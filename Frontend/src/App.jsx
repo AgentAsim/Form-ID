@@ -1,16 +1,30 @@
 import { Nav } from './components/Nav'
 import { Home } from './components/Home'
+import { LogForm } from './components/LogForm'
+import { useState } from 'react'
+import { ContainerContext } from './Context/context'
 
 
 function App() {
 
+  const [Show, setShow] = useState("home")
+
   return (
     <>
-    <div className="container">
+      <ContainerContext.Provider
+        value={
+          {
+            Show,
+            setShow
+          }
+        }>
 
-      <Nav />
-      <Home />
-    </div>
+        <div className="container">
+          <Nav />
+          <Home />
+          <LogForm />
+        </div>
+      </ContainerContext.Provider>
     </>
   )
 }

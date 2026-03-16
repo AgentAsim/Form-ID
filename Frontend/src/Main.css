@@ -16,7 +16,7 @@ body {
 }
 
 nav {
-    width: stretch;
+    width: 100%;
     height: 74px;
     color: #ffffff;
     background-color: #1d303f;
@@ -29,6 +29,9 @@ nav {
     border-bottom: 2px solid #ffffff;
     box-shadow: 0 0 15px #ffffff;
     margin-bottom: 20px;
+    position: fixed;
+    top: 0;
+    z-index: 200;
 }
 
 #logo {
@@ -60,11 +63,13 @@ nav div {
 
 /* Container for all the cards */
 .card-container {
+    margin-top: 96px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 24px;
     padding: 24px;
-    background-color: #0f1b26; /* Darkest theme color for main background */
+    background-color: #0f1b26;
+    /* Darkest theme color for main background */
     min-height: 100vh;
     font-family: sans-serif;
 }
@@ -72,10 +77,12 @@ nav div {
 /* Individual Card Design */
 .service-card {
     height: fit-content;
-    background-color: #1d303f; /* Lighter theme color for card background */
+    background-color: #1d303f;
+    /* Lighter theme color for card background */
     border-radius: 12px;
     padding: 20px;
-    color: #ffffff; /* White text */
+    color: #ffffff;
+    /* White text */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
@@ -83,7 +90,8 @@ nav div {
 }
 
 .service-card:hover {
-    transform: translateY(-4px); /* Slight lift effect on hover */
+    transform: translateY(-4px);
+    /* Slight lift effect on hover */
     box-shadow: 0 0 15px #ffffff;
     border: 2px solid #ffffff;
 }
@@ -105,7 +113,8 @@ nav div {
 }
 
 .user-id {
-    background-color: #0f1b26; /* Using darkest color for the ID badge */
+    background-color: #0f1b26;
+    /* Using darkest color for the ID badge */
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -128,7 +137,8 @@ nav div {
 }
 
 .label {
-    color: rgba(255, 255, 255, 0.65); /* Dimmed white to create visual hierarchy */
+    color: rgba(255, 255, 255, 0.65);
+    /* Dimmed white to create visual hierarchy */
     font-weight: 500;
 }
 
@@ -140,7 +150,8 @@ nav div {
 /* Specific styling for financial data to make it stand out */
 .financials {
     margin-top: 8px;
-    background-color: rgba(15, 27, 38, 0.4); /* Subtle inner box */
+    background-color: rgba(15, 27, 38, 0.4);
+    /* Subtle inner box */
     padding: 12px;
     border-radius: 8px;
     display: flex;
@@ -156,5 +167,151 @@ nav div {
 }
 
 .due-row .value {
-    color: #ff8a8a; /* A soft red to indicate a due amount (optional, remove to keep strictly to theme) */
+    color: #ff8a8a;
+    /* A soft red to indicate a due amount (optional, remove to keep strictly to theme) */
+}
+
+
+
+/* Container holding the form (matches card container background) */
+/* .HideForm {
+    display: flex;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+} */
+
+.form-page-container {
+    margin-top: 96px;
+    background-color: #0f1b26;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    font-family: sans-serif;
+}
+
+/* The Form Card itself */
+.theme-form {
+    background-color: #1d303f;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 12px;
+    padding: 32px;
+    color: #ffffff;
+    /* box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); */
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 18px #ffffff;
+}
+
+.form-header {
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 16px;
+}
+
+.form-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.5rem;
+}
+
+.form-header p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.95rem;
+}
+
+/* Responsive Grid for Inputs */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Two columns by default */
+    gap: 20px;
+}
+
+.btn {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+    /* Spans across all columns */
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+/* Input Fields */
+.form-group input {
+    background-color: #0f1b26;
+    /* Darkest theme color for inputs */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Remove number arrows natively for a cleaner look (optional) */
+.form-group input[type="number"]::-webkit-inner-spin-button,
+.form-group input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Submit Button */
+.form-actions {
+    margin-top: 32px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-btn {
+    background-color: #ffffff;
+    color: #0f1b26;
+    /* Inverted text for high contrast */
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.submit-btn:hover {
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        /* Stack into 1 column on small screens */
+    }
 }
