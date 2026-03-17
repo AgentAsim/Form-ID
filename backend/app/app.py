@@ -34,6 +34,7 @@ async def home():
 
 @app.post("/post")
 async def data_post(row: CreateLog):
+    print(row)
     try:
         # Data Insertion Query
         insert_query = f"INSERT INTO logs (Name, Contact, Service, Service_Type, Govt_Fee, Service_Charge, Total_Amount, Month, Created_At, Application_ID, Due) VALUES ('{row.Name}', '{row.Contact}', '{row.Service}', '{row.Service_Type}', '{row.Govt_Fee}', '{row.Service_Charge}', '{row.Total_Amount}', '{row.Month}', '{row.Created_At}', '{row.Application_ID}', '{row.Due}')"

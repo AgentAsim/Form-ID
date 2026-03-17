@@ -259,18 +259,20 @@ nav div {
 .form-group input {
     background-color: #0f1b26;
     /* Darkest theme color for inputs */
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffffff1a;
     color: #ffffff;
     padding: 12px;
     border-radius: 10px;
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
+    transition: all ease-out 0.25s;
 }
 
 .form-group input:focus {
     border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    border-style: dashed;
+    /* box-shadow: 0 0 12px rgba(255, 255, 255, 0.1); */
 }
 
 /* Remove number arrows natively for a cleaner look (optional) */

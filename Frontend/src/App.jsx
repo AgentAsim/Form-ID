@@ -7,6 +7,7 @@ import { ContainerContext } from './Context/context'
 
 function App() {
 
+  const API_Connect = "http://localhost:8000"
   const [Show, setShow] = useState("home")
 
   return (
@@ -15,7 +16,8 @@ function App() {
         value={
           {
             Show,
-            setShow
+            setShow,
+            API_Connect
           }
         }>
 

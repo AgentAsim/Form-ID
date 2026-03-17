@@ -6,7 +6,7 @@ import { ContainerContext } from '../Context/context';
 export const LogForm = () => {
 
 
-    const { Show, setShow } = useContext(ContainerContext);
+    const { API_Connect, Show, setShow } = useContext(ContainerContext);
 
 
     const [formData, setFormData] = useState({
@@ -31,12 +31,31 @@ export const LogForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Form Submitted: ", formData);
-        // Add your submission logic/API call here
-    };
-
+    const handleSubmit = async (data) => {
+        data.preventDefault();
+        
+        // API call here
+        try {
+            const res = await fetch(`${API_Connect}/post`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json"
+                },
+                
+                body: JSON.stringify(formData)
+                
+            })
+            if (!res.ok) throw Error("post request failed!")
+                
+                let post_res = await res.json()
+                return post_res
+            }
+            catch (err) {
+                console.error(`Error Occure in Posting Form with error code ${err}`)
+            }
+            
+        };
+        
     if (Show === "form") {
         return (<>
             <div className={`form-page-container`}>
@@ -76,7 +95,7 @@ export const LogForm = () => {
 
                         <div className="form-group">
                             <label>Created At</label>
-                            <input type="date" name="Created_At" value={formData.Created_At} onChange={handleChange} />
+                            <input type="text" name="Created_At" value={formData.Created_At} onChange={handleChange} />
                         </div>
 
                         <div className="form-group full-width">

@@ -4,9 +4,7 @@ import { ContainerContext } from '../Context/context'
 
 export const Home = () => {
 
-    const DB_API = "http://localhost:8000"
-
-    const { Show } = useContext(ContainerContext)
+    const { Show, API_Connect } = useContext(ContainerContext)
 
     const [HomeData, setHomeData] = useState([])
 
@@ -15,7 +13,7 @@ export const Home = () => {
     useEffect(() => {
         const api_connect = async () => {
             try {
-                let res = await fetch(`${DB_API}/home`);
+                let res = await fetch(`${API_Connect}/home`);
                 if (!res.ok) console.log("Unable to connect HomeDataBase!");
 
                 let HomeData = await res.json();
@@ -30,7 +28,7 @@ export const Home = () => {
         api_connect();
 
 
-    }, [DB_API])
+    }, [API_Connect])
 
     if (Show === "home") {
         return (
@@ -79,11 +77,11 @@ export const Home = () => {
                                     </div>
                                     <div className="data-row total-row">
                                         <span className="label">Total Fee</span>
-                                        <span className="value">{row.Total_Amount}</span>
+                                        <span className="value">₹{row.Total_Amount}</span>
                                     </div>
                                     <div className="data-row due-row">
                                         <span className="label">Due Amount</span>
-                                        <span className="value">{row.Due}</span>
+                                        <span className="value">₹{row.Due}</span>
                                     </div>
                                 </div>
                             </div>
