@@ -73,7 +73,7 @@ async def update_log(row: UpdateLog):
             # Update If given ID is available
             if len(find_data) == 1:
                 # Build Query for updating the existing data row
-                update_query = f"UPDATE logs SET Name='{row.Name}', Contact='{row.Contact}', Service='{row.Service}', Service_Type='{row.Service_Type}', Govt_Fee='{row.Govt_Fee}', Service_Charge='{row.Service_Charge}', Total_Amount='{row.Total_Amount}', Month='{row.Month}', Created_at='{date}', Application_ID='{row.Application_ID}', Due='{row.Due}' WHERE ID={row.id}"
+                update_query = f"UPDATE logs SET Name='{row.Name}', Contact='{row.Contact}', Service='{row.Service}', Service_Type='{row.Service_Type}', Govt_Fee='{row.Govt_Fee}', Service_Charge='{row.Service_Charge}', Total_Amount='{row.Total_Amount}', Month='{row.Month}', Created_at={date}, Application_ID='{row.Application_ID}', Due='{row.Due}' WHERE ID={row.id}"
 
                 # Execute update query
                 cursor.execute(update_query)
