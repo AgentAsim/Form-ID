@@ -1,7 +1,7 @@
 services:
   fastapi-app:
     build: .
-    container_name: fastapi-app
+    container_name: e-shopmine
     ports:
       - "8181:8181"
     environment:
