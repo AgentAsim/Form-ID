@@ -31,6 +31,7 @@ async def get_logs():
     select_query = "SELECT * FROM logs"
     cursor.execute(select_query)
     data = cursor.fetchall()
+    conn.commit()
     result = home_Entitys(data)
     return JSONResponse(content=result, status_code=200)
 
