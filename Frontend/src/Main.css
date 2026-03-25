@@ -15,6 +15,14 @@ body {
     box-sizing: border-box;
 }
 
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 nav {
     width: 100%;
     height: 74px;
@@ -52,17 +60,61 @@ nav div {
     border-radius: 5px;
 }
 
+
+.btnholder {
+    width: max-content;
+    height: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .add {
     margin: 0 26px;
     transition: all 0.5s ease-in-out;
+    padding: 9px 11px;
+    border: 2px solid #ffffff6a;
+}
+
+.add:hover {
     border: 2px solid #ffffff;
     box-shadow: 0px 0px 8px #ffffff;
-    padding: 4px 9px;
+}
+
+.cancel{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.getid {
+    width: max-content;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 35%;
+    z-index: 20;
+    background-color: #1d303f;
+    padding: 12px 24px;
+    border: 2px solid #ffffff;
+    border-radius: 9px;
+    transition: all 0.25s ease-out;
+    box-shadow: 0 0 15px #ffffff;
+}
+
+.confirmation-Box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #ffffff;
 }
 
 
 /* Container for all the cards */
 .card-container {
+    width: -webkit-fill-available;
     margin-top: 96px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));

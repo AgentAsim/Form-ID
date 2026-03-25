@@ -1,12 +1,10 @@
-from importlib.util import find_spec
-
 import mariadb
 from fastapi import FastAPI, HTTPException
 from  fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.databases.db import cursor, conn
 from app.model.model import home_Entitys
-from app.schema.schema import CreateLog, UpdateLog
+from app.schema.schema import CreateLog, UpdateLog, UpdateID
 
 app = FastAPI()
 
@@ -25,7 +23,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-table_name = 'logs'
+# DataBase Table Selection
+table_name = 'test_table'
 
 @app.get("/home")
 async def get_logs():
@@ -94,4 +93,35 @@ async def update_log(row: UpdateLog):
             print("Data Commited Successfully")
 
     else:
-        raise HTTPException(detail="Enter an ID that should be greater than 0!", status_code=404)
+        raise HTTPException(detail="Enter an ID that should be greater than 0!", status_code=400)
+
+
+@app.put("/getUpdateDue")
+async def find_update_due(due_id: UpdateID):
+    find_id = due_id.id
+
+    if find_id > 0:
+        try:
+            search_id = f"SELECT id FROM {table_name}"
+            cursor.execute(search_id)
+            validate_id = cursor.fetchrows(find_id)
+
+            if len(validate_id) == 1:
+                update_query = f"UPDATE {table_name} SET DUE={due_id.Due} WHERE id={find_id}"
+
+                cursor.execute(update_query)
+
+                return JSONResponse(content=f"Due value updated at id {find_id}", status_code=200)
+            else:
+                raise HTTPException(status_code=404, detail=f"ID {find_id} for update Due not found!")
+
+        except mariadb.Error as e:
+            raise HTTPException(detail=f"Couldn't able to update ID {find_id} with error {e}", status_code=500)
+
+        finally:
+            conn.commit()
+            print("Data Commited Successfully")
+
+    else:
+        raise HTTPException(detail=f"Enter ID should be greater than 0", status_code=400)
+

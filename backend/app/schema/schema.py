@@ -29,3 +29,7 @@ class UpdateLog(BaseModel):
     Created_At: str | None = None
     Application_ID: str | None = None
     Due: int | None = None
+
+class UpdateID(BaseModel):
+    id: int
+    Due: int

@@ -9,15 +9,18 @@ function App() {
 
   const API_Connect = import.meta.env.VITE_API;
   const [Show, setShow] = useState("home")
+  const [isUpdate, setisUpdate] = useState(false)
 
   return (
     <>
       <ContainerContext.Provider
         value={
           {
+            API_Connect,
             Show,
             setShow,
-            API_Connect
+            isUpdate,
+            setisUpdate
           }
         }>
 
