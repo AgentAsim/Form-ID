@@ -31,8 +31,6 @@ app.add_middleware(
 # DataBase Table Selection
 table_name = 'logs' if int(os.getenv("SERVER_PORT")) == 8181 else 'test_table'
 
-print(int(os.getenv("SERVER_PORT")))
-
 @app.get("/home")
 async def get_logs():
     # fetch all rows
@@ -105,17 +103,23 @@ async def update_log(row: UpdateLog):
 
 @app.put("/getUpdateDue")
 async def find_update_due(due_id: UpdateID):
+    # Store Due column ID
     find_id = due_id.id
 
+    # ID Validation
     if find_id > 0:
         try:
-            search_id = f"SELECT id FROM {table_name}"
+            # Search Due ID
+            search_id = f"SELECT id FROM {table_name} WHERE ID='{find_id}'"
             cursor.execute(search_id)
             validate_id = cursor.fetchrows(find_id)
 
+            # Check Due ID availability
             if len(validate_id) == 1:
-                update_query = f"UPDATE {table_name} SET DUE={due_id.Due} WHERE id={find_id}"
+                # Update Due column Query
+                update_query = f"UPDATE {table_name} SET DUE={due_id.Due} WHERE id='{find_id}'"
 
+                # Run Due column update query
                 cursor.execute(update_query)
 
                 return JSONResponse(content=f"Due value updated at id {find_id}", status_code=200)
@@ -126,6 +130,7 @@ async def find_update_due(due_id: UpdateID):
             raise HTTPException(detail=f"Couldn't able to update ID {find_id} with error {e}", status_code=500)
 
         finally:
+            # Commit Table Data
             conn.commit()
             print("Data Commited Successfully")
 
