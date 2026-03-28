@@ -9,42 +9,42 @@ import { ContainerContext } from '../Context/context';
 
 export const Nav = () => {
 
-    const { API_Connect, Show, setShow, isUpdate, setisUpdate } = useContext(ContainerContext)
+    const { API_Connect, Show, setShow, isUpdate, setisUpdate, setupdateForm } = useContext(ContainerContext)
 
-    const [updateForm, setUpdateForm] = useState(false)
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData({
+    //         ...formData,
+    //         [name]: value
+    //     });
+    // };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+    // useEffect(() => {
 
-    useEffect(() => {
+    //     try {
+    //         const isIDvalid = async (getted_ID) => {
+    //             getted_ID.preventDefault();
 
-       try { const isIDvalid = async (getted_ID) => {
-            getted_ID.preventDefault();
+    //             // Getting update ID response
+    //             let res = await fetch(`${API_Connect}/getUpdateID`, {
+    //                 method: "POST",
+    //                 header: {
+    //                     "content-type": "application/json"
+    //                 },
+    //                 body: JSON.stringify(getted_ID)
+    //             })
+    //             if (!res.ok) throw Error("ID for Update Not found!")
 
-            // Getting update ID response
-            let res = await fetch(`${API_Connect}/getUpdateID`, {
-                method: "POST",
-                header: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify(getted_ID)
-            })
-            if (!res.ok) throw Error("ID for Update Not found!")
+    //             let update_id = await res.json();
+    //             return update_id
+    //         }
+    //     }
+    //     catch (err) {
+    //         console.error(`Error in sending ID! ${err}`)
+    //     }
 
-            let update_id = await res.json();
-            return update_id
-        }}
-        catch (err) {
-            console.error(`Error in sending ID! ${err}`)
-        }
-        
 
-    }, [])
+    // }, [])
 
 
     return (
@@ -57,25 +57,25 @@ export const Nav = () => {
                     <div onClick={() => setShow("form")} className='add' style={{ marginRight: '0px' }}>
                         <RiAddLargeLine />
                     </div>
-                    <div onClick={() => setisUpdate(true)} className='add'>
+                    <div onClick={() => (setupdateForm(true), setShow(null))} className='add'>
                         <MdModeEdit />
                     </div>
                 </div>
             </nav>
-            <div className="getid" style={isUpdate ? { display: 'flex' } : { display: 'none' }}>
-                <form className='form-theme confirmation-Box'>
+            {/* <div className="getid" style={isUpdate ? { display: 'flex' } : { display: 'none' }}>
+                <div className='form-theme confirmation-Box'>
                     <div className="form-group">
                         <label className='cancel'>
                             <h3>Enter ID for Update</h3>
                             <ImCancelCircle size={25} color='#ff0606' onClick={() => setisUpdate(false)} />
                         </label>
-                        <input type="text" name="id" placeholder='e.g. 1' onChange={handleChange} required />
+                        <input type="text" name="id" placeholder='e.g. 1' required />
                     </div>
-                    <div className="form-actions btn" style={{ marginTop: '4px' }}>
+                    <div className="form-actions btn" style={{ marginTop: '4px' }} onClick={() => (setupdateForm(true), setShow(""))}>
                         <button type="submit" className="submit-btn btn">Update ID</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </div> */}
         </>
     )
 }

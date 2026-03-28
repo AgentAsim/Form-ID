@@ -4,7 +4,7 @@ import { ContainerContext } from '../Context/context'
 
 export const Home = () => {
 
-    const { Show, API_Connect } = useContext(ContainerContext)
+    const { Show, API_Connect, updateForm } = useContext(ContainerContext)
 
     const [HomeData, setHomeData] = useState([])
 
@@ -33,7 +33,7 @@ export const Home = () => {
     if (Show === "home") {
         return (
             <>
-                <div className="card-container">
+                <div className={`card-container`}>
                     {HomeData.map((row) => (
                         <div key={row.id} className="service-card">
                             {/* Card Header: Name and ID */}

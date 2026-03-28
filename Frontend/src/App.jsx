@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Nav } from './components/Nav'
 import { Home } from './components/Home'
 import { LogForm } from './components/LogForm'
+import { CardForm } from './components/CardForm'
 import { ContainerContext } from './Context/context'
 
 
@@ -10,6 +11,9 @@ function App() {
   const API_Connect = import.meta.env.VITE_API;
   const [Show, setShow] = useState("home")
   const [isUpdate, setisUpdate] = useState(false)
+  const [updateForm, setupdateForm] = useState(false)
+  
+  console.log(updateForm)
 
   return (
     <>
@@ -20,14 +24,17 @@ function App() {
             Show,
             setShow,
             isUpdate,
-            setisUpdate
+            setisUpdate,
+            updateForm,
+            setupdateForm
           }
         }>
 
-        <div className="container">
+        <div className={`container`}>
           <Nav />
           <Home />
           <LogForm />
+          <CardForm />
         </div>
       </ContainerContext.Provider>
     </>
