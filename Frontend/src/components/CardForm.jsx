@@ -53,7 +53,7 @@ export const CardForm = () => {
                     Update logs Details
                     <MdModeEdit />
                 </h1>
-                <div className="card-header">
+                <div className="card-header update-card-header">
                     <div className="update-header form-group">
 
                         {/* Input taking the place of the h3 heading */}

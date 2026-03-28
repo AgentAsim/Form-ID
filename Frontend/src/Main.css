@@ -419,9 +419,29 @@ nav div {
 
 
 /* Mobile Responsiveness */
+@media (max-width: 830px) {
+    .update-card-header {
+        display: block;
+    }
+
+    .card-body {
+        flex-direction: column;
+    }
+
+    .cancel-btn {
+        color: #fc6868;
+    }
+
+    .service-card {
+        box-shadow: 0 0 15px #ffffff;
+        border: 2px solid #ffffff;
+    }
+
+}
+
+
 @media (max-width: 600px) {
     .form-grid {
         grid-template-columns: 1fr;
-        /* Stack into 1 column on small screens */
     }
 }

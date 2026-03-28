@@ -1,21 +1,22 @@
 import os
-
 import mariadb
 from fastapi import FastAPI, HTTPException
 from  fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
-from app.databases.db import cursor, conn, config
+from app.databases.db import cursor, conn
 from app.model.model import home_Entitys
 from app.schema.schema import CreateLog, UpdateLog, UpdateID
 
 load_dotenv()
+local_connect = os.getenv("local_connect")
 
 app = FastAPI()
 
 # origins
 origins = [
     "http://localhost:5173",
+    local_connect,
     "https://eshopmine.netlify.app"
 ]
 
