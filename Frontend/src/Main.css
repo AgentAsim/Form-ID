@@ -225,6 +225,7 @@ nav div {
 
 /* Specific styling for financial data to make it stand out */
 .financials {
+    height: fit-content;
     margin-top: 8px;
     background-color: rgba(15, 27, 38, 0.4);
     /* Subtle inner box */
@@ -399,6 +400,8 @@ nav div {
 .updateform-body {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 
