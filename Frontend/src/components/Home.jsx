@@ -6,7 +6,7 @@ import { MdModeEdit } from "react-icons/md";
 
 export const Home = () => {
 
-    const { Show, API_Connect, setoldData, oldData, setupdateForm, setShow } = useContext(ContainerContext)
+    const { Show, API_Connect, setoldData, setupdateForm, setShow } = useContext(ContainerContext)
 
     const [HomeData, setHomeData] = useState([])
 

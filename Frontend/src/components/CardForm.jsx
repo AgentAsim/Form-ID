@@ -9,11 +9,6 @@ export const CardForm = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setoldData({ ...oldData, [name]: value });
-        // const newData = {
-        //     ...oldData, [name]: value
-        // }
-
-        // setoldData(newData)
     };
 
     const handleSubmit = async (e) => {

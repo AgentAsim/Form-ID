@@ -391,14 +391,6 @@ nav div {
     transform: scale(0.98);
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 600px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-        /* Stack into 1 column on small screens */
-    }
-}
-
 .update-form {
     width: fit-content;
     margin-top: 126px;
@@ -421,4 +413,15 @@ nav div {
     border: medium;
     font-weight: bold;
     cursor: pointer;
+}
+
+
+
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        /* Stack into 1 column on small screens */
+    }
 }

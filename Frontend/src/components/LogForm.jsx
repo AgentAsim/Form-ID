@@ -132,7 +132,6 @@ export const LogForm = () => {
                     <div className="form-actions btn">
                         <button onClick={() => (setShow("home"), setnewForm(false))} type="submit" className="submit-btn btn cancel-btn">Cancel</button>
                     </div>
-                    {/* </div> */}
                 </form>
             </div>
         </>)
