@@ -9,15 +9,19 @@ from app.model.model import home_Entitys
 from app.schema.schema import CreateLog, UpdateLog, UpdateID
 
 load_dotenv()
+
+# fetch know urls
+self_connect = os.getenv("self_connect")
 local_connect = os.getenv("local_connect")
+global_connect = os.getenv("global_connect")
 
 app = FastAPI()
 
 # origins
 origins = [
-    "http://localhost:5173",
+    self_connect,
     local_connect,
-    "https://eshopmine.netlify.app"
+    global_connect
 ]
 
 # make a bridge connection between frontend and admin <---> backend
