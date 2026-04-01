@@ -57,7 +57,7 @@ export const CardForm = () => {
     return (
         <>
             {/* Swapped standard div for a form element, kept the same class */}
-            <form className="service-card update-form" onSubmit={handleSubmit}>
+            <form className="service-card update-form" onSubmit={handleSubmit} autoComplete='off'>
 
                 <h1 className='updateform-heading'>
                     Update logs Details

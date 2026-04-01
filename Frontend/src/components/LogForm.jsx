@@ -77,7 +77,7 @@ export const LogForm = () => {
 
     return (<>
         <div className={`form-page-container`}>
-            <form className="theme-form" onSubmit={handleSubmit}>
+            <form className="theme-form" onSubmit={handleSubmit} autoComplete='off'>
                 <div className="form-header">
                     <h2>Add New Log</h2>
                     <p>Enter the service details below.</p>
