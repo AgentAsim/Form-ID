@@ -1,4 +1,6 @@
 import os
+from getopt import error
+
 import mariadb
 from fastapi import FastAPI, HTTPException
 from  fastapi.middleware.cors import CORSMiddleware
@@ -6,6 +8,7 @@ from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from app.databases.db import cursor, conn
 from app.model.model import home_Entitys
+from app.Search.search import SimpleSearchIndex
 from app.schema.schema import CreateLog, UpdateLog, UpdateID
 
 load_dotenv()
@@ -50,8 +53,7 @@ async def get_logs():
 @app.post("/post")
 async def post_log(row: CreateLog):
     # Fix date format for mariadb date insertion
-    date = row.Created_At.capitalize() if row.Created_At.capitalize() == 'Default' else f"'{row.Created_At}'"
-
+    date = row.Created_At.title() if row.Created_At.title() == 'Default' else f"'{row.Created_At}'"
     try:
         # Data Insertion Query
         insert_query = f"INSERT INTO {table_name} (Name, Contact, Service, Service_Type, Govt_Fee, Service_Charge, Total_Amount, Month, Created_At, Application_ID, Due) VALUES ('{row.Name.title()}', '{row.Contact}', '{row.Service.title()}', '{row.Service_Type.title()}', '{row.Govt_Fee}', '{row.Service_Charge}', '{row.Total_Amount}', '{row.Month.capitalize()}', {date}, '{row.Application_ID}', '{row.Due}')"
@@ -143,3 +145,26 @@ async def update_due(due_id: UpdateID):
     else:
         raise HTTPException(detail=f"Enter ID should be greater than 0", status_code=400)
 
+
+@app.get("/search/post/{query}")
+async def search_row(query):
+    print(query)
+    try:
+        search_engine = SimpleSearchIndex()
+        # fetch all rows
+        select_query = f"SELECT * FROM {table_name}"
+        cursor.execute(select_query)
+        data = cursor.fetchall()
+        conn.commit()
+        rows = home_Entitys(data)
+
+        searchTitles = ["Name", "Contact", "Application_ID", "Service", "Service_Type"]
+
+        for row in rows:
+            search_engine.add_to_index(searchTitles, row)
+
+        filter_data = search_engine.search(query)
+        result = home_Entitys(filter_data)
+        return JSONResponse(content=result, status_code=200)
+    except:
+        raise HTTPException(detail="Not Found", status_code=404)
