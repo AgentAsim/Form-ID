@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useState } from 'react';
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ContainerContext } from '../Context/context';
+import { useNavigate } from 'react-router-dom';
 
 export const LogForm = () => {
 
+    const { API_Connect, access_token } = useContext(ContainerContext);
 
-    const { API_Connect } = useContext(ContainerContext);
+    const navigate = useNavigate();
+    const handleRoute = () => {
+        navigate(`/`)
+    }
 
 
     // Form field data titles
@@ -46,7 +50,8 @@ export const LogForm = () => {
             const res = await fetch(`${API_Connect}/post`, {
                 method: "POST",
                 headers: {
-                    "content-type": "application/json"
+                    'Authorization': `Bearer ${access_token}`,
+                    'Content-Type': 'application/json'
                 },
 
                 body: JSON.stringify(formData)

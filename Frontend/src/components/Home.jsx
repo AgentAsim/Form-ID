@@ -7,9 +7,10 @@ import { MdModeEdit } from "react-icons/md";
 
 export const Home = () => {
 
-    const { API_Connect, setoldData, searchData } = useContext(ContainerContext)
+    const { API_Connect, setoldData, searchData, authorized, access_token, login_state } = useContext(ContainerContext)
 
     const url = useLocation();
+    const navigate = useNavigate();
 
     const [HomeData, setHomeData] = useState([])
     let showonPage = url.pathname.startsWith("/post/search/") ? searchData : HomeData
@@ -18,11 +19,22 @@ export const Home = () => {
     useEffect(() => {
         const api_connect = async () => {
             try {
-                let res = await fetch(`${API_Connect}/home`);
+                let res = await fetch(`${API_Connect}/home`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${access_token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
                 if (!res.ok) console.log("Unable to connect HomeDataBase!");
+                if (res.status === 401) {
+                    navigate('/login')
+                    localStorage.setItem(login_state, false)
+                }
 
                 let HomeData = await res.json();
                 setHomeData(HomeData);
+
             }
             catch (err) {
                 console.error(`Error Occure in Backend Connection ${err}`)
@@ -34,15 +46,20 @@ export const Home = () => {
 
     }, [API_Connect, url.pathname])
 
-    const navigate = useNavigate();
+
     const handleRoute = () => {
-        navigate(`/update/log`)
+        if (authorized) {
+            navigate(`/update/log`)
+        }
+        else {
+            navigate("/login")
+        }
     }
 
     return (
         <>
             <div className={`card-container`}>
-                { showonPage.map((row) => (
+                {showonPage.map((row) => (
                     <div key={row.id} className="service-card">
                         {/* Card Header: Name and ID */}
                         <div className="card-header">

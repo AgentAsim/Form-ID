@@ -72,7 +72,6 @@ async def post_log(row: CreateLog, current_user: current_active_user):
     finally:
         # Commit Table data
         conn.commit()
-        print("Data Commited Successfully")
 
 
 @app.put("/post/update")
@@ -99,7 +98,7 @@ async def update_log(row: UpdateLog, current_user: current_active_user):
                 return JSONResponse(content=f"Log Updated Successfully at ID {row.id}")
 
             else:
-                raise HTTPException(detail=f"Entered ID {row.id} not found", status_code=404)
+                raise HTTPException(detail=f"Too many post ID {row.id} found", status_code=404)
 
         except mariadb.Error as e:
             raise HTTPException(detail=f"Couldn't able to update log at ID {row.id}: {e}", status_code=500)
@@ -107,7 +106,6 @@ async def update_log(row: UpdateLog, current_user: current_active_user):
         finally:
             # Commit Table data
             conn.commit()
-            print("Data Commited Successfully")
 
     else:
         raise HTTPException(detail="Enter an ID that should be greater than 0!", status_code=400)
@@ -144,7 +142,6 @@ async def update_due(due_id: UpdateID, current_user: current_active_user):
         finally:
             # Commit Table Data
             conn.commit()
-            print("Data Commited Successfully")
 
     else:
         raise HTTPException(detail=f"Enter ID should be greater than 0", status_code=400)
@@ -152,7 +149,6 @@ async def update_due(due_id: UpdateID, current_user: current_active_user):
 
 @app.get("/search/post/{query}")
 async def search_row(query, current_user: current_active_user):
-    print(query)
     try:
         search_engine = SimpleSearchIndex()
         # fetch all rows

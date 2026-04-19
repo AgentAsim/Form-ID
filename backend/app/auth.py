@@ -3,7 +3,7 @@ from typing import Annotated
 import jwt
 import os
 from fastapi import APIRouter
-from fastapi import Depends, HTTPException, FastAPI, status
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
@@ -15,12 +15,13 @@ from app.schema.schema import Token, TokenData, User
 auth_router = APIRouter()
 
 
-# Load Secret Key
+# Load Secrets
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALOGRITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
+# Hashed Password Instance
 password_hashed = PasswordHash.recommended()
 DUMMY_HASHED = password_hashed.hash("secret")
 
@@ -63,7 +64,7 @@ def fake_decode_token(token):
 def authenticate_user(fake_db, username: str, password: str):
     user = fake_user(fake_db, username)
     if not user:
-        verify_password(password, DUMMY_HASHED)
+        verify_password(password, user.hashed_password)
         return False
     if not verify_password(password, user.hashed_password):
         return False
@@ -74,6 +75,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=2)
 
     to_encode.update({"exp": expire})
     encode_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
