@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
 
-    const { API_Connect, login_state } = useContext(ContainerContext)
+    const { API_Connect, setAuthorized } = useContext(ContainerContext)
 
     const navigate = useNavigate();
 
@@ -41,9 +41,9 @@ export const Login = () => {
             if (!res.ok) Error('User Not Authenticated')
 
             const data = await res.json();
-            localStorage.setItem('token', data.access_token)
-            localStorage.setItem(login_state, true)
-            navigate('/')
+            localStorage.setItem('token', data.access_token);
+            setAuthorized(true);
+            navigate('/');
 
         }
         catch (err) {

@@ -12,8 +12,8 @@ function App() {
 
   const API_Connect = import.meta.env.VITE_API;
   const access_token = localStorage.getItem('token')
-  const login_state = 'authorized'
-  let authorized = localStorage.getItem(login_state)
+  // const login_state = 'authorized'
+  // let authorized = localStorage.getItem(login_state)
 
   const [oldData, setoldData] = useState({ id: "undefine" })
 
@@ -21,6 +21,8 @@ function App() {
     query: ''
   })
   const [searchData, setsearchData] = useState([])
+
+  const [authorized, setAuthorized] = useState(false)
   console.log(`login State: ${authorized}`)
 
   return (
@@ -37,7 +39,7 @@ function App() {
             searchData,
             setsearchData,
             authorized,
-            login_state
+            setAuthorized
           }
         }>
 

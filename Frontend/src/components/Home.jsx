@@ -7,7 +7,7 @@ import { MdModeEdit } from "react-icons/md";
 
 export const Home = () => {
 
-    const { API_Connect, setoldData, searchData, authorized, access_token, login_state } = useContext(ContainerContext)
+    const { API_Connect, setoldData, searchData, authorized, access_token, setAuthorized } = useContext(ContainerContext)
 
     const url = useLocation();
     const navigate = useNavigate();
@@ -33,6 +33,7 @@ export const Home = () => {
                 }
 
                 let HomeData = await res.json();
+                setAuthorized(true);
                 setHomeData(HomeData);
 
             }
