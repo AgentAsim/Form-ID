@@ -13,11 +13,6 @@ export const LogForm = () => {
         navigate(`/`)
     }
 
-    const navigation = useNavigate();
-    const handleRoute = () => {
-        navigation('/')
-    }
-
 
     // Form field data titles
     const [formData, setFormData] = useState({
