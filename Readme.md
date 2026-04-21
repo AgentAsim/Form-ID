@@ -58,7 +58,7 @@ E-Shopmine
 ```
 ## Requirements
 - MariaDB - for the data storage.
-- Docker - for running the server without continuously.
+- Docker - for running the server continuously.
 
 ## Prerequisites
 #### Replace Value key word with your desire values (e.g. IP Address, Expiraction Time, Global Web URL, etc.)
