@@ -65,7 +65,6 @@ def UserManager():
     AllUsersDict = {}
     for one in AllUsers:
         AllUsersDict.update({one["username"]: one})
-    print(AllUsersDict)
     return AllUsersDict
 
 
@@ -78,20 +77,20 @@ def get_password_hashed(password):
     return password_hashed.hash(password)
 
 # Get Correct User if Available in UserData
-def fake_user(db, username: str):
+def register_user(db, username: str):
     if username in db:
         user_dict = db[username]
         return UserInDB(**user_dict)
 
 # Decode user's given token
-def fake_decode_token(token):
-    user = fake_user(UserManager(), token)
+def register_decode_token(token):
+    user = register_user(UserManager(), token)
     return user
 
 
 # Authenticate User Credentials
 def authenticate_user(fake_db, username: str, password: str):
-    user = fake_user(fake_db, username)
+    user = register_user(fake_db, username)
 
     if not user:
         # verify_password(password, user.hashed_password)
@@ -127,7 +126,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
            token_data = TokenData(username=username)
        except InvalidTokenError:
            raise Credentials_exception
-       user = fake_user(UserManager(), username=token_data.username)
+       user = register_user(UserManager(), username=token_data.username)
        if user is None:
            raise Credentials_exception
        return user
