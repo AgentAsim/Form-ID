@@ -2,18 +2,21 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 import jwt
 import os
+import mariadb
 from fastapi import APIRouter
 from fastapi import Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 from dotenv import load_dotenv
+from starlette.responses import JSONResponse
+from app.model.model import AllUsersEntity, AllUsersEntitys
 from app.schema.schema import Token, TokenData, User
+from app.databases.db import conn, cursor
 
-
-# Create an Authentication Router
-auth_router = APIRouter()
-
+# DataBase Table Selection
+user_table = 'users' if int(os.getenv("SERVER_PORT")) == 8181 else 'test_user'
 
 # Load Secrets
 load_dotenv()
@@ -21,13 +24,40 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALOGRITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
+
+# Create an Authentication Router
+auth_router = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
 # Hashed Password Instance
 password_hashed = PasswordHash.recommended()
-DUMMY_HASHED = password_hashed.hash("secret")
+DUMMY_HASHED = password_hashed.hash('secret')
 
 
 class UserInDB(User):
     hashed_password: str
+
+
+# Password Hashing for DB
+def PasswordHashing(password):
+    PasswordHashedKey = password_hashed.hash(password)
+    return PasswordHashedKey
+
+
+
+# All Users Dict list
+def user_db():
+    # Select Query
+    get_user_query = f"SELECT * FROM {user_table}"
+
+    # Execute Query
+    cursor.execute(get_user_query)
+    userdata = cursor.fetchall()
+
+    # list of all users
+    AllUsers = AllUsersEntitys(userdata)
+    return AllUsers
 
 
 fake_users_db = {
@@ -38,9 +68,6 @@ fake_users_db = {
         "disabled": False
     }
 }
-
-# app = FastAPI()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def verify_password(plain_password, hashed_password):
@@ -63,6 +90,7 @@ def fake_decode_token(token):
 
 def authenticate_user(fake_db, username: str, password: str):
     user = fake_user(fake_db, username)
+
     if not user:
         verify_password(password, user.hashed_password)
         return False
@@ -105,6 +133,38 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive User")
     return current_user
+
+
+@auth_router.post('/new/user')
+async def NewUser(FormData: User):
+    try:
+        # Making Hashed Password
+        HashedPassword = PasswordHashing(FormData.hashed_password)
+
+        # New User Insertion Query
+        inser_query = f"INSERT INTO {user_table} (username, hashed_password, email, disabled, created_at) VALUES ('{FormData.username}', '{HashedPassword}', '{FormData.email}', '{FormData.disabled}', Default)"
+
+        # Execeute Query
+        cursor.execute(inser_query)
+
+        return JSONResponse(content=f"User {FormData.username} Added Successfully!", status_code=201)
+    except mariadb.Error as err:
+        raise HTTPException(status_code=400, detail=f"User {FormData.username} insertion failed! with error {err}")
+
+    finally:
+        conn.commit()
+
+
+@auth_router.get("/all/users")
+async def AllUsers(current_user: Annotated[User, Depends(get_current_active_user)]):
+    try:
+        allusers = user_db()
+        return JSONResponse(status_code=200, content=allusers)
+
+    except mariadb.Error as e:
+        raise HTTPException(status_code=404, detail="Users Not Found!")
+    finally:
+        conn.commit()
 
 
 @auth_router.post("/token")

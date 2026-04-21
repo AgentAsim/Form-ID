@@ -43,6 +43,8 @@ app.add_middleware(
 # DataBase Table Selection
 table_name = 'logs' if int(os.getenv("SERVER_PORT")) == 8181 else 'test_table'
 
+
+
 @app.get("/home")
 async def get_logs(current_user: current_active_user):
     # fetch all rows
