@@ -44,6 +44,13 @@ app.add_middleware(
 table_name = 'logs' if int(os.getenv("SERVER_PORT")) == 8181 else 'test_table'
 
 
+# User Session
+@app.get("/user/session")
+def user_session(current_user: current_active_user):
+    if current_user:
+        return True
+    return False
+
 
 @app.get("/home")
 async def get_logs(current_user: current_active_user):
