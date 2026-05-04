@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from bson import ObjectId
 from dotenv import load_dotenv
 from app.databases.mongo import conn
-from app.model.model import home_entitys
+from app.model.model import home_entitys, search_entitys
 from app.Search.search import SimpleSearchIndex
 from app.schema.schema import CreateLog, UpdateLog, UpdateDue
 from app.auth import auth_router, get_current_active_user, User
@@ -146,11 +146,8 @@ async def update_due(due_row: UpdateDue, current_user: current_active_user):
 async def search_row(query, current_user: current_active_user):
     try:
         search_engine = SimpleSearchIndex()
-        # fetch all rows
-        select_query = f"SELECT * FROM {table_name}"
-        cursor.execute(select_query)
-        data = cursor.fetchall()
-        conn.commit()
+        # fetch all documents
+        data = conn.Shop.logs.find()
         rows = home_entitys(data)
 
         searchTitles = ["Name", "Contact", "Application_ID", "Service", "Service_Type"]
@@ -159,7 +156,7 @@ async def search_row(query, current_user: current_active_user):
             search_engine.add_to_index(searchTitles, row)
 
         filter_data = search_engine.search(query)
-        result = home_entitys(filter_data)
-        return JSONResponse(content=result[::-1], status_code=200)
+
+        return JSONResponse(content=filter_data[::-1], status_code=200)
     except:
         raise HTTPException(detail="Not Found", status_code=404)
