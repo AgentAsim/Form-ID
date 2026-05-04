@@ -48,7 +48,8 @@ class CreateLog(BaseModel):
 
 # Full log update model
 class UpdateLog(BaseModel):
-    id: int
+    id: str
+    id_no: int
     Name: str
     Contact: str
     Service: str
@@ -64,5 +65,5 @@ class UpdateLog(BaseModel):
 
 # Due field update model
 class UpdateDue(BaseModel):
-    id: int
+    id: str
     Due: int

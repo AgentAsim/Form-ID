@@ -2,9 +2,11 @@ import os
 from typing import Annotated
 from datetime import date
 import mariadb
+from dns import exception
 from fastapi import FastAPI, HTTPException, Depends
 from  fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from bson import ObjectId
 from dotenv import load_dotenv
 from app.databases.mongo import conn
 from app.model.model import home_entitys
@@ -67,17 +69,22 @@ async def get_logs(current_user: current_active_user):
 
 @app.post("/post", response_model=CreateLog)
 async def post_log(row: CreateLog, current_user: current_active_user):
-    # Fix date format for mariadb date insertion
+    # Make dict of row data
     new_doc_dict = row.model_dump()
-    doc_date = f"{date.today()}" if row.Created_At.title() == 'Default' else f"'{row.Created_At}'"
+    # Get date
+    doc_date = str(date.today()) if row.Created_At.title() == 'Default' else row.Created_At
+
+    # update date value
     new_doc_dict["Created_At"] = doc_date
+
     try:
+        # Count total no of documents
         doc_count = conn.Shop.logs.count_documents({})
+        # make index for new document
         new_doc_dict["id_no"] = doc_count + 1
 
         # Insert New Doc
-        new_doc = conn.Shop.logs.insert_one(new_doc_dict)
-        print(new_doc)
+        conn.Shop.logs.insert_one(new_doc_dict)
 
         return JSONResponse(content=f"Insertion Done Successfully!", status_code=201)
     except mariadb.Error as e:
@@ -87,75 +94,52 @@ async def post_log(row: CreateLog, current_user: current_active_user):
 
 @app.put("/post/update")
 async def update_log(row: UpdateLog, current_user: current_active_user):
-    # Fix date format for mariadb date insertion
-    date = row.Created_At.capitalize() if row.Created_At.capitalize() == 'Default' else f"'{row.Created_At}'"
+    # Make dict of row data
+    updated_doc_dict = row.model_dump()
+    # Get date
+    doc_date = str(date.today()) if row.Created_At.title() == 'Default' else row.Created_At
+    # update date value
+    updated_doc_dict["Created_At"] = doc_date
 
-    # Checking the ID authenticity for updating
-    if row.id > 0:
-        try:
-            # Getting ID is available or not
-            find_query = f"SELECT * FROM {table_name} WHERE ID={row.id}"
-            cursor.execute(find_query)
-            find_data = cursor.fetchrows(row.id)
+    # convert string to ObjectID for mongodb compatibility
+    document_id = ObjectId(updated_doc_dict["id"])
 
-            # Update If given ID is available
-            if len(find_data) == 1:
-                # Build Query for updating the existing data row
-                update_query = f"UPDATE {table_name} SET Name='{row.Name.title()}', Contact='{row.Contact}', Service='{row.Service.title()}', Service_Type='{row.Service_Type.title()}', Govt_Fee='{row.Govt_Fee}', Service_Charge='{row.Service_Charge}', Total_Amount='{row.Total_Amount}', Month='{row.Month.capitalize()}', Created_at={date}, Application_ID='{row.Application_ID}', Due='{row.Due}' WHERE ID={row.id}"
+    try:
+        # Get Document from Database
+        get_targeted_doc = conn.Shop.logs.find_one({"_id": document_id})
 
-                # Execute update query
-                cursor.execute(update_query)
+        # Update if Document is present in Database
+        if get_targeted_doc:
+            doc_update = conn.Shop.logs.update_one({"_id": document_id}, {"$set": updated_doc_dict})
+            if doc_update.acknowledged:
+                return JSONResponse(content="Document Update Successfully", status_code=200)
 
-                return JSONResponse(content=f"Log Updated Successfully at ID {row.id}")
+        else:
+            raise HTTPException(status_code=404, detail="Document not found!")
 
-            else:
-                raise HTTPException(detail=f"Too many post ID {row.id} found", status_code=404)
+    except Exception as e:
+        raise HTTPException(detail=f"Couldn't able to update document due to: {e}", status_code=400)
 
-        except mariadb.Error as e:
-            raise HTTPException(detail=f"Couldn't able to update log at ID {row.id}: {e}", status_code=500)
-
-        finally:
-            # Commit Table data
-            conn.commit()
-
-    else:
-        raise HTTPException(detail="Enter an ID that should be greater than 0!", status_code=400)
 
 
 @app.put("/post/UpdateDue")
-async def update_due(due_id: UpdateDue, current_user: current_active_user):
-    # Store Due column ID
-    find_id = due_id.id
+async def update_due(due_row: UpdateDue, current_user: current_active_user):
+    # Convert String to ObjectID for MongoDB compatibility
+    document_id = ObjectId(due_row.id)
+    try:
+        # Find targeted document
+        get_targeted_doc = conn.Shop.logs.find_one({"_id": document_id})
 
-    # ID Validation
-    if find_id > 0:
-        try:
-            # Search Due ID
-            search_id = f"SELECT id FROM {table_name} WHERE ID='{find_id}'"
-            cursor.execute(search_id)
-            validate_id = cursor.fetchrows(find_id)
+        # If document present make update
+        if get_targeted_doc:
+            doc_due_update = conn.Shop.logs.update_one({"_id": document_id}, {"$set": {"Due": due_row.Due}})
+            if doc_due_update.acknowledged:
+                return JSONResponse(content="Document Due Field Updated Successfully!", status_code=200)
+        else:
+            raise HTTPException(status_code=404, detail="Document not found!")
 
-            # Check Due ID availability
-            if len(validate_id) == 1:
-                # Update Due column Query
-                update_query = f"UPDATE {table_name} SET DUE={due_id.Due} WHERE id='{find_id}'"
-
-                # Run Due column update query
-                cursor.execute(update_query)
-
-                return JSONResponse(content=f"Due value updated at id {find_id}", status_code=200)
-            else:
-                raise HTTPException(status_code=404, detail=f"ID {find_id} for update Due not found!")
-
-        except mariadb.Error as e:
-            raise HTTPException(detail=f"Couldn't able to update ID {find_id} with error {e}", status_code=500)
-
-        finally:
-            # Commit Table Data
-            conn.commit()
-
-    else:
-        raise HTTPException(detail=f"Enter ID should be greater than 0", status_code=400)
+    except Exception as e:
+        raise HTTPException(detail=f"Couldn't able to update document due to: {e}", status_code=400)
 
 
 @app.get("/search/post/{query}")
