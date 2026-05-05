@@ -25,8 +25,6 @@ export const CardForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(oldData)
-
         try {
             // post data 
             let res = await fetch(`${API_Connect}/post/update`, {

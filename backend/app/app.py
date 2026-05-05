@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from app.databases.mongo import conn
 from app.model.model import home_entitys
 from app.Search.search import SimpleSearchIndex
-from app.schema.schema import CreateLog, UpdateLog, UpdateDue
+from app.schema.schema import CreateLog, UpdateLog, UpdateDue, DocumentID
 from app.auth import auth_router, get_current_active_user, User
 
 load_dotenv()
@@ -175,18 +175,23 @@ async def search_row(query, current_user: current_active_user):
 
 
 @app.delete("/delete/post")
-async def delete_log(row: str, current_user: current_active_user):
+async def delete_log(row: DocumentID, current_user: current_active_user):
+    # make dict of row data
+    delete_doc_id = row.model_dump()
+
     # convert str to ObjectID
-    document_id = ObjectId(row)
+    document_id = ObjectId(delete_doc_id["id"])
+    print(delete_doc_id)
     try:
         # find document
         find_document = collection_name.find_one({"_id": document_id})
+
         # if document found delete it
         if find_document:
             delete_document = collection_name.delete_one({"_id": document_id})
             # if deletion is successful
             if delete_document.acknowledged:
-                return JSONResponse(content=f"Document deleted successfully!", status_code=202)
+                return JSONResponse(content=f"Document deleted successfully!", status_code=200)
         # if document not found
         else:
             raise HTTPException(status_code=404, detail="Document Not Found!")

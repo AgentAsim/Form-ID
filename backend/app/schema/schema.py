@@ -67,3 +67,7 @@ class UpdateLog(BaseModel):
 class UpdateDue(BaseModel):
     id: str
     Due: int
+
+# Document ID
+class DocumentID(BaseModel):
+    id: str
