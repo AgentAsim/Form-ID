@@ -28,4 +28,11 @@ except mariadb.Error as e:
     sys.exit(1)
 
 
-
+# query = "SELECT * FROM logs"
+# cursor.execute(query)
+# data = cursor.fetchall()
+# from app.model.model import home_entitys
+# data_list = home_entitys(data)
+# print(data_list)
+# for i in data_list:
+#     print(i)

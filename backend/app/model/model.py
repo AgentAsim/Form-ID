@@ -18,7 +18,6 @@ def all_users_entitys(items) -> list:
 def home_entity(item) -> dict:
     return {
         "id": str(item["_id"]),
-        "id_no": str(item["id_no"]),
         "Name": item["Name"],
         "Contact": item["Contact"],
         "Service": item["Service"],

@@ -1,8 +1,6 @@
 import os
 from typing import Annotated
 from datetime import date
-import mariadb
-from dns import exception
 from fastapi import FastAPI, HTTPException, Depends
 from  fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -45,7 +43,7 @@ app.add_middleware(
 
 # DataBase Table Selection
 # table_name = 'logs' # if int(os.getenv("SERVER_PORT")) == 8181 else 'test_table'
-collection_name = conn.Shop.logs
+collection_name = conn.Shop.test_logs
 
 # User Session
 @app.get("/user/session")
@@ -81,9 +79,6 @@ async def post_log(row: CreateLog, current_user: current_active_user):
     try:
         # Count total no of documents
         doc_count = collection_name.count_documents({})
-
-        # make index for new document
-        new_doc_dict["id_no"] = doc_count + 1
 
         # Insert New Doc
         collection_name.insert_one(new_doc_dict)
@@ -181,7 +176,7 @@ async def delete_log(row: DocumentID, current_user: current_active_user):
 
     # convert str to ObjectID
     document_id = ObjectId(delete_doc_id["id"])
-    print(delete_doc_id)
+
     try:
         # find document
         find_document = collection_name.find_one({"_id": document_id})
@@ -198,3 +193,25 @@ async def delete_log(row: DocumentID, current_user: current_active_user):
     # Error in method execution
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error: {e}")
+
+
+# For delete all data
+@app.delete("/delete/all")
+async def delete_all_log(current_user: current_active_user):
+    try:
+        delete_all = collection_name.delete_many({})
+        if delete_all.acknowledged:
+            return JSONResponse(content="All documents deleted successfully")
+    except Exception as e:
+        raise HTTPException(detail=f"Error: {r}", status_code=400)
+
+# Bulk documents adding
+@app.post("/bulk/insertion")
+async def bulk_insertion(current_user: current_active_user):
+    try:
+        with open('data.json', 'r') as bulk_data:
+            content = bulk_data.read()
+            return JSONResponse(content=content, status_code=200)
+
+    except Exception as e:
+        raise HTTPException(detail=f"Error: {e}", status_code=400)
