@@ -3,6 +3,7 @@ import { useEffect, useContext, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ContainerContext } from '../Context/context'
 import { MdModeEdit } from "react-icons/md";
+import { FaTrashAlt } from "react-icons/fa";
 
 
 export const Home = () => {
@@ -66,11 +67,11 @@ export const Home = () => {
                         <div className="card-header">
                             <div className="editBox">
                                 <h3 className="user-name">{row.Name}</h3>
-                                <div onClick={() => (setoldData(row), handleRoute())}>
-                                    <MdModeEdit size='25' />
-                                </div>
                             </div>
-                            <span className="user-id">ID: {row.id}</span>
+                            <div className='btn-holder'>
+                                <MdModeEdit size='25' onClick={() => (setoldData(row), handleRoute('edit'))} />
+                                <FaTrashAlt size='20' color='#ff4343' onClick={() => console.log(row.id, "delete")} />
+                            </div>
                         </div>
 
                         {/* Card Body: All other details */}

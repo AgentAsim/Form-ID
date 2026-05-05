@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from bson import ObjectId
 from dotenv import load_dotenv
 from app.databases.mongo import conn
-from app.model.model import home_entitys, search_entitys
+from app.model.model import home_entitys
 from app.Search.search import SimpleSearchIndex
 from app.schema.schema import CreateLog, UpdateLog, UpdateDue
 from app.auth import auth_router, get_current_active_user, User
