@@ -1,8 +1,7 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 from typing import Annotated
 import jwt
 import os
-import mariadb
 from fastapi import APIRouter
 from fastapi import Depends, HTTPException, status
 from fastapi.responses import JSONResponse
@@ -12,10 +11,12 @@ from pwdlib import PasswordHash
 from dotenv import load_dotenv
 from app.model.model import all_users_entitys
 from app.schema.schema import Token, TokenData, User, NewUser, LoginRequest
-from app.databases.db import conn, cursor
+from app.databases.mongo import conn
 
 # DataBase Table Selection
-user_table = 'users' if int(os.getenv("SERVER_PORT")) == 8181 else 'test_user'
+# user_table = 'users' if int(os.getenv("SERVER_PORT")) == 8181 else 'test_user'
+user_collection = conn.Shop.users
+
 
 # Load Secrets
 load_dotenv()
@@ -47,18 +48,11 @@ def password_hashing(password):
 
 # All Users Dict list
 def user_manager():
-    # Select Query
-    get_user_query = f"SELECT * FROM {user_table}"
-
-    # Execute Query
-    cursor.execute(get_user_query)
-    userdata = cursor.fetchall()
-
-    # commit data
-    conn.commit()
+    # get all users
+    users_list = user_collection.find({})
 
     # list of all users
-    All_Users = all_users_entitys(userdata)
+    All_Users = all_users_entitys(users_list)
 
     # Dict of user by username
     All_Users_Dict = {}
@@ -140,23 +134,28 @@ async def new_user(new_user_data: NewUser):
     if new_user_data.username in user_manager():
         raise HTTPException(status_code=409, detail="Pick Another Username")
 
+    # make dict of row data
+    new_user_data_dict = new_user_data.model_dump()
+
+    # add current date
+    new_user_data_dict["created_at"] = str(date.today())
+
     try:
         # Making Hashed Password
         hashed_password = password_hashing(new_user_data.hashed_password)
 
-        # New User Insertion Query
-        insert_query = f"INSERT INTO {user_table} (username, hashed_password, email, disabled, created_at) VALUES ('{new_user_data.username}', '{hashed_password}', '{new_user_data.email}', '{new_user_data.disabled}', Default)"
+        # change str password to hash password
+        new_user_data_dict["hashed_password"] = hashed_password
 
-        # Execeute Query
-        cursor.execute(insert_query)
+        # insert new user
+        new_user_insertion = user_collection.insert_one(new_user_data_dict)
 
-        return JSONResponse(content=f"User {new_user_data.username} Added Successfully!", status_code=201)
-    except mariadb.Error as err:
-        raise HTTPException(status_code=400, detail=f"User {new_user_data.username} insertion failed! with error {err}")
+        if new_user_insertion.acknowledged:
+            return JSONResponse(content=f"User {new_user_data_dict["name"]} Added Successfully!", status_code=201)
 
-    finally:
-        conn.commit()
-        user_manager()
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"User {new_user_data_dict["name"]} not added!\nError: {e}")
 
 
 @auth_router.get("/all/users")
@@ -165,10 +164,8 @@ async def all_users(current_user: Annotated[User, Depends(get_current_active_use
         allusers = user_manager()
         return JSONResponse(status_code=200, content=allusers)
 
-    except mariadb.Error as e:
-        raise HTTPException(status_code=404, detail="Users Not Found!")
-    finally:
-        conn.commit()
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"Error: {e}")
 
 
 @auth_router.post("/token")

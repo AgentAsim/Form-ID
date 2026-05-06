@@ -2,7 +2,7 @@
 def all_users_entity(item) -> dict:
     return {
         # "id": str(item["_id"]),
-        "user_id": str(item["user_id"]),
+        "user_id": str(item["_id"]),
         "username": str(item["username"]),
         "hashed_password": str(item["hashed_password"]),
         "email": str(item["email"]),

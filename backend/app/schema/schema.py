@@ -14,6 +14,8 @@ class TokenData(BaseModel):
 # New user data modal
 class NewUser(BaseModel):
     username: str
+    name: str
+    mobile_no: str
     hashed_password: str
     email: str | None = None
     disabled: bool | None = None
