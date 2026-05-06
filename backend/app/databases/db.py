@@ -2,6 +2,8 @@ import os
 import mariadb
 import sys
 from dotenv import load_dotenv
+from app.model.model import home_entitys
+import pandas as pd
 
 load_dotenv()
 
@@ -24,3 +26,13 @@ try:
 except mariadb.Error as e:
     print(f"Error occur in connecting to Mariadb Server with error code {e}")
     sys.exit(1)
+
+
+# query = "SELECT * FROM logs"
+# cursor.execute(query)
+# data = cursor.fetchall()
+# from app.model.model import home_entitys
+# data_list = home_entitys(data)
+# print(data_list)
+# for i in data_list:
+#     print(i)

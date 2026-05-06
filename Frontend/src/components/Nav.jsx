@@ -14,8 +14,6 @@ export const Nav = () => {
     const url = useLocation();
 
     let searchTerm = url.pathname.split('/')
-    console.log(searchTerm)
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -83,8 +81,6 @@ export const Nav = () => {
                     }
                 })
 
-                console.log(res)
-
                 if (!res.ok) throw Error("search request failed!")
 
                 let post_res = await res.json()
@@ -109,7 +105,6 @@ export const Nav = () => {
     const handlelogout = (e) => {
         e.preventDefault()
         window.localStorage.removeItem('token')
-        console.log(access_token)
         window.location.reload('/')
     }
     

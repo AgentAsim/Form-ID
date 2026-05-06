@@ -3,6 +3,7 @@ import { useEffect, useContext, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ContainerContext } from '../Context/context'
 import { MdModeEdit } from "react-icons/md";
+import { FaTrashAlt } from "react-icons/fa";
 
 
 export const Home = () => {
@@ -14,6 +15,12 @@ export const Home = () => {
 
     const [HomeData, setHomeData] = useState([])
     let showonPage = url.pathname.startsWith("/post/search/") ? searchData : HomeData
+
+    const [delete_log_ID, setdelete_log_ID] = useState({
+        id: ''
+    })
+
+    const [delete_doc, setdelete_doc] = useState(false)
 
 
     useEffect(() => {
@@ -35,7 +42,6 @@ export const Home = () => {
                 let HomeData = await res.json();
                 setAuthorized(true);
                 setHomeData(HomeData);
-
             }
             catch (err) {
                 console.error(`Error Occure in Backend Connection ${err}`)
@@ -46,6 +52,39 @@ export const Home = () => {
 
 
     }, [API_Connect, url.pathname])
+
+
+    const delete_log = async () => {
+        try {
+            let res = await fetch(`${API_Connect}/delete/post`, {
+                method: "DELETE",
+                headers: {
+                    'Authorization': `Bearer ${access_token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(delete_log_ID)
+            });
+
+            if (!res.ok) throw Error("log not delete");
+
+            let delete_res = await res.json();
+            return delete_res;
+        }
+        catch (err) {
+            console.error(`Error: ${err}`)
+        }
+        finally {
+            setdelete_doc(false)
+            setdelete_log_ID({ id: "" })
+            window.location.reload()
+        }
+    };
+
+    if (delete_doc) {
+        // set(() => {
+        delete_log();
+        // }, 500);
+    };
 
 
     const handleRoute = () => {
@@ -66,11 +105,11 @@ export const Home = () => {
                         <div className="card-header">
                             <div className="editBox">
                                 <h3 className="user-name">{row.Name}</h3>
-                                <div onClick={() => (setoldData(row), handleRoute())}>
-                                    <MdModeEdit size='25' />
-                                </div>
                             </div>
-                            <span className="user-id">ID: {row.id}</span>
+                            <div className='btn-holder'>
+                                <MdModeEdit size='25' onClick={() => (setoldData(row), handleRoute('edit'))} />
+                                <FaTrashAlt size='20' color='#ff4343' name='id' value={delete_log_ID} onClick={() => (setdelete_doc(true), setdelete_log_ID({ id: row.id }))} />
+                            </div>
                         </div>
 
                         {/* Card Body: All other details */}

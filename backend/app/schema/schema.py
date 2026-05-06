@@ -1,28 +1,40 @@
 from pydantic import BaseModel
 
+"""User Authentication Schema"""
 
-# Authenticated User Schema
+# Token string Model
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+# Token data model
 class TokenData(BaseModel):
     username: str | None = None
 
-
+# New user data modal
 class NewUser(BaseModel):
     username: str
+    name: str
+    mobile_no: str
     hashed_password: str
     email: str | None = None
     disabled: bool | None = None
 
+# User model
 class User(BaseModel):
     username: str
     email: str | None = None
     disabled: bool | None = None
 
+# Login request model
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 
-# Data Schema
+
+"""Data Schema"""
+
+# New log insertion model
 class CreateLog(BaseModel):
     Name: str
     Contact: str
@@ -36,9 +48,9 @@ class CreateLog(BaseModel):
     Application_ID: str
     Due: int
 
-
+# Full log update model
 class UpdateLog(BaseModel):
-    id: int
+    id: str
     Name: str
     Contact: str
     Service: str
@@ -52,6 +64,11 @@ class UpdateLog(BaseModel):
     Due: int
 
 
-class UpdateID(BaseModel):
-    id: int
+# Due field update model
+class UpdateDue(BaseModel):
+    id: str
     Due: int
+
+# Document ID
+class DocumentID(BaseModel):
+    id: str
