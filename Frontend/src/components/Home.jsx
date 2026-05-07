@@ -51,7 +51,7 @@ export const Home = () => {
         api_connect();
 
 
-    }, [API_Connect, url.pathname])
+    }, [authorized])
 
 
     const delete_log = async () => {
