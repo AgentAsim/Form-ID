@@ -53,3 +53,16 @@ def home_entity(item) -> dict:
 
 def home_entitys(items) -> list:
     return [home_entity(item) for item in items]
+
+
+def finance_filter_entity(item) -> dict:
+    return {
+        "Govt_Fee": item["Govt_Fee"],
+        "Service_Charge": item["Service_Charge"],
+        "Total_Amount": item["Total_Amount"],
+        "Month": item["Month"],
+        "Due": item["Due"]
+    }
+
+def finance_filter_entitys(items) -> list:
+    return [finance_filter_entity(item) for item in items]
