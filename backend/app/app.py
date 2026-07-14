@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from bson import ObjectId
 from dotenv import load_dotenv
 from app.databases.mongo import conn
-from app.model.model import super_home_entitys, home_entitys, finance_filter_entitys
+from app.model.model import super_home_entitys, home_entitys
 from app.Search.search import SimpleSearchIndex
 from app.schema.schema import CreateLog, UpdateLog, UpdateDue, DocumentID
 from app.auth import auth_router, get_current_active_user, User
@@ -251,53 +251,7 @@ async def delete_all_log(current_user: current_active_user):
 # Summery Points
 @app.get("/current/month/summery")
 def get_previous(current_user: current_active_user):
-    summery_result_current_month = {
-        "Govt Fee": 0,
-        "Service Charge": 0,
-        "Total Amount": 0,
-        "Due": 0
-    }
-
-    summery_result_privous_month = {
-        "Govt Fee": 0,
-        "Service Charge": 0,
-        "Total Current": 0,
-        "Total Due": 0
-    }
-
-    summery_result_total = {
-        "Govt Fee": 0,
-        "Service Charge": 0,
-        "Total Current": 0,
-        "Total Due": 0
-    }
-
-    month_filter = Func()
-    current_month_value = month_filter.get_filtered_month(previous=True) 
-
-     # fetch all rows
-    rows = get_collection_name(current_user.data_collection).find({
-        "Month": current_month_value
-    })
     
-    if current_user.super:
-        docs = finance_filter_entitys(rows)
-
-        # if data not found
-        if not docs:
-            raise HTTPException(status_code=404, detail="Data Not Found!")
-
-        for doc in docs:
-            summery_result_current_month["Govt Fee"] += doc["Govt_Fee"]
-            summery_result_current_month["Service Charge"] += doc["Service_Charge"]
-            summery_result_current_month["Total Amount"] += doc["Total_Amount"]
-            summery_result_current_month["Due"] += doc["Due"]
-
-        summery = [summery_result_current_month, summery_result_privous_month, summery_result_total]
-        
-        return JSONResponse(status_code=200, content=summery)
-
-    
-    else:
-        HTTPException(detail="Finance Details not allowed for this user!!!", status_code=401)
-
+    month_filter = Func(current_user, get_collection_name(current_user.data_collection))
+    current_month_value = month_filter.current_month_summery() 
+    return current_month_value
