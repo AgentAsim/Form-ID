@@ -249,12 +249,12 @@ async def delete_all_log(current_user: current_active_user):
 
 
 # Summery Points
-@app.get("/summery")
+@app.get("/current/month/summery")
 def get_previous(current_user: current_active_user):
     summery_result_current_month = {
-        "Govt_Fee": 0,
-        "Service_Charge": 0,
-        "Total_Amount": 0,
+        "Govt Fee": 0,
+        "Service Charge": 0,
+        "Total Amount": 0,
         "Due": 0
     }
 
@@ -270,14 +270,13 @@ def get_previous(current_user: current_active_user):
         "Service Charge": 0,
         "Total Current": 0,
         "Total Due": 0
-    }        
+    }
 
     month_filter = Func()
-    current_month_value = month_filter.get_filtered_month() 
+    current_month_value = month_filter.get_filtered_month(previous=True) 
 
      # fetch all rows
     rows = get_collection_name(current_user.data_collection).find({
-        "Due": {"$gt": 0},
         "Month": current_month_value
     })
     
@@ -288,14 +287,15 @@ def get_previous(current_user: current_active_user):
         if not docs:
             raise HTTPException(status_code=404, detail="Data Not Found!")
 
-
         for doc in docs:
-            summery_result_current_month["Govt_Fee"] = doc["Govt_Fee"]
-            summery_result_current_month["Service_Charge"] = doc["Service_Charge"]
-            summery_result_current_month["Total_Amount"] = doc["Total_Amount"]
-            summery_result_current_month["Due"] = doc["Due"]
+            summery_result_current_month["Govt Fee"] += doc["Govt_Fee"]
+            summery_result_current_month["Service Charge"] += doc["Service_Charge"]
+            summery_result_current_month["Total Amount"] += doc["Total_Amount"]
+            summery_result_current_month["Due"] += doc["Due"]
+
+        summery = [summery_result_current_month, summery_result_privous_month, summery_result_total]
         
-        return JSONResponse(status_code=200, content=summery_result_current_month)
+        return JSONResponse(status_code=200, content=summery)
 
     
     else:
