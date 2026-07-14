@@ -261,6 +261,10 @@ def get_previous(current_user: current_active_user):
     previous_month_value = month_filter.finance_summery(summery_duration="previous")
     all_value = month_filter.finance_summery()
 
-    summery = [current_month_value, previous_month_value, all_value]
+    summery = {
+        "current month": current_month_value,
+        "previous month": previous_month_value,
+        "all value": all_value
+    }
 
     return JSONResponse(status_code=200, content=summery)
