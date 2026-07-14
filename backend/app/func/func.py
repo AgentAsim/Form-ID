@@ -6,7 +6,7 @@ from app.model.model import finance_filter_entitys
 
 
 class Func():
-    def __init__(self, current_user, collection_name):
+    def __init__(self, current_user: bool, collection_name):
         self.current_user = current_user
         self.collection_name = collection_name
 
@@ -21,36 +21,33 @@ class Func():
         return filter_month
 
 
-    def current_month_summery(self):
-        summery_result_current_month = {
+    def finance_summery(self, summery_duration=""):
+        finance_summery_block = {
             "Govt Fee": 0,
             "Service Charge": 0,
             "Total Amount": 0,
             "Due": 0
         }
 
-        summery_result_privous_month = {
-            "Govt Fee": 0,
-            "Service Charge": 0,
-            "Total Current": 0,
-            "Total Due": 0
-        }
+        if summery_duration.lower() == "current":
+            month_value = self.get_filtered_month()
 
-        summery_result_total = {
-            "Govt Fee": 0,
-            "Service Charge": 0,
-            "Total Current": 0,
-            "Total Due": 0
-        }
+        elif summery_duration.lower() == "previous":
+            month_value = self.get_filtered_month(previous=True)
 
-        current_month_value = self.get_filtered_month()
+        else:
+            month_value = ""
 
         # fetch all rows
-        rows = self.collection_name.find({
-            "Month": current_month_value
-        })
+        if month_value:
+            rows = self.collection_name.find({
+                "Month": month_value
+            })
+        else:
+            rows = self.collection_name.find()
 
-        if self.current_user.super:
+
+        if rows:
             docs = finance_filter_entitys(rows)
 
             # if data not found
@@ -58,13 +55,13 @@ class Func():
                 raise HTTPException(status_code=404, detail="Data Not Found!")
 
             for doc in docs:
-                print(doc)
-                summery_result_current_month["Govt Fee"] += doc["Govt_Fee"]
-                summery_result_current_month["Service Charge"] += doc["Service_Charge"]
-                summery_result_current_month["Total Amount"] += doc["Total_Amount"]
-                summery_result_current_month["Due"] += doc["Due"]
-                
-            return JSONResponse(status_code=200, content=summery_result_current_month)
+                finance_summery_block["Govt Fee"] += doc["Govt_Fee"]
+                finance_summery_block["Service Charge"] += doc["Service_Charge"]
+                finance_summery_block["Total Amount"] += doc["Total_Amount"]
+                finance_summery_block["Due"] += doc["Due"]
+
+            #return JSONResponse(status_code=200, content=finance_summery_block)
+            return finance_summery_block
 
             
         else:

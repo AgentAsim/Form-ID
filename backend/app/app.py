@@ -249,9 +249,18 @@ async def delete_all_log(current_user: current_active_user):
 
 
 # Summery Points
-@app.get("/current/month/summery")
+@app.get("/finance/summery")
 def get_previous(current_user: current_active_user):
+    # Only super user can do this
+    if not current_user.super:
+        raise HTTPException(status_code=405, detail="You are not allow for this operation!")
+
     
-    month_filter = Func(current_user, get_collection_name(current_user.data_collection))
-    current_month_value = month_filter.current_month_summery() 
-    return current_month_value
+    month_filter = Func(current_user.super, get_collection_name(current_user.data_collection))
+    current_month_value = month_filter.finance_summery(summery_duration="current")
+    previous_month_value = month_filter.finance_summery(summery_duration="previous")
+    all_value = month_filter.finance_summery()
+
+    summery = [current_month_value, previous_month_value, all_value]
+
+    return JSONResponse(status_code=200, content=summery)
