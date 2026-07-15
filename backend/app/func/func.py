@@ -1,5 +1,6 @@
 import datetime
 from dateutil.relativedelta import relativedelta
+import uuid
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException
 from app.model.model import finance_filter_entitys
@@ -21,21 +22,29 @@ class Func():
         return filter_month
 
 
-    def finance_summery(self, summery_duration=""):
-        finance_summery_block = {
-            "Govt Fee": 0,
-            "Service Charge": 0,
-            "Total Amount": 0,
+    def finance_summary(self, summary_duration=""):
+        finance_summary_block = {
+            "id": "",
+            "Month": "",
+            "Govt_Fee": 0,
+            "Service_Charge": 0,
+            "Total_Amount": 0,
             "Due": 0
         }
 
-        if summery_duration.lower() == "current":
+        if summary_duration.lower() == "current":
+            finance_summary_block["id"] = str(uuid.uuid4())
+            finance_summary_block["Month"] = "Current Month"
             month_value = self.get_filtered_month()
 
-        elif summery_duration.lower() == "previous":
+        elif summary_duration.lower() == "previous":
+            finance_summary_block["id"] = str(uuid.uuid4())
+            finance_summary_block["Month"] = "Previous Month"
             month_value = self.get_filtered_month(previous=True)
 
         else:
+            finance_summary_block["id"] = str(uuid.uuid4())
+            finance_summary_block["Month"] = "All Months"
             month_value = ""
 
         # fetch all rows
@@ -55,13 +64,13 @@ class Func():
                 raise HTTPException(status_code=404, detail="Data Not Found!")
 
             for doc in docs:
-                finance_summery_block["Govt Fee"] += doc["Govt_Fee"]
-                finance_summery_block["Service Charge"] += doc["Service_Charge"]
-                finance_summery_block["Total Amount"] += doc["Total_Amount"]
-                finance_summery_block["Due"] += doc["Due"]
+                finance_summary_block["Govt_Fee"] += doc["Govt_Fee"]
+                finance_summary_block["Service_Charge"] += doc["Service_Charge"]
+                finance_summary_block["Total_Amount"] += doc["Total_Amount"]
+                finance_summary_block["Due"] += doc["Due"]
 
             #return JSONResponse(status_code=200, content=finance_summery_block)
-            return finance_summery_block
+            return finance_summary_block
 
             
         else:

@@ -248,8 +248,8 @@ async def delete_all_log(current_user: current_active_user):
 
 
 
-# Summery Points
-@app.get("/finance/summery")
+# Summary Points
+@app.get("/finance/summary")
 def get_previous(current_user: current_active_user):
     # Only super user can do this
     if not current_user.super:
@@ -257,14 +257,10 @@ def get_previous(current_user: current_active_user):
 
     
     month_filter = Func(current_user.super, get_collection_name(current_user.data_collection))
-    current_month_value = month_filter.finance_summery(summery_duration="current")
-    previous_month_value = month_filter.finance_summery(summery_duration="previous")
-    all_value = month_filter.finance_summery()
+    current_month_value = month_filter.finance_summary(summary_duration="current")
+    previous_month_value = month_filter.finance_summary(summary_duration="previous")
+    all_value = month_filter.finance_summary()
 
-    summery = {
-        "current month": current_month_value,
-        "previous month": previous_month_value,
-        "all value": all_value
-    }
+    summary_list = [current_month_value, previous_month_value, all_value]
 
-    return JSONResponse(status_code=200, content=summery)
+    return JSONResponse(status_code=200, content=summary_list)
