@@ -9,13 +9,23 @@ import { Notification } from './Notification';
 
 export const Home = () => {
 
-    const { API_Connect, setoldData, searchData, authorized, access_token, setAuthorized, notification, setNotification, super_user } = useContext(ContainerContext)
+    const { API_Connect, setoldData, searchData, authorized, access_token, setAuthorized, notification, setNotification, super_user, summary_data } = useContext(ContainerContext)
 
     const url = useLocation();
     const navigate = useNavigate();
 
     const [HomeData, setHomeData] = useState([])
-    let showonPage = url.pathname.startsWith("/post/search/") ? searchData : HomeData
+
+    let showonPage;
+    if (url.pathname.startsWith("/post/search/")) {
+        showonPage = searchData;
+    }
+    else if (url.pathname.startsWith("/summary")) {
+        showonPage = summary_data;
+    }
+    else {
+        showonPage = HomeData
+    }
 
     const [delete_log_ID, setdelete_log_ID] = useState({
         id: ''
@@ -120,76 +130,115 @@ export const Home = () => {
     return (
         <>
             <div className={`card-container`}>
-                {showonPage.map((row) => (
-                    <div key={row.id} className="service-card">
-                        {/* Card Header: Name and ID */}
-                        <div className="card-header">
-                            <div className="editBox">
-                                <h3 className="user-name">{row.Name}</h3>
-                            </div>
-                            {super_user ? (
-                                <div className='btn-holder'>
-                                <MdModeEdit size='25' onClick={() => (setoldData(row), handleRoute('edit'))} />
-                                <FaTrashAlt size='20' color='#ff4343' name='id' value={delete_log_ID} onClick={() => (setdelete_doc(true), setdelete_log_ID({ id: row.id }))} />
-                            </div>
-                            ) : null}
-                        </div>
+                {showonPage.map((row) => url.pathname.startsWith("/summary") ? (
+                <div key={row.id} className="service-card">
+    
+    {/* Card Header */}
+    <div className="card-header">
+        <h3 className="user-name">{row.Month}</h3>
+    </div>
 
-                        {/* Card Body: All other details */}
-                        <div className="card-body">
-                            <div className="data-row">
-                                <span className="label">Contact</span>
-                                <a className="value" href={`tel:${row.Contact}`}>{row.Contact}</a>
-                            </div>
-                            <div className="data-row">
-                                <span className="label">Service</span>
-                                <span className="value">{row.Service}</span>
-                            </div>
-                            <div className="data-row">
-                                <span className="label">Service Type</span>
-                                <span className="value">{row.Service_Type}</span>
-                            </div>
-                            <div className="data-row">
-                                <span className="label">Created At</span>
-                                <span className="value">{row.Created_At}</span>
-                            </div>
-                            <div className="data-row">
-                                <span className="label">Application ID</span>
-                                <span className="value">{row.Application_ID}</span>
+    {/* Card Body */}
+    <div className="card-body">
+        
+        {/* Financials Container */}
+        <div className="financials">
+            
+            <div className="data-row">
+                <span className="label">Govt Fee</span>
+                <span className="value">₹{row.Govt_Fee}</span>
+            </div>
+            
+            <div className="data-row">
+                <span className="label">Service Charge</span>
+                <span className="value">₹{row.Service_Charge}</span>
+            </div>
+            
+            <div className="data-row total-row">
+                <span className="label">Total Amount</span>
+                <span className="value">₹{row.Total_Amount}</span>
+            </div>
+            
+            <div className="data-row due-row">
+                <span className="label">Due Amount</span>
+                <span className="value">₹{row.Due}</span>
+            </div>
+            
+        </div> 
+        
+    </div>
+
+</div>
+                ) : (
+                        <div key={row.id} className="service-card">
+                            {/* Card Header: Name and ID */}
+                            <div className="card-header">
+                                <div className="editBox">
+                                    <h3 className="user-name">{row.Name}</h3>
+                                </div>
+                                {super_user ? (
+                                    <div className='btn-holder'>
+                                    <MdModeEdit size='25' onClick={() => (setoldData(row), handleRoute('edit'))} />
+                                    <FaTrashAlt size='20' color='#ff4343' name='id' value={delete_log_ID} onClick={() => (setdelete_doc(true), setdelete_log_ID({ id: row.id }))} />
+                                </div>
+                                ) : null}
                             </div>
 
-                            {/* Financials grouped together visually */}
-                            {super_user? (
+                            {/* Card Body: All other details */}
+                            <div className="card-body">
+                                <div className="data-row">
+                                    <span className="label">Contact</span>
+                                    <a className="value" href={`tel:${row.Contact}`}>{row.Contact}</a>
+                                </div>
+                                <div className="data-row">
+                                    <span className="label">Service</span>
+                                    <span className="value">{row.Service}</span>
+                                </div>
+                                <div className="data-row">
+                                    <span className="label">Service Type</span>
+                                    <span className="value">{row.Service_Type}</span>
+                                </div>
+                                <div className="data-row">
+                                    <span className="label">Created At</span>
+                                    <span className="value">{row.Created_At}</span>
+                                </div>
+                                <div className="data-row">
+                                    <span className="label">Application ID</span>
+                                    <span className="value">{row.Application_ID}</span>
+                                </div>
+
+                                {/* Financials grouped together visually */}
+                                {super_user? (
+                                    <div className="financials">
+                                        <div className="data-row">
+                                            <span className="label">Govt Fee</span>
+                                            <span className="value">₹{row.Govt_Fee}</span>
+                                        </div>
+                                        <div className="data-row">
+                                            <span className="label">Service Fee</span>
+                                            <span className="value">₹{row.Service_Charge}</span>
+                                        </div>
+                                        <div className="data-row total-row">
+                                            <span className="label">Total Fee</span>
+                                            <span className="value">₹{row.Total_Amount}</span>
+                                        </div>
+                                        <div className="data-row due-row">
+                                            <span className="label">Due Amount</span>
+                                            <span className="value">₹{row.Due}</span>
+                                        </div>
+                                    </div>
+                                )
+                                : (
                                 <div className="financials">
-                                    <div className="data-row">
-                                        <span className="label">Govt Fee</span>
-                                        <span className="value">₹{row.Govt_Fee}</span>
-                                    </div>
-                                    <div className="data-row">
-                                        <span className="label">Service Fee</span>
-                                        <span className="value">₹{row.Service_Charge}</span>
-                                    </div>
-                                    <div className="data-row total-row">
-                                        <span className="label">Total Fee</span>
-                                        <span className="value">₹{row.Total_Amount}</span>
-                                    </div>
                                     <div className="data-row due-row">
                                         <span className="label">Due Amount</span>
                                         <span className="value">₹{row.Due}</span>
                                     </div>
                                 </div>
-                            )
-                            : (
-                            <div className="financials">
-                                <div className="data-row due-row">
-                                    <span className="label">Due Amount</span>
-                                    <span className="value">₹{row.Due}</span>
-                                </div>
+                                )}
                             </div>
-                            )}
                         </div>
-                    </div>
-                ))}
+                    ))}
             </div>
         </>
     )

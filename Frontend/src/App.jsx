@@ -16,10 +16,9 @@ function App() {
   const [authorized, setAuthorized] = useState(false)
   const [loading, setLoading] = useState(!!access_token)
   const [super_user, setsuper_user] = useState(false)
-  console.log(super_user)
+  const [summary_data, setsummary_data] = useState([])
 
   const navigate = useNavigate();
-
 
   const [notification, setNotification] = useState({
     "show": false,
@@ -51,7 +50,7 @@ function App() {
 
         if (res.ok) {
           const session_res = await res.json();
-          console.log("session res: ", session_res)
+
           if (session_res.active_user === true) {
             setAuthorized(true);
           
@@ -126,7 +125,9 @@ function App() {
             setAuthorized,
             notification,
             setNotification,
-            super_user
+            super_user,
+            summary_data,
+            setsummary_data
           }
         }>
 
@@ -135,6 +136,7 @@ function App() {
           <Routes>
             <Route path='/login' element={<Login />} />
             <Route path="/" element={<Home />} />
+            <Route path="/summary" element={<Home />} />
             <Route path="/post/search/:query" element={<Home />} />
             <Route path="/new/post" element={<LogForm />} />
             <Route path={`/update/log`} element={<CardForm />} />

@@ -44,6 +44,7 @@ export const Login = () => {
             localStorage.setItem('token', data.access_token);
             window.location.replace('/');
             setAuthorized(true);
+            return "Access Granted!!!"
 
         }
         catch (err) {

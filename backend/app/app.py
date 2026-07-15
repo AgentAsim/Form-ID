@@ -1,4 +1,5 @@
 import os
+import datetime
 from typing import Annotated
 from datetime import date
 from fastapi import FastAPI, HTTPException, Depends
@@ -11,6 +12,7 @@ from app.model.model import super_home_entitys, home_entitys
 from app.Search.search import SimpleSearchIndex
 from app.schema.schema import CreateLog, UpdateLog, UpdateDue, DocumentID
 from app.auth import auth_router, get_current_active_user, User
+from app.func.func import Func
 
 load_dotenv()
 
@@ -242,3 +244,23 @@ async def delete_all_log(current_user: current_active_user):
             return JSONResponse(content="All documents deleted successfully")
     except Exception as e:
         raise HTTPException(detail=f"Error: {r}", status_code=400)
+
+
+
+
+# Summary Points
+@app.get("/finance/summary")
+def get_previous(current_user: current_active_user):
+    # Only super user can do this
+    if not current_user.super:
+        raise HTTPException(status_code=405, detail="You are not allow for this operation!")
+
+    
+    month_filter = Func(current_user.super, get_collection_name(current_user.data_collection))
+    current_month_value = month_filter.finance_summary(summary_duration="current")
+    previous_month_value = month_filter.finance_summary(summary_duration="previous")
+    all_value = month_filter.finance_summary()
+
+    summary_list = [current_month_value, previous_month_value, all_value]
+
+    return JSONResponse(status_code=200, content=summary_list)

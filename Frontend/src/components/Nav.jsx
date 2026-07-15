@@ -2,13 +2,14 @@ import React, { useContext } from 'react'
 import { useState, useEffect } from 'react';
 import { RiAddLargeLine } from "react-icons/ri";
 import { IoLogOutSharp } from "react-icons/io5";
+import { FaSheetPlastic } from "react-icons/fa6";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ContainerContext } from '../Context/context';
 
 
 
 export const Nav = () => {
-    const { API_Connect, searchPara, setsearchPara, setsearchData, authorized, access_token, super_user } = useContext(ContainerContext)
+    const { API_Connect, searchPara, setsearchPara, setsearchData, authorized, access_token, super_user, setsummary_data } = useContext(ContainerContext)
 
     const navigate = useNavigate();
     const url = useLocation();
@@ -24,9 +25,14 @@ export const Nav = () => {
     }
 
 
-    const handleRoute = () => {
+    const handleRoute = (button_identifier) => {
         if (authorized) {
-            navigate("/new/post")
+            if (button_identifier === "new post") {
+                navigate("/new/post")
+            }
+            else if (button_identifier === "summary") {
+                navigate("/summary")
+            }
         }
         else {
             navigate("/login")
@@ -68,6 +74,29 @@ export const Nav = () => {
         }
     }
 
+    const handleSummary = async () => {
+        
+
+        try {
+            let res = await fetch(`${API_Connect}/finance/summary`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${access_token}`,
+                    'Content-Type': "application/json"
+                }
+            });
+
+            if (!res.ok) throw Error("Finance Summary not found!!!");
+
+            let finance_res = await res.json();
+            setsummary_data(finance_res);
+            return finance_res;
+        }
+        catch (err) {
+            console.error(`Error Occure in Finance Summary with error code ${err}`)
+        }
+    }
+
     useEffect(() => {
 
         const directSearch = async () => {
@@ -99,6 +128,10 @@ export const Nav = () => {
             directSearch();
         }
 
+        if (url.pathname.startsWith("/summary")) {
+            handleSummary()
+        }
+
     }, [])
 
 
@@ -121,9 +154,14 @@ export const Nav = () => {
                 </form>
                 <div className="btnholder">
                     {super_user ? (
-                         <div onClick={() => (handleRoute())} className='add'>
-                            <RiAddLargeLine />
-                        </div>
+                        <>
+                            <div onClick={() => (handleRoute("new post"))} className='add'>
+                                <RiAddLargeLine />
+                            </div>
+                            <div onClick={() => (handleRoute("summary"), handleSummary())} className='add'>
+                                <FaSheetPlastic />
+                            </div>
+                        </>
                     ) : null}
                     <div onClick={handlelogout} className='add logout'>
                         <IoLogOutSharp />
