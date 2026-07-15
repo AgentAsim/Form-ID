@@ -23,7 +23,7 @@ COPY . .
 ENV PYTHONPATH="/app:${PYTHONPATH}"
 
 # Expose port
-EXPOSE 8181
+EXPOSE 8000
 
 # Run the Python script directly (this will execute uvicorn.run())
 CMD ["python", "main.py"]
