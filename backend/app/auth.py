@@ -197,7 +197,7 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
         raise HTTPException(status_code=400, detail="Inactive User")
     return current_user
 
-
+#Create a new token on login
 @auth_router.post("/token")
 async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
     user = authenticate_user(user_manager(), login_credentials.username, login_credentials.password)
@@ -216,6 +216,7 @@ async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Dep
     return Token(access_token=access_token, token_type='bearer')
 
 
+# Send fresh token to user stay login
 @auth_router.get("/refresh/token")
 async def refresh_token(current_user: Annotated[User, Depends(decode_token)]):
     print("time now: ", datetime.now(timezone.utc).timestamp())
@@ -223,7 +224,8 @@ async def refresh_token(current_user: Annotated[User, Depends(decode_token)]):
         user = current_user.username
         print("my user", user)
         if user is not None:
-            return refresh_access_token(user)
+            refresh_token = refresh_access_token(user)
+            return JSONResponse(status_code=201, content=refresh_token.model_dump())
     else:
         return JSONResponse(status_code=400, content=f"Previous Token is Valid!!!")
 
