@@ -29,6 +29,44 @@ function App() {
 
 
   useEffect(() => {
+
+    let refreshToken = async () => {
+      try {
+
+        let res = await fetch(`${API_Connect}/refresh/token`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${access_token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        //let res_data = await res.json();
+        
+        if (res.status === 201) {
+          let res_data = await res.json();
+          console.log("--------Called__________")
+          console.log(res_data)
+          //console.log(res_data.access_token)
+          //localStorage.removeItem('token')
+          localStorage.setItem('token', res_data.access_token)
+          window.location.reload();
+          setAuthorized(true)
+          return "Token Refreshed!!!"
+        }
+ 
+        else if (res.ok) {
+          window.location.reload();
+        }
+
+      } catch (err) {
+        console.error(`Error Occure: ${err}`)
+        localStorage.removeItem('token')
+        navigate('/login')
+      }
+    }
+
+
     const verifySession = async () => {
       if (!access_token) {
         setAuthorized(false);
@@ -68,19 +106,20 @@ function App() {
           } else {
             setsuper_user(false)
           }
-          
-
-
+ 
         } else {
+          refreshToken()
           setAuthorized(false);
-          localStorage.removeItem('token');
-          navigate("/login");
+          //localStorage.removeItem('token');
+          //navigate("/login");
         }
+
       } catch (err) {
         console.error("Session verification failed:", err);
         setAuthorized(false);
         localStorage.removeItem('token');
         navigate("/login");
+
       } finally {
         setLoading(false);
       }

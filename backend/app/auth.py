@@ -100,13 +100,11 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
     to_encode.update({"exp": expire})
     encode_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
-    #print(encode_jwt)
     return encode_jwt    
 
 
 # Decode current token and return user for generating new fresh token with extened expiration time
 def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
-    print("decoded token: ", token)
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Not Authorized",
@@ -121,7 +119,6 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
         expiration_time = payload.get("exp")
 
         if expiration_time < current_time_stamp and expiration_time:
-            print("asim")
             refresh_access_token(username)
             token_data = RefreshTokenData(username=username)
             return token_data
@@ -186,8 +183,6 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     if user is None:
         raise credentials_exception
 
-    print("user from get_current_user", user)
-
     return user
 
 
@@ -219,15 +214,13 @@ async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Dep
 # Send fresh token to user stay login
 @auth_router.get("/refresh/token")
 async def refresh_token(current_user: Annotated[User, Depends(decode_token)]):
-    print("time now: ", datetime.now(timezone.utc).timestamp())
     if current_user.username:
         user = current_user.username
-        print("my user", user)
         if user is not None:
             refresh_token = refresh_access_token(user)
             return JSONResponse(status_code=201, content=refresh_token.model_dump())
     else:
-        return JSONResponse(status_code=400, content=f"Previous Token is Valid!!!")
+        return JSONResponse(status_code=200, content={"token": "Privous Token is Valid!!!"})
 
 
 

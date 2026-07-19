@@ -129,10 +129,10 @@ export const Nav = () => {
         }
 
         if (url.pathname.startsWith("/summary")) {
-            handleSummary()
+            handleSummary();
         }
 
-    }, [])
+    }, [url.pathname])
 
 
     const handlelogout = (e) => {

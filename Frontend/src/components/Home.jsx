@@ -132,43 +132,43 @@ export const Home = () => {
             <div className={`card-container`}>
                 {showonPage.map((row) => url.pathname.startsWith("/summary") ? (
                 <div key={row.id} className="service-card">
-    
-    {/* Card Header */}
-    <div className="card-header">
-        <h3 className="user-name">{row.Month}</h3>
-    </div>
+                    
+                    {/* Card Header */}
+                    <div className="card-header">
+                        <h3 className="user-name">{row.Month}</h3>
+                    </div>
 
-    {/* Card Body */}
-    <div className="card-body">
+                    {/* Card Body */}
+                    <div className="card-body">
+                        
+                        {/* Financials Container */}
+                        <div className="financials">
+                            
+                            <div className="data-row">
+                                <span className="label">Govt Fee</span>
+                                <span className="value">₹{row.Govt_Fee}</span>
+                            </div>
+                            
+                            <div className="data-row">
+                                <span className="label">Service Charge</span>
+                                <span className="value">₹{row.Service_Charge}</span>
+                            </div>
+                            
+                            <div className="data-row total-row">
+                                <span className="label">Total Amount</span>
+                                <span className="value">₹{row.Total_Amount}</span>
+                            </div>
+                            
+                            <div className="data-row due-row">
+                                <span className="label">Due Amount</span>
+                                <span className="value">₹{row.Due}</span>
+                            </div>
+                    
+                        </div> 
         
-        {/* Financials Container */}
-        <div className="financials">
-            
-            <div className="data-row">
-                <span className="label">Govt Fee</span>
-                <span className="value">₹{row.Govt_Fee}</span>
-            </div>
-            
-            <div className="data-row">
-                <span className="label">Service Charge</span>
-                <span className="value">₹{row.Service_Charge}</span>
-            </div>
-            
-            <div className="data-row total-row">
-                <span className="label">Total Amount</span>
-                <span className="value">₹{row.Total_Amount}</span>
-            </div>
-            
-            <div className="data-row due-row">
-                <span className="label">Due Amount</span>
-                <span className="value">₹{row.Due}</span>
-            </div>
-            
-        </div> 
-        
-    </div>
+                    </div>
+                </div>
 
-</div>
                 ) : (
                         <div key={row.id} className="service-card">
                             {/* Card Header: Name and ID */}
