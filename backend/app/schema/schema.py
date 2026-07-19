@@ -11,6 +11,10 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: str | None = None
 
+class RefreshTokenData(BaseModel):
+    username: str | None = None
+    token: str | None = None
+
 # New user data modal
 class NewUser(BaseModel):
     username: str

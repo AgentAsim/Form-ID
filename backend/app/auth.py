@@ -10,7 +10,7 @@ from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 from dotenv import load_dotenv
 from app.model.model import all_users_entitys
-from app.schema.schema import Token, TokenData, User, NewUser, LoginRequest
+from app.schema.schema import Token, TokenData, User, NewUser, LoginRequest, RefreshTokenData
 from app.databases.mongo import conn
 
 # DataBase Table Selection
@@ -100,33 +100,133 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
     to_encode.update({"exp": expire})
     encode_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
-    return encode_jwt
+    #print(encode_jwt)
+    return encode_jwt    
+
+
+# Decode current token and return user for generating new fresh token with extened expiration time
+def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
+    print("decoded token: ", token)
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        headers={"WWW-Authenticated": "bearer"}
+    )
+
+    current_time_stamp = int(datetime.now(timezone.utc).timestamp())
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM], options={"verify_exp": False})
+        username = payload.get("sub")
+        expiration_time = payload.get("exp")
+
+        if expiration_time < current_time_stamp and expiration_time:
+            print("asim")
+            refresh_access_token(username)
+            token_data = RefreshTokenData(username=username)
+            return token_data
+
+        else:
+            privous_token = RefreshTokenData(token=token)
+            return privous_token
+
+    except InvalidTokenError as e:
+        raise credentials_exception
+
+
+# Refresh token with extened expiration time
+def refresh_access_token(username: str | None = None) -> Token:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        headers={"WWW-Authenticated": "bearer"}
+    )
+
+    try:
+        if username is None:
+            raise credentials_exception
+
+        refresh_token_expiration_time = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        refresh_access_token = create_access_token(
+            data={"sub": username}, expires_delta=refresh_token_expiration_time
+        )
+        return Token(access_token=refresh_access_token, token_type="bearer")
+    
+    except:
+        raise credentials_exception
+
+
 
 # Return Requested User if Authorized
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-       credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not Authorized",
-            headers={"WWW-Authenticated": "bearer"}
-       )
-       try:
-           payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-           username = payload.get("sub")
-           if username is None:
-               raise credentials_exception
-           token_data = TokenData(username=username)
-       except InvalidTokenError:
-           raise credentials_exception
-       user = registered_user(user_manager(), username=token_data.username)
-       if user is None:
-           raise credentials_exception
-       return user
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        headers={"WWW-Authenticated": "bearer"}
+    )
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM], options={"verify_exp": True})
+        username = payload.get("sub")
+
+        if username is None:
+            raise credentials_exception 
+
+        token_data = TokenData(username=username)
+
+    except InvalidTokenError as e:
+        if str(e) == "Signature has expired":
+            #decode_token(token)
+            raise HTTPException(status_code=401, detail="Token has expired!!!")
+
+        raise credentials_exception
+
+    user = registered_user(user_manager(), username=token_data.username)
+
+    if user is None:
+        raise credentials_exception
+
+    print("user from get_current_user", user)
+
+    return user
+
 
 # Return Current User Active or Not
 async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive User")
     return current_user
+
+
+@auth_router.post("/token")
+async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
+    user = authenticate_user(user_manager(), login_credentials.username, login_credentials.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token =  create_access_token(
+        data= {"sub": user.username}, expires_delta=access_token_expires
+    )
+
+    return Token(access_token=access_token, token_type='bearer')
+
+
+@auth_router.get("/refresh/token")
+async def refresh_token(current_user: Annotated[User, Depends(decode_token)]):
+    print("time now: ", datetime.now(timezone.utc).timestamp())
+    if current_user.username:
+        user = current_user.username
+        print("my user", user)
+        if user is not None:
+            return refresh_access_token(user)
+    else:
+        return JSONResponse(status_code=400, content=f"Previous Token is Valid!!!")
+
 
 
 @auth_router.post('/new/user')
@@ -169,24 +269,6 @@ async def all_users(current_user: Annotated[User, Depends(get_current_active_use
 
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Error: {e}")
-
-
-@auth_router.post("/token")
-async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
-    user = authenticate_user(user_manager(), login_credentials.username, login_credentials.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"}
-        )
-
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token =  create_access_token(
-        data= {"sub": user.username}, expires_delta=access_token_expires
-    )
-
-    return Token(access_token=access_token, token_type='bearer')
 
 
 
