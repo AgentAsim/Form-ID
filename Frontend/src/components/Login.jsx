@@ -8,7 +8,7 @@ export const Login = () => {
 
     const { API_Connect, setAuthorized } = useContext(ContainerContext)
 
-    //const { formState: { isSubmitting } } = useForm();
+    const { handleSubmit, formState: { isSubmitting } } = useForm();
 
     const navigate = useNavigate();
 
@@ -28,8 +28,8 @@ export const Login = () => {
         });
     }
 
+
     let handle_login = async (credentials) => {
-        credentials.preventDefault();
 
         try {
             const res = await fetch(`${API_Connect}/token`, {
@@ -65,7 +65,7 @@ export const Login = () => {
                 <h2>Welcome Back</h2>
                 <p>Please enter your details to login.</p>
 
-                <form onSubmit={handle_login}>
+                <form onSubmit={handleSubmit(handle_login)}>
                     <div className="form-group-login">
                         <label for="username">Username</label>
                         <input type="text" name='username' value={login_credentials.username} onChange={handle_change} id="username" placeholder="username" required />
@@ -76,7 +76,7 @@ export const Login = () => {
                         <input type="password" name="password" value={login_credentials.password} onChange={handle_change} id="password" placeholder="password" required />
                     </div>
 
-                    <button type="submit" className="login-btn">Sign In</button>
+                    <button type="submit" disabled={isSubmitting} className="login-btn">Sign In</button>
                 </form>
 
                 <div className="options">

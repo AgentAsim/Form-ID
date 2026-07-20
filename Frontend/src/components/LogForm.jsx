@@ -3,11 +3,14 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import { ContainerContext } from '../Context/context';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form'
 import { Notification } from './Notification';
 
 export const LogForm = () => {
 
     const { API_Connect, access_token, notification, setNotification } = useContext(ContainerContext);
+
+    const { handleSubmit, formState: { isSubmitting } } = useForm();
 
     const navigate = useNavigate();
     const handleRoute = () => {
@@ -42,8 +45,8 @@ export const LogForm = () => {
 
 
     // handle form submition
-    const handleSubmit = async (data) => {
-        data.preventDefault();
+    const handle_Submit = async (data) => {
+        //data.preventDefault();
 
         // API call here
         try {
@@ -87,7 +90,7 @@ export const LogForm = () => {
 
     return (<>
         <div className={`form-page-container`}>
-            <form className="theme-form" onSubmit={handleSubmit} autoComplete='off'>
+            <form className="theme-form" onSubmit={handleSubmit(handle_Submit)} autoComplete='off'>
                 <div className="form-header">
                     <h2>Add New Log</h2>
                     <p>Enter the service details below.</p>
@@ -155,7 +158,7 @@ export const LogForm = () => {
 
                 {/* <div className=""> */}
                 <div className="form-actions btn">
-                    <button type="submit" className="submit-btn btn">Save Log</button>
+                    <button type="submit" diabled={isSubmitting} className="submit-btn btn">Save Log</button>
                 </div>
                 <div className="form-actions btn">
                     <button onClick={() => (handleRoute())} type="submit" className="submit-btn btn cancel-btn">Cancel</button>

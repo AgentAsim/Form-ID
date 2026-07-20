@@ -3,10 +3,13 @@ import { useContext } from 'react';
 import { MdModeEdit } from "react-icons/md";
 import { ContainerContext } from '../Context/context';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form'
 import { Notification } from './Notification';
 
 export const CardForm = () => {
     const { API_Connect, oldData, setoldData, access_token, notification, setNotification } = useContext(ContainerContext)
+
+    const { handleSubmit, formState: { isSubmitting } } = useForm();
 
     // home page pointer
     const navigate = useNavigate();
@@ -23,8 +26,8 @@ export const CardForm = () => {
 
 
     // Handle form submition
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handle_Submit = async (e) => {
+        //e.preventDefault();
 
         try {
             // post data 
@@ -69,7 +72,7 @@ export const CardForm = () => {
     return (
         <>
             {/* Swapped standard div for a form element, kept the same class */}
-            <form className="service-card update-form" onSubmit={handleSubmit} autoComplete='off'>
+            <form className="service-card update-form" onSubmit={handleSubmit(handle_Submit)} autoComplete='off'>
 
                 <h1 className='updateform-heading'>
                     Update logs Details
@@ -155,7 +158,7 @@ export const CardForm = () => {
 
                 </div>
                 {/* Inline styled button to fit the card bottom natively */}
-                <button type="submit" className='update-form-btn btn submit-btn'>
+                <button type="submit" disabled={isSubmitting} className='update-form-btn btn submit-btn'>
                     Update Log
                 </button>
                 <div className='update-form-btn cancel-btn' onClick={() => (handleRoute())}>
