@@ -45,10 +45,6 @@ function App() {
         
         if (res.status === 201) {
           let res_data = await res.json();
-          console.log("--------Called__________")
-          console.log(res_data)
-          //console.log(res_data.access_token)
-          //localStorage.removeItem('token')
           localStorage.setItem('token', res_data.access_token)
           window.location.reload();
           setAuthorized(true)
@@ -108,11 +104,20 @@ function App() {
           }
  
         } else {
-          refreshToken()
-          setAuthorized(false);
-          //localStorage.removeItem('token');
-          //navigate("/login");
+          const session_res = await res.json();
+
+          // refresh token if the token is authentic
+          if (session_res.detail === "Token has expired!!!") {
+            refreshToken();
+          }
+
+          else {
+            setAuthorized(false);
+            localStorage.removeItem('token');
+            navigate("/login");
+          }
         }
+
 
       } catch (err) {
         console.error("Session verification failed:", err);

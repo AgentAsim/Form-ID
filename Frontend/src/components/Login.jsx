@@ -2,10 +2,13 @@ import React from 'react'
 import { useContext, useState } from 'react'
 import { ContainerContext } from '../Context/context'
 import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 
 export const Login = () => {
 
     const { API_Connect, setAuthorized } = useContext(ContainerContext)
+
+    //const { formState: { isSubmitting } } = useForm();
 
     const navigate = useNavigate();
 
@@ -25,7 +28,6 @@ export const Login = () => {
         });
     }
 
-
     let handle_login = async (credentials) => {
         credentials.preventDefault();
 
@@ -38,13 +40,15 @@ export const Login = () => {
                 body: new URLSearchParams(login_credentials)
             });
 
-            if (!res.ok) Error('User Not Authenticated')
+            if (!res.ok) alert('Username or Password Incorrect!')
 
-            const data = await res.json();
-            localStorage.setItem('token', data.access_token);
-            window.location.replace('/');
-            setAuthorized(true);
-            return "Access Granted!!!"
+            if (res.ok) {
+                const data = await res.json();
+                localStorage.setItem('token', data.access_token);
+                window.location.replace('/');
+                setAuthorized(true);
+                return "Access Granted!!!"
+            }
 
         }
         catch (err) {

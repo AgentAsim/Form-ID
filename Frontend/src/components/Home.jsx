@@ -45,13 +45,15 @@ export const Home = () => {
                     }
                 });
                 if (!res.ok || res.status === 401) {
-                    console.log("Unable to connect HomeDataBase!");
+                    console.error("Unable to connect HomeDataBase!");
                     setNotification({
                         ...notification,
                         "is_error": true,
                         "status_code": res.status,
                         "message": res.statusText
                     })
+                    //navigate('/login')
+                    //localstorage.remove('token')
                 }
 
                 let HomeData = await res.json();
