@@ -27,7 +27,6 @@ export const LogForm = () => {
         Govt_Fee: '',
         Service_Charge: '',
         Total_Amount: '',
-        Month: '',
         Created_At: 'Default',
         Application_ID: 'NA',
         Due: ''
@@ -118,13 +117,7 @@ export const LogForm = () => {
                         <input type="text" name="Service_Type" value={formData.Service_Type} onChange={handleChange} placeholder='Service Type' required />
                     </div>
 
-                    <div className="form-group">
-                        <label>Month</label>
-                        {/* Could also be type="month" depending on your needs */}
-                        <input type="text" name="Month" value={formData.Month} onChange={handleChange} placeholder="e.g. Jan26" required />
-                    </div>
-
-                    <div className="form-group">
+                    <div className="form-group full-width">
                         <label>Created At</label>
                         <input type="text" name="Created_At" value={formData.Created_At} onChange={handleChange} placeholder='e.g. YYYY-MM-DD' required />
                     </div>

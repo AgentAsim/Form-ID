@@ -184,6 +184,7 @@ nav div {
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     padding-bottom: 12px;
     margin-bottom: 16px;
+    gap: 20px;
 }
 
 .btn-holder {
@@ -259,6 +260,7 @@ nav div {
 
 /* Specific styling for financial data to make it stand out */
 .financials {
+    width: 100%;
     height: fit-content;
     margin-top: 8px;
     background-color: rgba(15, 27, 38, 0.4);
@@ -293,7 +295,7 @@ nav div {
 } */
 
 .form-page-container {
-    width: 100%;
+    width: -webkit-fill-available;
     min-height: 100vh;
     margin-top: 96px;
     background-color: #0f1b26;
@@ -357,6 +359,7 @@ nav div {
 }
 
 .form-group {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -429,8 +432,9 @@ nav div {
 }
 
 .update-form {
-    width: fit-content;
-    margin-top: 126px;
+    width: 100%;
+    max-width: 800px;
+    /* margin-top: 126px; */
 }
 
 .updateform-body {
@@ -438,6 +442,10 @@ nav div {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.details {
+    width: 100%;
 }
 
 
