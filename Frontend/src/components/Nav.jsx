@@ -176,11 +176,13 @@ export const Nav = () => {
                 <div className={`${side_panel ? "side-panel" : "hide-block"}`}> 
                     
                     <div className="btnholder side-panel-btnholder">
-                        {super_user ? (
-                            <>
-                                <div onClick={() => (setsearchbar(true), setside_panel(false))} className='add'>
+
+                        <div onClick={() => (setsearchbar(true), setside_panel(false))} className='add'>
                                     <BsSearch />
-                                </div>
+                        </div>
+
+                        {super_user ? (
+                            <> 
                                 <div onClick={() => (handleRoute("new post"), setside_panel(false), setsearchbar(false))} className='add'>
                                     <RiAddLargeLine />
                                 </div>
@@ -189,9 +191,11 @@ export const Nav = () => {
                                 </div>
                             </>
                         ) : null}
+
                         <div onClick={handlelogout} className='add'>
                             <BiLogOut />
                         </div>
+
                     </div>
 
                 </div>
