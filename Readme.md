@@ -8,13 +8,15 @@ Password: dummy
 ```bash
 
 E-Shopmine
-|
 ├── backend
 │   ├── app
 │   │   ├── app.py
 │   │   ├── auth.py
 │   │   ├── databases
-│   │   │   ├── db.py
+│   │   │   ├── __init__.py
+│   │   │   └── mongo.py
+│   │   ├── func
+│   │   │   ├── func.py
 │   │   │   └── __init__.py
 │   │   ├── __init__.py
 │   │   ├── model
@@ -30,34 +32,33 @@ E-Shopmine
 │   ├── Dockerfile
 │   ├── __init__.py
 │   ├── main.py
-│   ├── pyproject.toml
-│   └── uv.lock
-|
-└── Frontend
-    ├── eslint.config.js
-    ├── index.html
-    ├── netlify.toml
-    ├── package.json
-    ├── package-lock.json
-    ├── public
-    │   ├── favicon.ico
-    │   └── vite.svg
-    ├── src
-    │   ├── App.jsx
-    │   ├── assets
-    │   │   └── react.svg
-    │   ├── components
-    │   │   ├── CardForm.jsx
-    │   │   ├── Home.jsx
-    │   │   ├── LogForm.jsx
-    │   │   ├── Login.jsx
-    │   │   └── Nav.jsx
-    │   ├── Context
-    │   │   └── context.js
-    │   ├── Main.css
-    │   └── main.jsx
-    └── vite.config.js
-
+│   └── requirements.txt
+├── Frontend
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── netlify.toml
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   └── vite.svg
+│   ├── src
+│   │   ├── App.jsx
+│   │   ├── assets
+│   │   │   └── react.svg
+│   │   ├── components
+│   │   │   ├── CardForm.jsx
+│   │   │   ├── Home.jsx
+│   │   │   ├── LogForm.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Nav.jsx
+│   │   │   └── Notification.jsx
+│   │   ├── Context
+│   │   │   └── context.js
+│   │   ├── Main.css
+│   │   └── main.jsx
+│   └── vite.config.js
+└── Readme.md
 ```
 ## Requirements
 - MongoDB - for the data storage.
