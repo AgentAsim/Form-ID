@@ -28,9 +28,18 @@ a {
     justify-content: center;
 }
 
+
+.hide-block {
+    display: none;
+}
+
+.rotate-block {
+    rotate: 180deg;
+}
+
 nav {
     width: -webkit-fill-available;
-    height: 74px;
+    height: 64px;
     color: #ffffff;
     background-color: #1d303fdb;
     padding: 3px 6px;
@@ -46,6 +55,36 @@ nav {
     z-index: 200;
     margin: 24px;
     border-radius: 20px;}
+
+
+.side-bar {
+    display: none;
+    /*position: absolute;
+    right: 32px;*/
+    margin-right: 32px;
+}
+
+.side-panel {
+    width: fit-content;
+    height: calc(100vh - 184px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border: 2px solid #3eb1ff;
+    box-shadow: 0 0 23px #3eb1ff;
+    position: absolute;
+    top: 100px;
+    right: 18px;
+    padding: 16px;
+    gap: 12px;
+    background: #1d303f;
+}
+
+
+.nav-btn-container {
+    display: contents;
+}
 
 
 .search-bar {
@@ -65,9 +104,9 @@ nav {
 
 
 #logo {
-    margin: 0 26px;
+    margin: 0 0 0 26px;
     font-family: 'Princess Sofia';
-    font-size: xxx-large;
+    font-size: 38px;
     text-shadow: 0 0 8px #ffffff;
 }
 
@@ -92,6 +131,10 @@ nav div {
     gap: 15px;
 }
 
+.side-panel-btnholder {
+    flex-direction: column;
+}
+
 
 .add {
     transition: all 0.5s ease-in-out;
@@ -101,7 +144,6 @@ nav div {
 
 .logout {
     margin: 0 26px 0 0;
-
 }
 
 .add:hover {
@@ -651,6 +693,20 @@ input:focus {
 
 /* Mobile Responsiveness */
 @media (max-width: 830px) {
+
+    .nav-btn-container {
+        display: none;
+    }
+
+    .side-bar {
+        display: flex;
+    }
+
+    .add {
+        border: 2px solid #ffffff;
+        box-shadow: 0px 0px 8px #ffffff;
+    }
+
     .update-card-header {
         display: block;
     }

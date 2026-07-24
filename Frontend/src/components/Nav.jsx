@@ -1,15 +1,20 @@
 import React, { useContext } from 'react'
 import { useState, useEffect } from 'react';
 import { RiAddLargeLine } from "react-icons/ri";
-import { IoLogOutSharp } from "react-icons/io5";
+import { BiLogOut } from "react-icons/bi";
 import { FaSheetPlastic } from "react-icons/fa6";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ContainerContext } from '../Context/context';
-
+import { TbLayoutSidebarRightExpandFilled } from "react-icons/tb";
+import { BsSearch } from "react-icons/bs";
 
 
 export const Nav = () => {
     const { API_Connect, searchPara, setsearchPara, setsearchData, authorized, access_token, super_user, setsummary_data } = useContext(ContainerContext)
+    
+
+    const [side_panel, setside_panel] = useState(false);
+    const [searchbar, setsearchbar] = useState(false)
 
     const navigate = useNavigate();
     const url = useLocation();
@@ -140,31 +145,74 @@ export const Nav = () => {
         window.localStorage.removeItem('token')
         window.location.replace('/login')
     }
-    
+
+
+    const handle_side_panel = () => {
+        if (side_panel) {
+            setside_panel(false)
+        }
+        else {
+            setside_panel(true)
+        }
+    }    
 
 
     return (
         <>
             <nav>
-                <div id='logo' onClick={() => authorized ? navigate("/") : navigate('/login')}>
+                <div id='logo' onClick={() => (authorized ? navigate("/") : navigate('/login'), setsearchbar(false))}>
                     Shop
                 </div>
-                <form className="search-bar form-group" onSubmit={handleSearch}>
-                    <input type="text" className="search-area" name='query' placeholder='Search' value={searchPara.query} onChange={handleChange} />
+                
+                <form className={`${searchbar ? "search-bar form-group" : "hide-block"}`} onSubmit={handleSearch}>
+                        <input type="text" className="search-area" name='query' placeholder='Search' value={searchPara.query} onChange={handleChange}/>
                 </form>
-                <div className="btnholder">
-                    {super_user ? (
-                        <>
-                            <div onClick={() => (handleRoute("new post"))} className='add'>
-                                <RiAddLargeLine />
-                            </div>
-                            <div onClick={() => (handleRoute("summary"), handleSummary())} className='add'>
-                                <FaSheetPlastic />
-                            </div>
-                        </>
-                    ) : null}
-                    <div onClick={handlelogout} className='add logout'>
-                        <IoLogOutSharp />
+
+                <div className={`add side-bar`} onClick={() => (setside_panel(true), handle_side_panel())}>
+                    <TbLayoutSidebarRightExpandFilled size='25'/>
+                </div>
+
+
+                <div className={`${side_panel ? "side-panel" : "hide-block"}`}> 
+                    
+                    <div className="btnholder side-panel-btnholder">
+                        {super_user ? (
+                            <>
+                                <div onClick={() => (setsearchbar(true), setside_panel(false))} className='add'>
+                                    <BsSearch />
+                                </div>
+                                <div onClick={() => (handleRoute("new post"), setside_panel(false), setsearchbar(false))} className='add'>
+                                    <RiAddLargeLine />
+                                </div>
+                                <div onClick={() => (handleRoute("summary"), handleSummary(), setside_panel(false), setsearchbar(false))} className='add'>
+                                    <FaSheetPlastic />
+                                </div>
+                            </>
+                        ) : null}
+                        <div onClick={handlelogout} className='add'>
+                            <BiLogOut />
+                        </div>
+                    </div>
+
+                </div>
+                <div className="nav-btn-container">
+                    <form className="search-bar form-group" onSubmit={handleSearch}>
+                        <input type="text" className="search-area" name='query' placeholder='Search' value={searchPara.query} onChange={handleChange} />
+                    </form>
+                    <div className="btnholder">
+                        {super_user ? (
+                            <>
+                                <div onClick={() => (handleRoute("new post"))} className='add'>
+                                    <RiAddLargeLine />
+                                </div>
+                                <div onClick={() => (handleRoute("summary"), handleSummary())} className='add'>
+                                    <FaSheetPlastic />
+                                </div>
+                            </>
+                        ) : null}
+                        <div onClick={handlelogout} className='add logout'>
+                            <BiLogOut />
+                        </div>
                     </div>
                 </div>
             </nav>

@@ -176,7 +176,9 @@ function App() {
         }>
 
         <div className={`container`}>
-          <Nav />
+          {window.location.pathname === "/login" ? null : (
+            <Nav />
+          )}
           <Routes>
             <Route path='/login' element={<Login />} />
             <Route path="/" element={<Home />} />
