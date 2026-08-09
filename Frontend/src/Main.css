@@ -39,7 +39,7 @@ a {
 
 nav {
     width: -webkit-fill-available;
-    height: 64px;
+    height: 55px;
     color: #ffffff;
     background-color: #1d303fdb;
     padding: 3px 6px;
@@ -104,10 +104,12 @@ nav {
 
 
 #logo {
+    width: 73px;
     margin: 0 0 0 26px;
     font-family: 'Princess Sofia';
     font-size: 38px;
-    text-shadow: 0 0 8px #ffffff;
+    text-shadow: 0 0 8px #ffffff; 
+    cursor: pointer;
 }
 
 nav div {
@@ -115,7 +117,7 @@ nav div {
     justify-content: center;
     align-items: center;
     gap: 4px;
-    cursor: pointer;
+    /* cursor: pointer; */
     padding: 4px;
     background: transparent;
     border-radius: 5px;
@@ -137,6 +139,7 @@ nav div {
 
 
 .add {
+    cursor: pointer;
     transition: all 0.5s ease-in-out;
     padding: 9px 11px;
     border: 2px solid #ffffff6a;

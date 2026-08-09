@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import logo from '../../public/logo.png'
 import { useState, useEffect } from 'react';
 import { RiAddLargeLine } from "react-icons/ri";
 import { BiLogOut } from "react-icons/bi";
@@ -160,9 +161,7 @@ export const Nav = () => {
     return (
         <>
             <nav>
-                <div id='logo' onClick={() => (authorized ? navigate("/") : navigate('/login'), setsearchbar(false))}>
-                    Shop
-                </div>
+                <img src={logo} id='logo' onClick={() => (authorized ? navigate("/") : navigate('/login'), setsearchbar(false))} />
                 
                 <form className={`${searchbar ? "search-bar form-group" : "hide-block"}`} onSubmit={handleSearch}>
                         <input type="text" className="search-area" name='query' placeholder='Search' value={searchPara.query} onChange={handleChange}/>
