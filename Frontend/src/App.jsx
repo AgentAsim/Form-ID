@@ -46,19 +46,20 @@ function App() {
         if (res.status === 201) {
           let res_data = await res.json();
           localStorage.setItem('token', res_data.access_token)
-          window.location.reload();
           setAuthorized(true)
           return "Token Refreshed!!!"
         }
  
         else if (res.ok) {
-          window.location.reload();
+          setAuthorized(true)
         }
 
       } catch (err) {
         console.error(`Error Occure: ${err}`)
-        localStorage.removeItem('token')
-        navigate('/login')
+        if (err.name !== 'TypeError' && err.name !== 'AbortError') {
+          localStorage.removeItem('token')
+          navigate('/login')
+        }
       }
     }
 
@@ -121,9 +122,11 @@ function App() {
 
       } catch (err) {
         console.error("Session verification failed:", err);
-        setAuthorized(false);
-        localStorage.removeItem('token');
-        navigate("/login");
+        if (err.name !== 'TypeError' && err.name !== 'AbortError') {
+          setAuthorized(false);
+          localStorage.removeItem('token');
+          navigate("/login");
+        }
 
       } finally {
         setLoading(false);
