@@ -2,7 +2,7 @@ import os
 import datetime
 from typing import Annotated
 from fastapi import FastAPI, HTTPException, Depends
-from  fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from bson import ObjectId
 from dotenv import load_dotenv
@@ -63,7 +63,7 @@ def get_collection_name(user_data_collection):
 
 # User Session
 @app.get("/user/session")
-def user_session(current_user: current_active_user):
+async def user_session(current_user: current_active_user):
     if current_user:
         return {"super": current_user.super, "active_user": True}
     return False
