@@ -124,7 +124,7 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
 
         else:
             previous_token = RefreshTokenData(token=token)
-            return prvious_token
+            return previous_token
 
     except InvalidTokenError as e:
         raise credentials_exception
