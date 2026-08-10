@@ -21,7 +21,7 @@ user_collection = conn.Shop.users
 # Load Secrets
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALOGRITHM")
+ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 
@@ -119,13 +119,12 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
         expiration_time = payload.get("exp")
 
         if expiration_time < current_time_stamp and expiration_time:
-            refresh_access_token(username)
             token_data = RefreshTokenData(username=username)
             return token_data
 
         else:
-            privous_token = RefreshTokenData(token=token)
-            return privous_token
+            previous_token = RefreshTokenData(token=token)
+            return prvious_token
 
     except InvalidTokenError as e:
         raise credentials_exception
@@ -147,6 +146,7 @@ def refresh_access_token(username: str | None = None) -> Token:
         refresh_access_token = create_access_token(
             data={"sub": username}, expires_delta=refresh_token_expiration_time
         )
+        
         return Token(access_token=refresh_access_token, token_type="bearer")
     
     except:
@@ -220,7 +220,7 @@ async def refresh_token(current_user: Annotated[User, Depends(decode_token)]):
             refresh_token = refresh_access_token(user)
             return JSONResponse(status_code=201, content=refresh_token.model_dump())
     else:
-        return JSONResponse(status_code=200, content={"token": "Privous Token is Valid!!!"})
+        return JSONResponse(status_code=200, content={"token": "Previous Token is Valid!!!"})
 
 
 
