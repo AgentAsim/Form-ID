@@ -74,7 +74,7 @@ E-Shopmine
 ```bash
 # Authentication Secrets
 SECRET_KEY=values
-ALOGRITHM=HS256
+ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=values
 
 # Server Configurations
