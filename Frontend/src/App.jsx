@@ -25,8 +25,7 @@ function App() {
     "is_error": false,
     "status_code": "",
     "message": ""
-  })
-
+  }) 
 
   useEffect(() => {
 
@@ -46,17 +45,19 @@ function App() {
         if (res.status === 201) {
           let res_data = await res.json();
           localStorage.setItem('token', res_data.access_token)
+          window.location.reload();
           setAuthorized(true)
           return "Token Refreshed!!!"
         }
  
         else if (res.ok) {
+          window.location.reload();
           setAuthorized(true)
         }
 
       } catch (err) {
         console.error(`Error Occure: ${err}`)
-        if (err.name !== 'TypeError' && err.name !== 'AbortError') {
+        if (err.name !== "TypeError" && err.name !== "AbortError") {
           localStorage.removeItem('token')
           navigate('/login')
         }
@@ -94,8 +95,10 @@ function App() {
             }
           } else {
             setAuthorized(false);
-            localStorage.removeItem('token');
-            navigate("/login");
+            if (err.name !== "TypeError" && err.name !== "AbortError") {
+              localStorage.removeItem('token')
+              navigate('/login')
+            }
           }
 
           if (session_res.super === true) {
@@ -114,19 +117,21 @@ function App() {
 
           else {
             setAuthorized(false);
-            localStorage.removeItem('token');
-            navigate("/login");
+            if (err.name !== "TypeError" && err.name !== "AbortError") {
+              localStorage.removeItem('token')
+              navigate('/login')
+            }
           }
         }
 
 
       } catch (err) {
         console.error("Session verification failed:", err);
-        if (err.name !== 'TypeError' && err.name !== 'AbortError') {
           setAuthorized(false);
-          localStorage.removeItem('token');
-          navigate("/login");
-        }
+          if (err.name !== "TypeError" && err.name !== "AbortError") {
+            localStorage.removeItem('token')
+            navigate('/login')
+          }
 
       } finally {
         setLoading(false);
@@ -144,13 +149,12 @@ function App() {
   const [searchPara, setsearchPara] = useState({
     query: ''
   })
-  const [searchData, setsearchData] = useState([])
-  
+  const [searchData, setsearchData] = useState([]) 
+
   if (loading) {
     return (
       <div className="app-loader">
         <div className="spinner"></div>
-        <p>Verifying session...</p>
       </div>
     );
   }
