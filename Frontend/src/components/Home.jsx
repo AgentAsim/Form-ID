@@ -57,7 +57,7 @@ export const Home = () => {
                 }
 
                 let HomeData = await res.json();
-                setAuthorized(true);
+                //setAuthorized(true);
                 setHomeData(HomeData);
             }
             catch (err) {
@@ -68,7 +68,7 @@ export const Home = () => {
         api_connect();
 
 
-    }, [authorized])
+    }, [])
 
 
     const delete_log = async () => {

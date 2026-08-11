@@ -60,7 +60,7 @@ export const LogForm = () => {
                 body: JSON.stringify(formData)
 
             })
-            console.log(res)
+            
             if (!res.ok) {
                 setNotification({
                     ...notification,
