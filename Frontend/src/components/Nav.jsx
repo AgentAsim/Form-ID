@@ -3,10 +3,11 @@ import logo from '/logo.png'
 import { useState, useEffect } from 'react';
 import { RiAddLargeLine } from "react-icons/ri";
 import { BiLogOut } from "react-icons/bi";
-import { FaSheetPlastic } from "react-icons/fa6";
+import { MdOutlineSummarize } from "react-icons/md";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ContainerContext } from '../Context/context';
 import { TbLayoutSidebarRightExpandFilled } from "react-icons/tb";
+import { AiOutlineUserSwitch } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
 
 
@@ -81,7 +82,6 @@ export const Nav = () => {
     }
 
     const handleSummary = async () => {
-        
 
         try {
             let res = await fetch(`${API_Connect}/finance/summary`, {
@@ -177,7 +177,11 @@ export const Nav = () => {
                     <div className="btnholder side-panel-btnholder">
 
                         <div onClick={() => (setsearchbar(true), setside_panel(false))} className='add'>
-                                    <BsSearch />
+                            <BsSearch />
+                        </div>
+
+                        <div className="add">
+                            <AiOutlineUserSwitch />
                         </div>
 
                         {super_user ? (
@@ -186,7 +190,7 @@ export const Nav = () => {
                                     <RiAddLargeLine />
                                 </div>
                                 <div onClick={() => (handleRoute("summary"), handleSummary(), setside_panel(false), setsearchbar(false))} className='add'>
-                                    <FaSheetPlastic />
+                                    <MdOutlineSummarize />
                                 </div>
                             </>
                         ) : null}
@@ -209,10 +213,13 @@ export const Nav = () => {
                                     <RiAddLargeLine />
                                 </div>
                                 <div onClick={() => (handleRoute("summary"), handleSummary())} className='add'>
-                                    <FaSheetPlastic />
+                                    <MdOutlineSummarize />
                                 </div>
                             </>
                         ) : null}
+                        <div className='add'>
+                            <AiOutlineUserSwitch />
+                        </div>
                         <div onClick={handlelogout} className='add logout'>
                             <BiLogOut />
                         </div>
