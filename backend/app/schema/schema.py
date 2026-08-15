@@ -10,6 +10,7 @@ class Token(BaseModel):
 # Token data model
 class TokenData(BaseModel):
     username: str | None = None
+    admin: bool | None = None
 
 class RefreshTokenData(BaseModel):
     username: str | None = None
@@ -25,6 +26,7 @@ class NewUser(BaseModel):
     disabled: bool | None = None
     super: bool | None = None
 
+
 # User model
 class User(BaseModel):
     username: str
@@ -32,6 +34,7 @@ class User(BaseModel):
     disabled: bool | None = None
     super: bool | None = None
     data_collection: str
+    #admin: bool | None = None
 
 # Login request model
 class LoginRequest(BaseModel):

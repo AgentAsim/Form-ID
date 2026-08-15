@@ -37,6 +37,7 @@ password_hashed = PasswordHash.recommended()
 # Store Requested User with password
 class UserInDB(User):
     hashed_password: str
+    admin: bool | None = None
 
 
 # Password Hashing for DB
@@ -56,8 +57,10 @@ def user_manager():
 
     # Dict of user by username
     All_Users_Dict = {}
+
     for one in All_Users:
         All_Users_Dict.update({one["username"]: one})
+
     return All_Users_Dict
 
 
@@ -70,9 +73,10 @@ def get_password_hashed(password):
     return password_hashed.hash(password)
 
 # Get Correct User if Available in UserData
-def registered_user(user_db, username: str):
+def registered_user(user_db, username: str, admin: bool = False):
     if username in user_db:
         user_dict = user_db[username]
+        user_dict["admin"] = admin
         return UserInDB(**user_dict)
     return False
 
@@ -100,7 +104,41 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
     to_encode.update({"exp": expire})
     encode_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
-    return encode_jwt    
+    return encode_jwt
+
+
+def switch_role(token: Annotated[str, Depends(oauth2_scheme)]):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        headers={"WWW-Authenticated": "bearer"}
+    )
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        admin = payload.get("admin")
+
+        if username is None:
+            raise credentials_exception
+
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+
+        if not admin:
+            new_token = create_access_token(
+                data={"sub": username, "admin": True}, expires_delta=access_token_expires
+            )
+            return JSONResponse(content={"admin": True, "token": new_token}, status_code=201)
+
+        else:
+            new_token = create_access_token(
+                data={"sub": username, "admin": False}, expires_delta=access_token_expires
+            )
+            return JSONResponse(content={"admin": False, "token": new_token}, status_code=201)
+
+    except InvalidTokenError as e:
+        raise credentials_exception
+        
 
 
 # Decode current token and return user for generating new fresh token with extened expiration time
@@ -116,10 +154,11 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM], options={"verify_exp": False})
         username = payload.get("sub")
+        admin = payload.get("admin")
         expiration_time = payload.get("exp")
 
         if expiration_time < current_time_stamp and expiration_time:
-            token_data = RefreshTokenData(username=username)
+            token_data = RefreshTokenData(username=username, admin=admin)
             return token_data
 
         else:
@@ -131,7 +170,7 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
 
 
 # Refresh token with extened expiration time
-def refresh_access_token(username: str | None = None) -> Token:
+def refresh_access_token(username: str | None = None, admin: bool = False) -> Token:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Not Authorized",
@@ -144,7 +183,7 @@ def refresh_access_token(username: str | None = None) -> Token:
 
         refresh_token_expiration_time = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         refresh_access_token = create_access_token(
-            data={"sub": username}, expires_delta=refresh_token_expiration_time
+            data={"sub": username, "admin": admin}, expires_delta=refresh_token_expiration_time
         )
         
         return Token(access_token=refresh_access_token, token_type="bearer")
@@ -162,14 +201,22 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         headers={"WWW-Authenticated": "bearer"}
     )
 
+    # Token Data
+    token_fields = {}
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM], options={"verify_exp": True})
         username = payload.get("sub")
+        admin = payload.get("admin")
+
+        # Token Fields
+        token_fields["username"] = username
+        token_fields["admin"] = admin
 
         if username is None:
             raise credentials_exception 
 
-        token_data = TokenData(username=username)
+        token_data = TokenData(username=username, admin=admin)
 
     except InvalidTokenError as e:
         if str(e) == "Signature has expired":
@@ -178,19 +225,21 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
         raise credentials_exception
 
-    user = registered_user(user_manager(), username=token_data.username)
+    user = registered_user(user_manager(), username=token_data.username, admin=token_data.admin)
 
     if user is None:
         raise credentials_exception
 
+    #return {"user": user, "token_fields": token_fields["admin"]}
     return user
 
 
-# Return Current User Active or Not
-async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
+# Return Current User Active or Not and Super user or not
+async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]): 
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive User")
     return current_user
+
 
 #Create a new token on login
 @auth_router.post("/token")
@@ -205,7 +254,7 @@ async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Dep
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token =  create_access_token(
-        data= {"sub": user.username}, expires_delta=access_token_expires
+        data= {"sub": user.username, "admin": False}, expires_delta=access_token_expires
     )
 
     return Token(access_token=access_token, token_type='bearer')
@@ -222,6 +271,11 @@ async def refresh_token(current_user: Annotated[User, Depends(decode_token)]):
     else:
         return JSONResponse(status_code=200, content={"token": "Previous Token is Valid!!!"})
 
+
+
+@auth_router.get("/switch/user/role")
+async def switch_user_role(switch_current_user_access: Annotated[User, Depends(switch_role)]):
+    return switch_current_user_access
 
 
 @auth_router.post('/new/user')

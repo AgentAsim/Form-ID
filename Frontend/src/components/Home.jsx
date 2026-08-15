@@ -131,6 +131,7 @@ export const Home = () => {
 
     return (
         <>
+            { /* Financial Transcation Summary */ }
             <div className={`card-container`}>
                 {showonPage.map((row) => url.pathname.startsWith("/summary") ? (
                 <div key={row.id} className="service-card">

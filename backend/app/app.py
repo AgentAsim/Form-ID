@@ -65,7 +65,7 @@ def get_collection_name(user_data_collection):
 @app.get("/user/session")
 async def user_session(current_user: current_active_user):
     if current_user:
-        return {"super": current_user.super, "active_user": True}
+        return {"super": current_user.admin, "active_user": True}
     return False
 
 
