@@ -184,13 +184,13 @@ export const Nav = () => {
     return (
         <>
             <nav>
-                <img src={logo} id='logo' onClick={() => (authorized ? navigate("/") : navigate('/login'), setsearchbar(false))} />
+                <img src={logo} id='logo' onClick={() => (authorized ? navigate("/") : navigate('/login'), setsearchbar(false))} title="Home" />
                 
                 <form className={`${searchbar ? "search-bar form-group" : "hide-block"}`} onSubmit={handleSearch}>
                         <input type="text" className="search-area" name='query' placeholder='Search' value={searchPara.query} onChange={handleChange}/>
                 </form>
 
-                <div className={`add side-bar`} onClick={() => (setside_panel(true), handle_side_panel())}>
+                <div className={`add side-bar`} onClick={() => (setside_panel(true), handle_side_panel())} title="Quick Links">
                     <TbLayoutSidebarRightExpandFilled size='25'/>
                 </div>
 
@@ -199,26 +199,26 @@ export const Nav = () => {
                     
                     <div className="btnholder side-panel-btnholder">
 
-                        <div onClick={() => (setsearchbar(true), setside_panel(false))} className='add'>
+                        <div onClick={() => (setsearchbar(true), setside_panel(false))} className='add' title='Search'>
                             <BsSearch />
                         </div>
 
-                        <div className="add" onClick={handle_user_role}>
+                        <div className="add" onClick={handle_user_role} title={super_user ? "Normal" : "Admin"}>
                             <AiOutlineUserSwitch />
                         </div>
 
                         {super_user ? (
                             <> 
-                                <div onClick={() => (handleRoute("new post"), setside_panel(false), setsearchbar(false))} className='add'>
+                                <div onClick={() => (handleRoute("new post"), setside_panel(false), setsearchbar(false))} className='add' title="New Post">
                                     <RiAddLargeLine />
                                 </div>
-                                <div onClick={() => (handleRoute("summary"), handleSummary(), setside_panel(false), setsearchbar(false))} className='add'>
+                                <div onClick={() => (handleRoute("summary"), handleSummary(), setside_panel(false), setsearchbar(false))} className='add' title="Summary">
                                     <MdOutlineSummarize />
                                 </div>
                             </>
                         ) : null}
 
-                        <div onClick={handlelogout} className='add'>
+                        <div onClick={handlelogout} className='add' title="Log Out">
                             <BiLogOut />
                         </div>
 
@@ -232,18 +232,18 @@ export const Nav = () => {
                     <div className="btnholder">
                         {super_user ? (
                             <>
-                                <div onClick={() => (handleRoute("new post"))} className='add'>
+                                <div onClick={() => (handleRoute("new post"))} className='add' title="New Post">
                                     <RiAddLargeLine />
                                 </div>
-                                <div onClick={() => (handleRoute("summary"), handleSummary())} className='add'>
+                                <div onClick={() => (handleRoute("summary"), handleSummary())} className='add' title="Summary">
                                     <MdOutlineSummarize />
                                 </div>
                             </>
                         ) : null}
-                        <div className='add' onClick={handle_user_role}>
+                        <div className='add' onClick={handle_user_role} title={super_user ? "Normal" : "Admin"}>
                             <AiOutlineUserSwitch />
                         </div>
-                        <div onClick={handlelogout} className='add logout'>
+                        <div onClick={handlelogout} className='add logout' title="Log Out">
                             <BiLogOut />
                         </div>
                     </div>
