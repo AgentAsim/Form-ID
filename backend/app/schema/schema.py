@@ -10,6 +10,7 @@ class Token(BaseModel):
 # Token data model
 class TokenData(BaseModel):
     username: str | None = None
+    admin: bool | None = None
 
 class RefreshTokenData(BaseModel):
     username: str | None = None

@@ -37,6 +37,7 @@ password_hashed = PasswordHash.recommended()
 # Store Requested User with password
 class UserInDB(User):
     hashed_password: str
+    admin: bool | None = None
 
 
 # Password Hashing for DB
@@ -72,9 +73,10 @@ def get_password_hashed(password):
     return password_hashed.hash(password)
 
 # Get Correct User if Available in UserData
-def registered_user(user_db, username: str):
+def registered_user(user_db, username: str, admin: bool = False):
     if username in user_db:
         user_dict = user_db[username]
+        user_dict["admin"] = admin
         return UserInDB(**user_dict)
     return False
 
@@ -152,10 +154,11 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM], options={"verify_exp": False})
         username = payload.get("sub")
+        admin = payload.get("admin")
         expiration_time = payload.get("exp")
 
         if expiration_time < current_time_stamp and expiration_time:
-            token_data = RefreshTokenData(username=username)
+            token_data = RefreshTokenData(username=username, admin=admin)
             return token_data
 
         else:
@@ -167,7 +170,7 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
 
 
 # Refresh token with extened expiration time
-def refresh_access_token(username: str | None = None) -> Token:
+def refresh_access_token(username: str | None = None, admin: bool = False) -> Token:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Not Authorized",
@@ -180,7 +183,7 @@ def refresh_access_token(username: str | None = None) -> Token:
 
         refresh_token_expiration_time = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         refresh_access_token = create_access_token(
-            data={"sub": username, "admin": False}, expires_delta=refresh_token_expiration_time
+            data={"sub": username, "admin": admin}, expires_delta=refresh_token_expiration_time
         )
         
         return Token(access_token=refresh_access_token, token_type="bearer")
@@ -213,7 +216,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         if username is None:
             raise credentials_exception 
 
-        token_data = TokenData(username=username)
+        token_data = TokenData(username=username, admin=admin)
 
     except InvalidTokenError as e:
         if str(e) == "Signature has expired":
@@ -222,7 +225,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
         raise credentials_exception
 
-    user = registered_user(user_manager(), username=token_data.username)
+    user = registered_user(user_manager(), username=token_data.username, admin=token_data.admin)
 
     if user is None:
         raise credentials_exception
@@ -232,7 +235,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
 
 # Return Current User Active or Not and Super user or not
-async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
+async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]): 
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive User")
     return current_user
