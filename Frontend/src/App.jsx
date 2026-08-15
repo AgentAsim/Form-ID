@@ -189,11 +189,17 @@ function App() {
           <Routes>
             <Route path='/login' element={<Login />} />
             <Route path="/" element={<Home />} />
-            <Route path="/summary" element={<Home />} />
             <Route path="/post/search/:query" element={<Home />} />
-            <Route path="/new/post" element={<LogForm />} />
-            <Route path={`/update/log`} element={<CardForm />} />
           </Routes>
+
+          {super_user ? (
+            <Routes>
+              <Route path="/summary" element={<Home />} /> 
+              <Route path="/new/post" element={<LogForm />} />
+              <Route path={`/update/log`} element={<CardForm />} />
+            </Routes>
+          ) : null }
+          
         </div>
       </ContainerContext.Provider>
     </>

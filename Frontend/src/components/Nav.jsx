@@ -54,6 +54,29 @@ export const Nav = () => {
     }
 
 
+    const handle_user_role = async () => {
+        try {
+            const res = await fetch(`${API_Connect}/switch/user/role`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${access_token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            if (!res.ok) throw Error ("switch user role failed!!!")
+
+            let new_role = await res.json()
+            localStorage.setItem("token", new_role.token)
+            window.location.reload();
+            return new_role.admin
+
+        } catch (err) {
+            console.error(`Error to switch user role ${err}`)
+        }
+    }
+
+
     const handleSearch = async (data) => {
         data.preventDefault()
 
@@ -180,7 +203,7 @@ export const Nav = () => {
                             <BsSearch />
                         </div>
 
-                        <div className="add">
+                        <div className="add" onClick={handle_user_role}>
                             <AiOutlineUserSwitch />
                         </div>
 
@@ -217,7 +240,7 @@ export const Nav = () => {
                                 </div>
                             </>
                         ) : null}
-                        <div className='add'>
+                        <div className='add' onClick={handle_user_role}>
                             <AiOutlineUserSwitch />
                         </div>
                         <div onClick={handlelogout} className='add logout'>
