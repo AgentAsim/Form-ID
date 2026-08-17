@@ -48,20 +48,32 @@ def password_hashing(password):
 
 
 # All Users Dict list
-def user_manager():
-    # get all users
-    users_list = user_collection.find({})
+def user_manager(username: str = None):
+    if username is not None:
+        # find requested user
+        user = user_collection.find({"username": username})
+        
+        # User dict
+        user_dict = all_users_entitys(user)
 
-    # list of all users
-    All_Users = all_users_entitys(users_list)
+        # Return only first user
+        return user_dict[0]
 
-    # Dict of user by username
-    All_Users_Dict = {}
 
-    for one in All_Users:
-        All_Users_Dict.update({one["username"]: one})
+    elif username is None:
+        # get all users
+        users_list = user_collection.find({})
 
-    return All_Users_Dict
+        # list of all users
+        All_Users = all_users_entitys(users_list)
+
+        # Dict of user by username
+        All_Users_Dict = {}
+
+        for one in All_Users:
+            All_Users_Dict.update({one["username"]: one})
+
+        return All_Users_Dict
 
 
 # Varify user password
@@ -72,19 +84,20 @@ def verify_password(plain_password, hashed_password):
 def get_password_hashed(password):
     return password_hashed.hash(password)
 
-# Get Correct User if Available in UserData
-def registered_user(user_db, username: str, admin: bool = False):
-    if username in user_db:
-        user_dict = user_db[username]
+# is user registered or not
+def is_registered_user(username: str, admin: bool = False):
+    user_db = user_manager(username)
+    if username in user_db["username"]:
+        user_dict = user_db
         user_dict["admin"] = admin
         return UserInDB(**user_dict)
     return False
 
 
 # Authenticate User Credentials
-def authenticate_user(user_db, username: str, password: str):
+def authenticate_user(username: str, password: str):
     # Search user on DataBase
-    user = registered_user(user_db, username)
+    user = is_registered_user(username)
     if not user:
         # If user not exist
         return False
@@ -128,7 +141,7 @@ def switch_role(token: Annotated[str, Depends(oauth2_scheme)]):
         if username is None:
             raise credentials_exception
 
-        user = registered_user(user_db=user_manager(), username=username, admin=admin)
+        user = is_registered_user(username=username, admin=admin)
 
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
@@ -230,7 +243,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
         raise credentials_exception
 
-    user = registered_user(user_manager(), username=token_data.username, admin=token_data.admin)
+    user = is_registered_user(username=token_data.username, admin=token_data.admin)
 
     if user is None:
         raise credentials_exception
@@ -248,7 +261,8 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
 #Create a new token on login
 @auth_router.post("/token")
 async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
-    user = authenticate_user(user_manager(), login_credentials.username, login_credentials.password)
+    user = authenticate_user(login_credentials.username, login_credentials.password)
+    admin = True
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -258,10 +272,10 @@ async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Dep
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token =  create_access_token(
-        data= {"sub": user.username, "admin": False}, expires_delta=access_token_expires
+        data= {"sub": user.username, "admin": admin}, expires_delta=access_token_expires
     )
 
-    return Token(admin=False, access_token=access_token, token_type='bearer')
+    return Token(admin=admin, access_token=access_token, token_type='bearer')
 
 
 # Send fresh token to user stay login
