@@ -95,6 +95,12 @@ def authenticate_user(user_db, username: str, password: str):
     return user
 
 
+def has_admin(user):
+    if user.super and not user.disabled:
+        return True
+    return False
+
+
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
@@ -122,19 +128,24 @@ def switch_role(token: Annotated[str, Depends(oauth2_scheme)]):
         if username is None:
             raise credentials_exception
 
+        user = registered_user(user_db=user_manager(), username=username, admin=admin)
+
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
-        if not admin:
+        if not admin and has_admin(user):
             new_token = create_access_token(
                 data={"sub": username, "admin": True}, expires_delta=access_token_expires
             )
             return JSONResponse(content={"admin": True, "token": new_token}, status_code=201)
 
-        else:
+        elif admin and has_admin(user):
             new_token = create_access_token(
                 data={"sub": username, "admin": False}, expires_delta=access_token_expires
             )
             return JSONResponse(content={"admin": False, "token": new_token}, status_code=201)
+
+        elif not has_admin(user):
+            raise HTTPException(status_code=403, detail="You are not Allow as Admin!!!") 
 
     except InvalidTokenError as e:
         raise credentials_exception
@@ -162,7 +173,7 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]):
             return token_data
 
         else:
-            previous_token = RefreshTokenData(token=token)
+            previous_token = RefreshTokenData(token=token, admin=admin)
             return previous_token
 
     except InvalidTokenError as e:
@@ -186,7 +197,7 @@ def refresh_access_token(username: str | None = None, admin: bool = False) -> To
             data={"sub": username, "admin": admin}, expires_delta=refresh_token_expiration_time
         )
         
-        return Token(access_token=refresh_access_token, token_type="bearer")
+        return Token(admin=admin, access_token=refresh_access_token, token_type="bearer")
     
     except:
         raise credentials_exception
@@ -201,17 +212,11 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         headers={"WWW-Authenticated": "bearer"}
     )
 
-    # Token Data
-    token_fields = {}
-
+    
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM], options={"verify_exp": True})
         username = payload.get("sub")
         admin = payload.get("admin")
-
-        # Token Fields
-        token_fields["username"] = username
-        token_fields["admin"] = admin
 
         if username is None:
             raise credentials_exception 
@@ -230,12 +235,11 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     if user is None:
         raise credentials_exception
 
-    #return {"user": user, "token_fields": token_fields["admin"]}
     return user
 
 
 # Return Current User Active or Not and Super user or not
-async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]): 
+async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive User")
     return current_user
@@ -257,25 +261,28 @@ async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Dep
         data= {"sub": user.username, "admin": False}, expires_delta=access_token_expires
     )
 
-    return Token(access_token=access_token, token_type='bearer')
+    return Token(admin=False, access_token=access_token, token_type='bearer')
 
 
 # Send fresh token to user stay login
 @auth_router.get("/refresh/token")
-async def refresh_token(current_user: Annotated[User, Depends(decode_token)]):
-    if current_user.username:
-        user = current_user.username
-        if user is not None:
-            refresh_token = refresh_access_token(user)
-            return JSONResponse(status_code=201, content=refresh_token.model_dump())
-    else:
-        return JSONResponse(status_code=200, content={"token": "Previous Token is Valid!!!"})
-
+async def refresh_token(current_user: Annotated[User, Depends(decode_token)]) -> Token:
+    try:
+        if current_user.username:
+            user = current_user.username
+            if user is not None:
+                refresh_token = refresh_access_token(user)
+                return JSONResponse(status_code=201, content=refresh_token.model_dump())
+        else:
+            return JSONResponse(status_code=200, content={"token": "Previous Token is Valid!!!"})
+    
+    except Error as e:
+        raise HTTPException(status_code=400, detail="Bad Request!!!")
 
 
 @auth_router.get("/switch/user/role")
-async def switch_user_role(switch_current_user_access: Annotated[User, Depends(switch_role)]):
-    return switch_current_user_access
+async def switch_user_role(switch_to_admin_user: Annotated[User, Depends(switch_role)]) -> Token:
+    return switch_to_admin_user
 
 
 @auth_router.post('/new/user')

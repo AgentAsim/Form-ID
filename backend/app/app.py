@@ -29,10 +29,10 @@ current_active_user = Annotated[User, Depends(get_current_active_user)]
 
 # check weather the user is super or not
 def get_home_entitiys_by_user_role(current_user, doc_collection):
-    if current_user.super:
+    if current_user.admin:
         return super_home_entitys(doc_collection)
     
-    if not current_user.super:
+    if not current_user.admin:
         return home_entitys(doc_collection)
 
     return None
@@ -86,7 +86,7 @@ async def get_logs(current_user: current_active_user):
 @app.post("/post", response_model=CreateLog)
 async def post_log(row: CreateLog, current_user: current_active_user):
      # Only super user can do this
-    if not current_user.super:
+    if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
 
     # Make dict of row data
@@ -120,7 +120,7 @@ async def post_log(row: CreateLog, current_user: current_active_user):
 @app.put("/post/update")
 async def update_log(row: UpdateLog, current_user: current_active_user):
     # Only super user can do this
-    if not current_user.super:
+    if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
 
     # Make dict of row data
@@ -155,7 +155,7 @@ async def update_log(row: UpdateLog, current_user: current_active_user):
 @app.put("/post/UpdateDue")
 async def update_due(due_row: UpdateDue, current_user: current_active_user):
     # Only super user can do this
-    if not current_user.super:
+    if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
 
     # Convert String to ObjectID for MongoDB compatibility
@@ -208,7 +208,7 @@ async def search_row(query, current_user: current_active_user):
 @app.delete("/delete/post")
 async def delete_log(row: DocumentID, current_user: current_active_user):
     # Only super user can do this
-    if not current_user.super:
+    if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
 
     # make dict of row data
@@ -239,7 +239,7 @@ async def delete_log(row: DocumentID, current_user: current_active_user):
 @app.delete("/delete/all")
 async def delete_all_log(current_user: current_active_user):
     # Only super user can do this
-    if not current_user.super:
+    if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
 
 
@@ -257,11 +257,11 @@ async def delete_all_log(current_user: current_active_user):
 @app.get("/finance/summary")
 def get_previous(current_user: current_active_user):
     # Only super user can do this
-    if not current_user.super:
+    if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
 
     
-    month_filter = Func(current_user.super, get_collection_name(current_user.data_collection))
+    month_filter = Func(current_user.admin, get_collection_name(current_user.data_collection))
     current_month_value = month_filter.finance_summary(summary_duration="current")
     previous_month_value = month_filter.finance_summary(summary_duration="previous")
     all_value = month_filter.finance_summary()
