@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 # Token string Model
 class Token(BaseModel):
+    admin: bool
     access_token: str
     token_type: str
 
@@ -14,6 +15,7 @@ class TokenData(BaseModel):
 
 class RefreshTokenData(BaseModel):
     username: str | None = None
+    admin: bool
     token: str | None = None
 
 # New user data modal
