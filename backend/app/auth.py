@@ -262,7 +262,7 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
 @auth_router.post("/token")
 async def user_login(login_credentials: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
     user = authenticate_user(login_credentials.username, login_credentials.password)
-    admin = True
+    admin = False
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -294,11 +294,13 @@ async def refresh_token(current_user: Annotated[User, Depends(decode_token)]) ->
         raise HTTPException(status_code=400, detail="Bad Request!!!")
 
 
+# Switch User role between Normal and Admin
 @auth_router.get("/switch/user/role")
 async def switch_user_role(switch_to_admin_user: Annotated[User, Depends(switch_role)]) -> Token:
     return switch_to_admin_user
 
 
+# Post new User
 @auth_router.post('/new/user')
 async def new_user(new_user_data: NewUser):
     if new_user_data.username in user_manager():
@@ -312,6 +314,10 @@ async def new_user(new_user_data: NewUser):
 
     # New user data collection name
     new_user_data_dict["data_collection"] = new_user_data_dict["username"]
+    
+    # set disabled and super
+    new_user_data_dict["disabled"] = True
+    new_user_data_dict["super"] = False
 
     try:
         # Making Hashed Password
@@ -331,6 +337,7 @@ async def new_user(new_user_data: NewUser):
         raise HTTPException(status_code=400, detail=f'User {new_user_data_dict["name"]} not added!\nError: {e}')
 
 
+# Get all users
 @auth_router.get("/all/users")
 async def all_users(current_user: Annotated[User, Depends(get_current_active_user)]):
     try:
@@ -341,7 +348,7 @@ async def all_users(current_user: Annotated[User, Depends(get_current_active_use
         raise HTTPException(status_code=404, detail=f"Error: {e}")
 
 
-
+# Get current login user
 @auth_router.get("/user/me")
 async def read_user(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user

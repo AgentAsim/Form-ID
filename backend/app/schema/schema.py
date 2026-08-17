@@ -25,8 +25,6 @@ class NewUser(BaseModel):
     mobile_no: str
     hashed_password: str
     email: str | None = None
-    disabled: bool | None = None
-    super: bool | None = None
 
 
 # User model
