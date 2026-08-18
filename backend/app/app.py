@@ -63,14 +63,14 @@ def get_collection_name(user_data_collection):
 
 # User Session
 @app.get("/user/session")
-async def user_session(current_user: current_active_user):
+def user_session(current_user: current_active_user):
     if current_user:
         return {"super": current_user.admin, "active_user": True}
     return False
 
 
 @app.get("/home")
-async def get_logs(current_user: current_active_user):
+def get_logs(current_user: current_active_user):
     # fetch all rows
     docs = get_collection_name(current_user.data_collection).find()
     result = get_home_entitiys_by_user_role(current_user, docs)
@@ -206,7 +206,7 @@ async def search_row(query, current_user: current_active_user):
 
 
 @app.delete("/delete/post")
-async def delete_log(row: DocumentID, current_user: current_active_user):
+def delete_log(row: DocumentID, current_user: current_active_user):
     # Only super user can do this
     if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")

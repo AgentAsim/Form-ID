@@ -45,33 +45,68 @@ class Func():
         else:
             finance_summary_block["id"] = str(uuid.uuid4())
             finance_summary_block["Month"] = "All Months"
-            month_value = ""
+            month_value = None
+ 
+        pipeline = []
+        if month_value is not None:
+            pipeline = [
+                {
+                    "$match": {"Month": month_value}
+                },
+                {
+                    "$group": {
+                        "_id": None,
+                        "Govt_Fee": {"$sum": "$Govt_Fee"},
+                        "Service_Charge": {"$sum": "$Service_Charge"},
+                        "Due": {"$sum": "$Due"}
+                    }
+                }
+            ]
+        
+        elif month_value is None:
+            pipeline = [ 
+                {
+                    "$group": {
+                        "_id": None,
+                        "Govt_Fee": {"$sum": "$Govt_Fee"},
+                        "Service_Charge": {"$sum": "$Service_Charge"},
+                        "Due": {"$sum": "$Due"}
+                    }
+                }
+            ]
 
-        # fetch all rows
-        if month_value:
-            rows = self.collection_name.find({
-                "Month": month_value
-            })
-        else:
-            rows = self.collection_name.find()
 
+        try:
+            # get filtered summary of financial details based on month
+            rows = self.collection_name.aggregate(pipeline)
 
-        if rows:
-            docs = finance_filter_entitys(rows)
+            if rows:
+                docs = finance_filter_entitys(rows)
+                print(docs)
+                
+                # if the list is empty
+                if len(docs) <= 0:
+                    return finance_summary_block
 
-            # if data not found
-            if not docs:
-                raise HTTPException(status_code=404, detail="Data Not Found!")
+                elif len(docs) > 1:
+                    raise Exception("List out of range")
 
-            for doc in docs:
-                finance_summary_block["Govt_Fee"] += doc["Govt_Fee"]
-                finance_summary_block["Service_Charge"] += doc["Service_Charge"]
-                finance_summary_block["Total_Amount"] += doc["Total_Amount"]
-                finance_summary_block["Due"] += doc["Due"]
+                # if data not found
+                if not docs:
+                    raise HTTPException(status_code=404, detail="Data Not Found!")
 
-            #return JSONResponse(status_code=200, content=finance_summery_block)
-            return finance_summary_block
+                #for doc in docs:
+                finance_summary_block["Govt_Fee"] += docs[0]["Govt_Fee"]
+                finance_summary_block["Service_Charge"] += docs[0]["Service_Charge"]
+                finance_summary_block["Total_Amount"] += docs[0]["Govt_Fee"] + docs[0]["Service_Charge"]
+                finance_summary_block["Due"] += docs[0]["Due"]
 
-            
-        else:
-            HTTPException(detail="Finance Details not allowed for this user!!!", status_code=401)
+                #return JSONResponse(status_code=200, content=finance_summery_block)
+                return finance_summary_block
+                #return docs
+
+            else:
+                raise HTTPException(detail="Finance Details not allowed for this user!!!", status_code=401)
+
+        except Exception as e:
+            raise HTTPException(detail=f"{e}", status_code=400)
