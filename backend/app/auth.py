@@ -49,31 +49,39 @@ def password_hashing(password):
 
 # All Users Dict list
 def user_manager(username: str = None):
-    if username is not None:
-        # find requested user
-        user = user_collection.find({"username": username})
-        
-        # User dict
-        user_dict = all_users_entitys(user)
+    try:
+        if username is not None:
+            # find requested user
+            user = user_collection.find({"username": username})
+            
+            # User dict
+            user_dict = all_users_entitys(user)
 
-        # Return only first user
-        return user_dict[0]
+            if len(user_dict) != 1:
+                return None
+
+            else:
+                # Return only first user
+                return user_dict[0]
 
 
-    elif username is None:
-        # get all users
-        users_list = user_collection.find({})
+        elif username is None:
+            # get all users
+            users_list = user_collection.find({})
 
-        # list of all users
-        All_Users = all_users_entitys(users_list)
+            # list of all users
+            All_Users = all_users_entitys(users_list)
 
-        # Dict of user by username
-        All_Users_Dict = {}
+            # Dict of user by username
+            All_Users_Dict = {}
 
-        for one in All_Users:
-            All_Users_Dict.update({one["username"]: one})
+            for one in All_Users:
+                All_Users_Dict.update({one["username"]: one})
 
-        return All_Users_Dict
+            return All_Users_Dict
+    
+    except Exception as e:
+        raise Exception(f"Something went wrong! {e}")
 
 
 # Varify user password
@@ -87,6 +95,11 @@ def get_password_hashed(password):
 # is user registered or not
 def is_registered_user(username: str, admin: bool = False):
     user_db = user_manager(username)
+
+    # Return False if user not found!!
+    if user_db is None:
+        return False
+
     if username in user_db["username"]:
         user_dict = user_db
         user_dict["admin"] = admin
