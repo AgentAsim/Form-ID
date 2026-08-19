@@ -8,7 +8,7 @@ from bson import ObjectId
 from dotenv import load_dotenv
 from app.databases.mongo import conn
 from app.model.model import super_home_entitys, home_entitys
-from app.Search.search import SimpleSearchIndex
+import re
 from app.schema.schema import CreateLog, UpdateLog, UpdateDue, DocumentID
 from app.auth import auth_router, get_current_active_user, User
 from app.func.func import Func
@@ -192,26 +192,34 @@ async def update_due(due_row: UpdateDue, current_user: current_active_user):
 @app.get("/search/post/{query}")
 async def search_row(query, current_user: current_active_user):
     try:
-        # search engine
-        search_engine = SimpleSearchIndex()
-
-        # fetch all documents
-        data = get_collection_name(current_user.data_collection).find()
+        clean_query = query.replace('+', ' ').strip()
+        escaped_query = re.escape(clean_query)
+        
+        or_conditions = []
+        
+        # Check if the query is a valid 24-character hexadecimal ObjectId
+        if len(clean_query) == 24 and all(c in "0123456789abcdefABCDEF" for c in clean_query):
+            or_conditions.append({"_id": ObjectId(clean_query)})
+            
+        # Substring case-insensitive matches on text fields
+        search_fields = ["Name", "Contact", "Application_ID", "Service", "Service_Type", "Month"]
+        for field in search_fields:
+            or_conditions.append({field: {"$regex": escaped_query, "$options": "i"}})
+            
+        # Query MongoDB
+        data = get_collection_name(current_user.data_collection).find({"$or": or_conditions})
+        
+        # Map results
         rows = get_home_entitiys_by_user_role(current_user, data)
-
-        # search titles
-        searchTitles = ["id", "Name", "Contact", "Application_ID", "Service", "Service_Type", "Month"]
-
-        # make a index, which is categorized data based on search titles
-        for row in rows:
-            search_engine.add_to_index(searchTitles, row)
-
-        # search requested data from index
-        filter_data = search_engine.search(query)
-        return JSONResponse(content=filter_data[::-1], status_code=200)
-    # Error in method execution
-    except:
-        raise HTTPException(detail="Not Found", status_code=404)
+        
+        # If no results found, return an empty list or return results in reverse
+        if not rows:
+            return JSONResponse(content=[], status_code=200)
+            
+        return JSONResponse(content=rows[::-1], status_code=200)
+        
+    except Exception as e:
+        raise HTTPException(detail=f"Search failed: {str(e)}", status_code=500)
 
 
 @app.delete("/delete/post")

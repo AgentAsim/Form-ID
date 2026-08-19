@@ -77,31 +77,9 @@ export const Nav = () => {
     }
 
 
-    const handleSearch = async (data) => {
-        data.preventDefault()
-
-        // API call here
-        try {
-            const res = await fetch(`${API_Connect}/search/post/${searchPara.query}`, {
-                method: "GET",
-                headers: {
-                    'Authorization': `Bearer ${access_token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-
-            if (!res.ok) throw Error("search request failed!")
-
-            let post_res = await res.json()
-            setsearchData(post_res)
-            return post_res
-        }
-        catch (err) {
-            console.error(`Error Occure in Posting Form with error code ${err}`)
-        }
-        finally {
-            handleSearchPage()
-        }
+    const handleSearch = (e) => {
+        e.preventDefault()
+        handleSearchPage()
     }
 
     const handleSummary = async () => {
@@ -147,9 +125,6 @@ export const Nav = () => {
             }
             catch (err) {
                 console.error(`Error Occure in Posting Form with error code ${err}`)
-            }
-            finally {
-                navigate(`/post/search/${searchTerm.at(-1)}`)
             }
         }
 
