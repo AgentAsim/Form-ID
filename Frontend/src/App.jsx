@@ -95,10 +95,8 @@ function App() {
             }
           } else {
             setAuthorized(false);
-            if (err.name !== "TypeError" && err.name !== "AbortError") {
-              localStorage.removeItem('token')
-              navigate('/login')
-            }
+            localStorage.removeItem('token');
+            navigate('/login');
           }
 
           if (session_res.super === true) {
@@ -110,17 +108,14 @@ function App() {
         } else {
           const session_res = await res.json();
 
-          // refresh token if the token is authentic
           if (session_res.detail === "Token has expired!!!") {
-            refreshToken();
+            await refreshToken();
           }
 
           else {
             setAuthorized(false);
-            if (err.name !== "TypeError" && err.name !== "AbortError") {
-              localStorage.removeItem('token')
-              navigate('/login')
-            }
+            localStorage.removeItem('token');
+            navigate('/login');
           }
         }
 

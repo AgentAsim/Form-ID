@@ -212,9 +212,9 @@ async def search_row(query, current_user: current_active_user):
         # Map results
         rows = get_home_entitiys_by_user_role(current_user, data)
         
-        # If no results found, return an empty list or return results in reverse
+        # If no results found, return a formatted 404 message
         if not rows:
-            return JSONResponse(content=[], status_code=200)
+            return JSONResponse(content=f"No Data Found for {clean_query}", status_code=404)
             
         return JSONResponse(content=rows[::-1], status_code=200)
         

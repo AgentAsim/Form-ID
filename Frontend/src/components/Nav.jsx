@@ -12,7 +12,7 @@ import { BsSearch } from "react-icons/bs";
 
 
 export const Nav = () => {
-    const { API_Connect, searchPara, setsearchPara, setsearchData, authorized, access_token, super_user, setsummary_data } = useContext(ContainerContext)
+    const { API_Connect, searchPara, setsearchPara, setsearchData, authorized, access_token, super_user, setsummary_data, notification, setNotification } = useContext(ContainerContext)
     
 
     const [side_panel, setside_panel] = useState(false);
@@ -117,15 +117,53 @@ export const Nav = () => {
                     }
                 })
 
+                if (res.status === 404) {
+                    let error_msg = await res.json()
+                    setsearchData([]) // Clear previous results
+                    setNotification(prev => ({
+                        ...prev,
+                        "is_error": true,
+                        "status_code": res.status,
+                        "message": error_msg
+                    }))
+                    return;
+                }
+
                 if (!res.ok) throw Error("search request failed!")
 
                 let post_res = await res.json()
+                // Clear any previous search error notification
+                setNotification(prev => {
+                    if (prev.is_error) {
+                        return {
+                            ...prev,
+                            "is_error": false,
+                            "status_code": "",
+                            "message": ""
+                        }
+                    }
+                    return prev
+                })
                 setsearchData(post_res)
                 return post_res
             }
             catch (err) {
                 console.error(`Error Occure in Posting Form with error code ${err}`)
             }
+        }
+
+        if (!url.pathname.startsWith("/post/search/")) {
+            setNotification(prev => {
+                if (prev.is_error && prev.status_code === 404) {
+                    return {
+                        ...prev,
+                        "is_error": false,
+                        "status_code": "",
+                        "message": ""
+                    }
+                }
+                return prev
+            })
         }
 
         if (url.pathname.startsWith("/post/search/")) {
@@ -136,7 +174,7 @@ export const Nav = () => {
             handleSummary();
         }
 
-    }, [url.pathname])
+    }, [url.pathname, setNotification, API_Connect, access_token])
 
 
     const handlelogout = (e) => {
