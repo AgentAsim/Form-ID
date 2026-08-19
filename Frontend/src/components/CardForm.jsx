@@ -28,6 +28,7 @@ export const CardForm = () => {
     // Handle form submition
     const handle_Submit = async (e) => {
         //e.preventDefault();
+        delete oldData.Total_Amount
 
         try {
             // post data 
@@ -149,7 +150,7 @@ export const CardForm = () => {
                             </div>
                             <div className="data-row form-group total-row">
                                 <span className="label">Total Fee</span>
-                                <input type="number" name="Total_Amount" className="value card-input" placeholder="0" value={oldData.Total_Amount} onChange={handleChange} />
+                                <input type="number" name="Total_Amount" className="value card-input" placeholder="0" value={Number(oldData.Govt_Fee) + Number(oldData.Service_Charge)} />
                             </div>
                             <div className="data-row form-group due-row">
                                 <span className="label">Due Amount</span>
