@@ -82,8 +82,7 @@ class Func():
 
             if rows:
                 docs = finance_filter_entitys(rows)
-                print(docs)
-                
+                                
                 # if the list is empty
                 if len(docs) <= 0:
                     return finance_summary_block

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 """User Authentication Schema"""
 
@@ -20,6 +20,8 @@ class RefreshTokenData(BaseModel):
 
 # New user data modal
 class NewUser(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     username: str
     name: str
     mobile_no: str
@@ -46,19 +48,22 @@ class LoginRequest(BaseModel):
 
 # New log insertion model
 class CreateLog(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     Name: str
     Contact: str
     Service: str
     Service_Type: str
     Govt_Fee: int
     Service_Charge: int
-    Total_Amount: int
-    Created_At: str
+    Created_At: str = 'Default'
     Application_ID: str
     Due: int
 
 # Full log update model
 class UpdateLog(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     id: str
     Name: str
     Contact: str
@@ -66,18 +71,19 @@ class UpdateLog(BaseModel):
     Service_Type: str
     Govt_Fee: int
     Service_Charge: int
-    Total_Amount: int
     Month: str
-    Created_At: str
+    Created_At: str = 'Default'
     Application_ID: str
     Due: int
 
 
 # Due field update model
 class UpdateDue(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     id: str
     Due: int
 
 # Document ID
 class DocumentID(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     id: str
