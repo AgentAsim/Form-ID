@@ -24,13 +24,15 @@ export const LogForm = () => {
         Contact: '',
         Service: '',
         Service_Type: '',
-        Govt_Fee: '',
-        Service_Charge: '',
-        Total_Amount: '',
+        Govt_Fee: 0,
+        Service_Charge: 0,
+        //Total_Amount: '',
         Created_At: 'Default',
         Application_ID: 'NA',
-        Due: ''
+        Due: 0
     });
+
+    console.log(Number(formData.Govt_Fee) + Number(formData.Service_Charge))
 
 
     // track form field changes
@@ -140,7 +142,7 @@ export const LogForm = () => {
 
                     <div className="form-group">
                         <label>Total Amount</label>
-                        <input type="number" name="Total_Amount" value={formData.Total_Amount} onChange={handleChange} placeholder='0' />
+                        <input type="number" name="Total_Amount" value={Number(formData.Govt_Fee) + Number(formData.Service_Charge)} placeholder='0' />
                     </div>
 
                     <div className="form-group due-row">

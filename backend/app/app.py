@@ -63,14 +63,14 @@ def get_collection_name(user_data_collection):
 
 # User Session
 @app.get("/user/session")
-async def user_session(current_user: current_active_user):
+def user_session(current_user: current_active_user):
     if current_user:
         return {"super": current_user.admin, "active_user": True}
     return False
 
 
 @app.get("/home")
-async def get_logs(current_user: current_active_user):
+def get_logs(current_user: current_active_user):
     # fetch all rows
     docs = get_collection_name(current_user.data_collection).find()
     result = get_home_entitiys_by_user_role(current_user, docs)
@@ -90,7 +90,7 @@ async def post_log(row: CreateLog, current_user: current_active_user):
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
 
     # Make dict of row data
-    new_doc_dict = row.model_dump()
+    new_doc_dict = row.model_dump() 
 
     # Get date
     doc_date = str(datetime.date.today()) if row.Created_At.title() == 'Default' else row.Created_At
@@ -102,6 +102,10 @@ async def post_log(row: CreateLog, current_user: current_active_user):
 
     # update date value
     new_doc_dict["Created_At"] = doc_date
+
+    # calculate total amount
+    total_amount = new_doc_dict["Govt_Fee"] + new_doc_dict["Service_Charge"]
+    new_doc_dict["Total_Amount"] = total_amount
 
     try:
         # Count total no of documents
@@ -126,12 +130,16 @@ async def update_log(row: UpdateLog, current_user: current_active_user):
     # Make dict of row data
     updated_doc_dict = row.model_dump()
     # Get date
-    doc_date = str(date.today()) if row.Created_At.title() == 'Default' else row.Created_At
+    doc_date = str(datetime.date.today()) if row.Created_At.title() == 'Default' else row.Created_At
     # update date value
     updated_doc_dict["Created_At"] = doc_date
 
     # convert string to ObjectID for mongodb compatibility
     document_id = ObjectId(updated_doc_dict["id"])
+
+    # calculate total amount
+    total_amount = updated_doc_dict["Govt_Fee"] + updated_doc_dict["Service_Charge"]
+    updated_doc_dict["Total_Amount"] = total_amount
 
     try:
         # Get Document from Database
@@ -162,7 +170,7 @@ async def update_due(due_row: UpdateDue, current_user: current_active_user):
     document_id = ObjectId(due_row.id)
     try:
         # find document
-        get_targeted_doc = collection_name.find_one({"_id": document_id})
+        get_targeted_doc = get_collection_name(current_user.data_collection).find_one({"_id": document_id})
 
         # update data if document is available
         if get_targeted_doc:
@@ -170,6 +178,7 @@ async def update_due(due_row: UpdateDue, current_user: current_active_user):
             # if update data successfully
             if doc_due_update.acknowledged:
                 return JSONResponse(content="Document Due Field Updated Successfully!", status_code=200)
+
         # if document not found
         else:
             raise HTTPException(status_code=404, detail="Document not found!")
@@ -191,7 +200,7 @@ async def search_row(query, current_user: current_active_user):
         rows = get_home_entitiys_by_user_role(current_user, data)
 
         # search titles
-        searchTitles = ["Name", "Contact", "Application_ID", "Service", "Service_Type", "Month"]
+        searchTitles = ["id", "Name", "Contact", "Application_ID", "Service", "Service_Type", "Month"]
 
         # make a index, which is categorized data based on search titles
         for row in rows:
@@ -206,7 +215,7 @@ async def search_row(query, current_user: current_active_user):
 
 
 @app.delete("/delete/post")
-async def delete_log(row: DocumentID, current_user: current_active_user):
+def delete_log(row: DocumentID, current_user: current_active_user):
     # Only super user can do this
     if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
