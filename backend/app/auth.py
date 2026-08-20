@@ -303,7 +303,7 @@ async def refresh_token(current_user: Annotated[User, Depends(decode_token)]) ->
         else:
             return JSONResponse(status_code=200, content={"token": "Previous Token is Valid!!!"})
     
-    except Error as e:
+    except Exception as e:
         raise HTTPException(status_code=400, detail="Bad Request!!!")
 
 
@@ -353,6 +353,9 @@ async def new_user(new_user_data: NewUser):
 # Get all users
 @auth_router.get("/all/users")
 async def all_users(current_user: Annotated[User, Depends(get_current_active_user)]):
+    if not current_user.admin:
+        raise HTTPException(status_code=405, detail="You are not allowed for this method!!!")
+
     try:
         allusers = user_manager()
         return JSONResponse(status_code=200, content=allusers)

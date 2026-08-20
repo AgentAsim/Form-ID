@@ -265,7 +265,7 @@ async def delete_all_log(current_user: current_active_user):
         if delete_all.acknowledged:
             return JSONResponse(content="All documents deleted successfully")
     except Exception as e:
-        raise HTTPException(detail=f"Error: {r}", status_code=400)
+        raise HTTPException(detail=f"Error: {e}", status_code=400)
 
 
 
