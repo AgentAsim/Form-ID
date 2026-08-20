@@ -22,12 +22,9 @@ E-Shopmine
 │   │   ├── model
 │   │   │   ├── __init__.py
 │   │   │   └── model.py
-│   │   ├── schema
-│   │   │   ├── __init__.py
-│   │   │   └── schema.py
-│   │   └── Search
+│   │   └── schema
 │   │       ├── __init__.py
-│   │       └── search.py
+│   │       └── schema.py
 │   ├── docker-compose.yml
 │   ├── Dockerfile
 │   ├── __init__.py
@@ -41,7 +38,7 @@ E-Shopmine
 │   ├── package-lock.json
 │   ├── public
 │   │   ├── favicon.ico
-│   │   └── vite.svg
+│   │   └── logo.png
 │   ├── src
 │   │   ├── App.jsx
 │   │   ├── assets
@@ -59,6 +56,7 @@ E-Shopmine
 │   │   └── main.jsx
 │   └── vite.config.js
 └── Readme.md
+
 ```
 ## Requirements
 - MongoDB - for the data storage.
