@@ -298,7 +298,7 @@ async def refresh_token(current_user: Annotated[User, Depends(decode_token)]) ->
         if current_user.username:
             user = current_user.username
             if user is not None:
-                refresh_token = refresh_access_token(user)
+                refresh_token = refresh_access_token(username=user, admin=current_user.admin)
                 return JSONResponse(status_code=201, content=refresh_token.model_dump())
         else:
             return JSONResponse(status_code=200, content={"token": "Previous Token is Valid!!!"})
