@@ -217,7 +217,10 @@ nav {
 .service-card:hover {
     transform: translateY(-8px) scale(1.02);
     border-color: var(--glass-border-hover);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 229, 255, 0.1);
+    /* box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 229, 255, 0.1); */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(16, 25, 35, 0.85); /* Slightly darker solid background when hovered to compensate for lost blur */
 }
 
 .card-header {
@@ -611,6 +614,38 @@ input[type="number"]::-webkit-outer-spin-button {
     .card-container {
         padding: 16px;
         gap: 16px;
+    }
+
+    .side-panel {
+        flex-direction: row;
+        width: calc(100% - 32px);
+        left: 16px;
+        right: 16px;
+        top: 84px;
+        justify-content: center;
+        align-items: center;
+        height: 60px;
+        padding: 0 16px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .side-panel-btnholder {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .add {
+        color: var(--accent-cyan);
+        background: rgba(0, 229, 255, 0.1);
+        border: 1px solid var(--glass-border-hover);
+    }
+
+    .search-area:focus {
+        width: 200px; /* Prevent expansion */
     }
 }
 
