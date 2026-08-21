@@ -333,6 +333,12 @@ nav {
     text-align: center;
 }
 
+.login-card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
 .login-card h2 {
     color: var(--text-primary);
     margin-bottom: 8px;
@@ -413,6 +419,10 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+.btn {
+    text-align: center;
+}
+
 .submit-btn, .login-btn, .update-form-btn {
     background: linear-gradient(135deg, var(--accent-cyan), #00b3cc);
     color: var(--bg-dark);
@@ -423,14 +433,14 @@ input[type="number"]::-webkit-outer-spin-button {
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-top: 16px;
+    margin-top: 10px;
     width: 100%;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .submit-btn {
-    width: auto;
+    width: 100%;
 }
 
 .form-actions {
@@ -441,6 +451,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .submit-btn:hover, .login-btn:hover, .update-form-btn:hover {
+    color: rgba(255, 255, 255, 1);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 229, 255, 0.3);
 }

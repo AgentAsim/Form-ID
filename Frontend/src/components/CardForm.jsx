@@ -160,11 +160,11 @@ export const CardForm = () => {
 
                     </div>
                     {/* Inline styled button to fit the card bottom natively */}
-                    <button type="submit" disabled={isSubmitting} className='update-form-btn btn submit-btn'>
-                        Update Log
-                    </button>
-                    <div className='update-form-btn cancel-btn' onClick={() => (handleRoute())}>
-                        Cancel
+                    <div className="form-actions btn">
+                        <button type="submit" disabled={isSubmitting} className="submit-btn btn">Update Log</button>
+                    </div>
+                    <div className="btn">
+                        <div onClick={() => (handleRoute())} className="submit-btn btn cancel-btn">Cancel</div>
                     </div>
                 </form>
             </div>

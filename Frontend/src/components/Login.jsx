@@ -65,7 +65,7 @@ export const Login = () => {
                 <h2>Welcome Back</h2>
                 <p>Please enter your details to login.</p>
 
-                <form onSubmit={handleSubmit(handle_login)}>
+                <form className="login-card-form" onSubmit={handleSubmit(handle_login)}>
                     <div className="form-group-login">
                         <label for="username">Username</label>
                         <input type="text" name='username' value={login_credentials.username} onChange={handle_change} id="username" placeholder="username" required />
@@ -79,7 +79,7 @@ export const Login = () => {
                     <button type="submit" disabled={isSubmitting} className="login-btn">Sign In</button>
                 </form>
 
-                <div className="options">
+                <div className="options" style={{display: "None"}}>
                     <span>Don't have an account? <a href="#">Create one</a></span>
                 </div>
             </div>

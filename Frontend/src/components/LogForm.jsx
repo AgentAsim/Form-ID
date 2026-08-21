@@ -155,7 +155,7 @@ export const LogForm = () => {
                 <div className="form-actions btn">
                     <button type="submit" disabled={isSubmitting} className="submit-btn btn">Save Log</button>
                 </div>
-                <div className="form-actions btn">
+                <div className="btn">
                     <div onClick={() => (handleRoute())} className="submit-btn btn cancel-btn">Cancel</div>
                 </div>
             </form>
