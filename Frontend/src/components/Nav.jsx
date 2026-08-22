@@ -245,10 +245,10 @@ export const Nav = () => {
                     <div className="btnholder">
                         {super_user ? (
                             <>
-                                <div onClick={() => (handleRoute("new post"))} className='add' title="New Post">
+                                <div onClick={() => (handleRoute("new post"))} className={`${url.pathname === '/new/post' ? "btn-hover" : ""} add`} title="New Post">
                                     <RiAddLargeLine />
                                 </div>
-                                <div onClick={() => (handleRoute("summary"), handleSummary())} className='add' title="Summary">
+                                <div onClick={() => (handleRoute("summary"), handleSummary())} className={`${url.pathname === '/summary' ? "btn-hover" : ""} add`} title="Summary">
                                     <MdOutlineSummarize />
                                 </div>
                             </>
