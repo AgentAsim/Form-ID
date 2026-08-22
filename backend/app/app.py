@@ -200,6 +200,9 @@ async def search_row(query, current_user: current_active_user):
         # Check if the query is a valid 24-character hexadecimal ObjectId
         if len(clean_query) == 24 and all(c in "0123456789abcdefABCDEF" for c in clean_query):
             or_conditions.append({"_id": ObjectId(clean_query)})
+
+        if clean_query.lower() == 'due':
+            or_conditions.append({"Due": {"$gt": 0} })
             
         # Substring case-insensitive matches on text fields
         search_fields = ["Name", "Contact", "Application_ID", "Service", "Service_Type", "Month"]

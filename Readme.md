@@ -122,6 +122,8 @@ python main.py
 ```bash
 cd Frontend
 
+npm i
+
 npm run dev
 ```
 
