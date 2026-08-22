@@ -1,6 +1,5 @@
 import React from 'react'
 import { useContext } from 'react';
-import { MdModeEdit } from "react-icons/md";
 import { ContainerContext } from '../Context/context';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form'
@@ -70,104 +69,85 @@ export const CardForm = () => {
     }
 
 
-    return (
-        <>
-            <div className='form-page-container'>
-                {/* Swapped standard div for a form element, kept the same class */}
-                <form className="service-card update-form" onSubmit={handleSubmit(handle_Submit)} autoComplete='off'>
+    return (<>
+        <div className={`form-page-container`}>
+            <form className="theme-form" onSubmit={handleSubmit(handle_Submit)} autoComplete='off'>
+                <div className="form-header">
+                    <h2>Update Log Details</h2>
+                    <p>Update the service details below.</p>
+                </div>
 
-                    <h1 className='updateform-heading'>
-                        Update logs Details
-                        <MdModeEdit />
-                    </h1>
-                    <div className="card-header update-card-header">
-                        <div className="update-header form-group">
-
-                            {/* Input taking the place of the h3 heading */}
-                            <span className="user-id form-group data-row">Update log ID</span>
-                            <input
-                                type="text"
-                                name="id"
-                                className="user-name card-input"
-                                placeholder="Enter ID"
-                                value={oldData.id}
-                                onChange={handleChange}
-                                disabled
-                                required
-                            />
-                        </div>
-                        <div className="update-header form-group">
-                            {/* Input taking the place of the h3 heading */}
-                            <span className="user-id form-group data-row">Enter Name</span>
-                            <input
-                                type="text"
-                                name="Name"
-                                className="user-name card-input"
-                                placeholder="Enter Name"
-                                value={oldData.Name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                <div className="form-grid">
+                    {/* Text Inputs */}
+                    <div className="form-group">
+                        <label>Log ID</label>
+                        <input type="text" name="id" value={oldData.id} onChange={handleChange} placeholder='Enter ID' disabled required />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label>Name</label>
+                        <input type="text" name="Name" value={oldData.Name} onChange={handleChange} placeholder='Enter Name' required />
                     </div>
 
-                    <div className="card-body updateform-body">
-                        <div className="details">
-                            <div className="data-row form-group">
-                                <span className="label">Contact</span>
-                                <input type="text" name="Contact" className="value card-input" placeholder="e.g. 9876543210" value={oldData.Contact} onChange={handleChange} />
-                            </div>
-                            <div className="data-row form-group">
-                                <span className="label">Service</span>
-                                <input type="text" name="Service" className="value card-input" placeholder="Service Name" value={oldData.Service} onChange={handleChange} />
-                            </div>
-                            <div className="data-row form-group">
-                                <span className="label">Service Type</span>
-                                <input type="text" name="Service_Type" className="value card-input" placeholder="Type" value={oldData.Service_Type} onChange={handleChange} />
-                            </div>
-                            <div className="data-row form-group">
-                                <span className="label">Month</span>
-                                <input type="text" name="Month" className="value card-input" placeholder="Month" value={oldData.Month} onChange={handleChange} />
-                            </div>
-                            <div className="data-row form-group">
-                                <span className="label">Created_At</span>
-                                <input type="text" name="Created_At" className="value card-input" placeholder="YYYY-MM-DD" value={oldData.Created_At} onChange={handleChange} />
-                            </div>
-                            <div className="data-row form-group">
-                                <span className="label">Application ID</span>
-                                <input type="text" name="Application_ID" className="value card-input" placeholder="App ID" value={oldData.Application_ID} onChange={handleChange} />
-                            </div>
-                        </div>
+                    <div className="form-group">
+                        <label>Contact</label>
+                        <input type="text" name="Contact" value={oldData.Contact} onChange={handleChange} placeholder='1234567890' required />
+                    </div>
 
-                        <div className="financials">
-                            <div className="data-row form-group">
-                                <span className="label">Govt Fee (₹)</span>
-                                <input type="number" name="Govt_Fee" className="value card-input" placeholder="0" value={oldData.Govt_Fee} onChange={handleChange} />
-                            </div>
-                            <div className="data-row form-group">
-                                <span className="label">Service Fee (₹)</span>
-                                <input type="number" name="Service_Charge" className="value card-input" placeholder="0" value={oldData.Service_Charge} onChange={handleChange} />
-                            </div>
-                            <div className="data-row form-group total-row">
-                                <span className="label">Total Fee</span>
-                                <input type="number" name="Total_Amount" className="value card-input" placeholder="0" value={Number(oldData.Govt_Fee) + Number(oldData.Service_Charge)} />
-                            </div>
-                            <div className="data-row form-group due-row">
-                                <span className="label">Due Amount</span>
-                                <input type="number" name="Due" className="value card-input" placeholder="0" value={oldData.Due} onChange={handleChange} />
-                            </div>
-                        </div>
+                    <div className="form-group">
+                        <label>Service</label>
+                        <input type="text" name="Service" value={oldData.Service} onChange={handleChange} placeholder='Service Name' required />
+                    </div>
 
+                    <div className="form-group">
+                        <label>Service Type</label>
+                        <input type="text" name="Service_Type" value={oldData.Service_Type} onChange={handleChange} placeholder='Service Type' required />
                     </div>
-                    {/* Inline styled button to fit the card bottom natively */}
-                    <div className="form-actions btn">
-                        <button type="submit" disabled={isSubmitting} className="submit-btn btn">Update Log</button>
+
+                    <div className="form-group">
+                        <label>Month</label>
+                        <input type="text" name="Month" value={oldData.Month} onChange={handleChange} placeholder='Month' />
                     </div>
-                    <div className="btn">
-                        <div onClick={() => (handleRoute())} className="submit-btn btn cancel-btn">Cancel</div>
+
+                    <div className="form-group full-width">
+                        <label>Created At</label>
+                        <input type="text" name="Created_At" value={oldData.Created_At} onChange={handleChange} placeholder='e.g. YYYY-MM-DD' required />
                     </div>
-                </form>
-            </div>
-        </>
-    )
+
+                    <div className="form-group full-width">
+                        <label>Application ID</label>
+                        <input type="text" name="Application_ID" value={oldData.Application_ID} onChange={handleChange} placeholder='Application no.' />
+                    </div>
+
+                    {/* Financial/Integer Inputs */}
+                    <div className="form-group">
+                        <label>Govt Fee</label>
+                        <input type="number" name="Govt_Fee" value={oldData.Govt_Fee} onChange={handleChange} placeholder='0' />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Service Charge</label>
+                        <input type="number" name="Service_Charge" value={oldData.Service_Charge} onChange={handleChange} placeholder='0' />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Total Amount</label>
+                        <input type="number" name="Total_Amount" value={Number(oldData.Govt_Fee) + Number(oldData.Service_Charge)} placeholder='0' />
+                    </div>
+
+                    <div className="form-group due-row">
+                        <label>Due</label>
+                        <input type="number" name="Due" value={oldData.Due} onChange={handleChange} placeholder='0' className='value' />
+                    </div>
+                </div>
+
+                <div className="form-actions btn">
+                    <button type="submit" disabled={isSubmitting} className="submit-btn btn">Update Log</button>
+                </div>
+                <div className="btn">
+                    <div onClick={() => (handleRoute())} className="submit-btn btn cancel-btn">Cancel</div>
+                </div>
+            </form>
+        </div>
+    </>)
 }
