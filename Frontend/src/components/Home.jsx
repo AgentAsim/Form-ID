@@ -122,12 +122,11 @@ export const Home = () => {
         else {
             navigate("/login")
         }
-    }
+    } 
 
     if (notification.is_error) {
         return <Notification />
     }
-
 
     return (
         <>
@@ -207,7 +206,7 @@ export const Home = () => {
                                 </div>
                                 <div className="data-row">
                                     <span className="label">Application ID</span>
-                                    <span className="value">{row.Application_ID}</span>
+                                    <span onClick={() => navigator.clipboard.writeText(row.Application_ID)} className="value textCopy" style={{cursor: "copy"}}>{row.Application_ID}</span>
                                 </div>
 
                                 {/* Financials grouped together visually */}

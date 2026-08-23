@@ -24,7 +24,6 @@ function App() {
   } else {
     access_token = normal_token
   }
-  console.log(access_token)
   
   const [authorized, setAuthorized] = useState(false)
   const [loading, setLoading] = useState(!!access_token)

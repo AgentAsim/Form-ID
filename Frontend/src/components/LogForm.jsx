@@ -32,9 +32,6 @@ export const LogForm = () => {
         Due: 0
     });
 
-    console.log(Number(formData.Govt_Fee) + Number(formData.Service_Charge))
-
-
     // track form field changes
     const handleChange = (e) => {
         const { name, value } = e.target;
