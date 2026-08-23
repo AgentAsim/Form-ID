@@ -121,6 +121,7 @@ function App() {
           if (session_res.super === true) {
             setsuper_user(true)
           } else {
+            localStorage.setItem('admin', session_res.super)
             setsuper_user(false)
           }
  
