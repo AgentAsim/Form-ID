@@ -44,7 +44,13 @@ export const Login = () => {
 
             if (res.ok) {
                 const data = await res.json();
-                localStorage.setItem('token', data.access_token);
+                localStorage.setItem('admin', data.admin)
+                if (data.admin) {
+                    sessionStorage.setItem('token', data.access_token)
+
+                } else if (!data.admin) {
+                    localStorage.setItem('token', data.access_token)
+                }
                 window.location.replace('/');
                 setAuthorized(true);
                 return "Access Granted!!!"

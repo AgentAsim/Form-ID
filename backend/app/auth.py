@@ -301,7 +301,7 @@ async def refresh_token(current_user: Annotated[User, Depends(decode_token)]) ->
                 refresh_token = refresh_access_token(username=user, admin=current_user.admin)
                 return JSONResponse(status_code=201, content=refresh_token.model_dump())
         else:
-            return JSONResponse(status_code=200, content={"token": "Previous Token is Valid!!!"})
+            return JSONResponse(status_code=200, content={"admin": current_user.admin, "token": "Previous Token is Valid!!!"})
     
     except Exception as e:
         raise HTTPException(status_code=400, detail="Bad Request!!!")

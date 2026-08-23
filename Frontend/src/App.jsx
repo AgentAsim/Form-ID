@@ -12,7 +12,20 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 function App() {
 
   const API_Connect = import.meta.env.VITE_API;
-  const access_token = localStorage.getItem('token')
+  let access_token = ""
+
+  const admin_token = sessionStorage.getItem('token')
+  const normal_token = localStorage.getItem('token')
+
+  const admin_state = localStorage.getItem('admin')
+  
+  if (admin_token !== null && admin_state === "true") {
+    access_token = admin_token
+  } else {
+    access_token = normal_token
+  }
+  console.log(access_token)
+  
   const [authorized, setAuthorized] = useState(false)
   const [loading, setLoading] = useState(!!access_token)
   const [super_user, setsuper_user] = useState(false)
@@ -44,8 +57,14 @@ function App() {
         
         if (res.status === 201) {
           let res_data = await res.json();
-          localStorage.setItem('token', res_data.access_token)
-          window.location.reload();
+          localStorage.setItem('admin', res_data.admin)
+          if (res_data.admin) {
+            sessionStorage.setItem('token', res.access_token)
+          }
+          else if (!res_data.admin) {
+            localStorage.setItem('token', res_data.access_token)
+          }
+          //window.location.reload();
           setAuthorized(true)
           return "Token Refreshed!!!"
         }

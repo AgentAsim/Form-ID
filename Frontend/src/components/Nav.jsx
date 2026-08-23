@@ -67,7 +67,16 @@ export const Nav = () => {
             if (!res.ok) throw Error ("switch user role failed!!!")
 
             let new_role = await res.json()
-            localStorage.setItem("token", new_role.token)
+
+            localStorage.setItem('admin', new_role.admin)
+
+            if (new_role.admin) {
+                sessionStorage.setItem('token', new_role.token)
+
+            } else if (!new_role.admin) {
+                //sessionStorage.removeItem('token')
+                localStorage.setItem('token', new_role.token)
+            }
             window.location.reload();
             return new_role.admin
 
@@ -180,6 +189,8 @@ export const Nav = () => {
     const handlelogout = (e) => {
         e.preventDefault()
         window.localStorage.removeItem('token')
+        window.localStorage.removeItem('admin')
+        window.sessionStorage.removeItem('token')
         window.location.replace('/login')
     }
 
