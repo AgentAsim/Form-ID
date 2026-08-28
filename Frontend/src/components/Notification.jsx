@@ -1,12 +1,25 @@
-import React from 'react'
-import { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { ContainerContext } from '../Context/context'
 import { IoIosNotificationsOutline } from "react-icons/io";
 
 
 export const Notification = () => {
 
-    const { notification } = useContext(ContainerContext)
+    const { notification, setNotification } = useContext(ContainerContext)
+
+    useEffect(() => {
+        if (notification.is_error) {
+            const timer = setTimeout(() => {
+                setNotification(prev => ({
+                    ...prev,
+                    is_error: false,
+                    status_code: "",
+                    message: ""
+                }));
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification.is_error, setNotification]);
 
     return (
         <>
@@ -26,7 +39,7 @@ export const Notification = () => {
                     <h4 className="notification-title">{notification.status_code}</h4>
                     <p className="notification-message">{notification.message}</p>
                 </div>
-                <button className="notification-close-btn">
+                <button className="notification-close-btn" onClick={() => setNotification(prev => ({ ...prev, is_error: false, status_code: "", message: "" }))}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                     </svg>

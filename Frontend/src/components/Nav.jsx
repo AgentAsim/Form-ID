@@ -82,7 +82,13 @@ export const Nav = () => {
             return new_role.admin
 
         } catch (err) {
-            console.error(`Error to switch user role ${err}`)
+            console.error(`Error to switch user role ${err}`);
+            setNotification(prev => ({
+                ...prev,
+                "is_error": true,
+                "status_code": "Error",
+                "message": err.message || "Failed to switch user role"
+            }));
         }
     }
 
@@ -110,7 +116,13 @@ export const Nav = () => {
             return finance_res;
         }
         catch (err) {
-            console.error(`Error Occure in Finance Summary with error code ${err}`)
+            console.error(`Error Occure in Finance Summary with error code ${err}`);
+            setNotification(prev => ({
+                ...prev,
+                "is_error": true,
+                "status_code": "Error",
+                "message": err.message || "Failed to fetch finance summary"
+            }));
         }
     }
 
@@ -142,23 +154,39 @@ export const Nav = () => {
                 if (!res.ok) throw Error("search request failed!")
 
                 let post_res = await res.json()
-                // Clear any previous search error notification
-                setNotification(prev => {
-                    if (prev.is_error) {
-                        return {
-                            ...prev,
-                            "is_error": false,
-                            "status_code": "",
-                            "message": ""
+                
+                if (post_res.length === 0) {
+                    setNotification(prev => ({
+                        ...prev,
+                        "is_error": true,
+                        "status_code": "404",
+                        "message": "No search result found"
+                    }));
+                } else {
+                    // Clear any previous search error notification
+                    setNotification(prev => {
+                        if (prev.is_error) {
+                            return {
+                                ...prev,
+                                "is_error": false,
+                                "status_code": "",
+                                "message": ""
+                            }
                         }
-                    }
-                    return prev
-                })
+                        return prev
+                    })
+                }
                 setsearchData(post_res)
                 return post_res
             }
             catch (err) {
-                console.error(`Error Occure in Posting Form with error code ${err}`)
+                console.error(`Error Occured during search with error code ${err}`);
+                setNotification(prev => ({
+                    ...prev,
+                    "is_error": true,
+                    "status_code": "Error",
+                    "message": err.message || "An error occurred while searching"
+                }));
             }
         }
 

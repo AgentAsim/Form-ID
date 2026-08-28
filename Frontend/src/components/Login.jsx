@@ -1,5 +1,4 @@
-import React from 'react'
-import { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { ContainerContext } from '../Context/context'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -18,7 +17,16 @@ export const Login = () => {
             password: ''
         }
     )
+    const [loginError, setLoginError] = useState("");
 
+    useEffect(() => {
+        if (loginError) {
+            const timer = setTimeout(() => {
+                setLoginError("");
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [loginError]);
 
     const handle_change = (e) => {
         const { name, value } = e.target;
@@ -26,6 +34,7 @@ export const Login = () => {
             ...login_credentials,
             [name]: value
         });
+        if (loginError) setLoginError("");
     }
 
 
@@ -40,7 +49,10 @@ export const Login = () => {
                 body: new URLSearchParams(login_credentials)
             });
 
-            if (!res.ok) alert('Username or Password Incorrect!')
+            if (!res.ok) {
+                setLoginError('Username or Password Incorrect!');
+                return;
+            }
 
             if (res.ok) {
                 const data = await res.json();
@@ -58,7 +70,8 @@ export const Login = () => {
 
         }
         catch (err) {
-            console.error(`${err}`)
+            console.error(`${err}`);
+            setLoginError('An error occurred during login. Please try again.');
         }
 
     }
@@ -84,6 +97,15 @@ export const Login = () => {
                 <div className="login-card-new">
                     <h2>Welcome Back!</h2>
                     <p>Please log in to continue to your account.</p>
+
+                    {loginError && (
+                        <div className="error-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            {loginError}
+                        </div>
+                    )}
 
                     <form className="login-card-form" onSubmit={handleSubmit(handle_login)}>
                         
