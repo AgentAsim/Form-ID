@@ -67,27 +67,48 @@ export const Login = () => {
 
     return (
         <>
-            <div className="login-card">
-                <h2>Welcome Back</h2>
-                <p>Please enter your details to login.</p>
-
-                <form className="login-card-form" onSubmit={handleSubmit(handle_login)}>
-                    <div className="form-group-login">
-                        <label for="username">Username</label>
-                        <input type="text" name='username' value={login_credentials.username} onChange={handle_change} id="username" placeholder="username" required />
+            <div className="login-wrapper">
+                
+                <div className="login-header">
+                    <div className="login-header-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"/>
+                            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+                            <path d="M12 17.5v-11"/>
+                        </svg>
                     </div>
-
-                    <div className="form-group-login">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" value={login_credentials.password} onChange={handle_change} id="password" placeholder="password" required />
-                    </div>
-
-                    <button type="submit" disabled={isSubmitting} className="login-btn">Sign In</button>
-                </form>
-
-                <div className="options" style={{display: "None"}}>
-                    <span>Don't have an account? <a href="#">Create one</a></span>
+                    <h1>ShopTrack</h1>
+                    <p>Transaction Management System</p>
                 </div>
+
+                <div className="login-card-new">
+                    <h2>Welcome Back!</h2>
+                    <p>Please log in to continue to your account.</p>
+
+                    <form className="login-card-form" onSubmit={handleSubmit(handle_login)}>
+                        
+                        <div className="form-group">
+                            <label htmlFor="username">Username</label>
+                            <input type="text" id="username" name="username" className="input-field" value={login_credentials.username} onChange={handle_change} placeholder="Enter your username" required />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <div className="password-container">
+                                <input type="password" id="password" name="password" className="input-field" value={login_credentials.password} onChange={handle_change} placeholder="Enter your password" required />
+                                <button type="button" className="password-toggle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" disabled={isSubmitting} className="submit-btn-new">Log In</button>
+                    </form>
+                </div>
+
             </div>
         </>
     )

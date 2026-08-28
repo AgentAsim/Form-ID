@@ -1,0 +1,171 @@
+/* New Design CSS: Figma Implementation */
+
+/* Core Variables matching the Figma design theme */
+
+
+/* Background gradient for depth */
+body {
+    background-color: var(--bg-dark);
+    background-image: radial-gradient(circle at top right, rgba(0, 229, 255, 0.05), transparent 40%),
+                      radial-gradient(circle at bottom left, rgba(0, 229, 255, 0.05), transparent 40%);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Wrapper */
+.login-wrapper {
+    width: 100%;
+    max-width: 28rem; /* max-w-md */
+    padding: 1rem;
+}
+
+/* Header Text */
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #3a6aaf 0%, #5b8dd9 100%);
+    box-shadow: 0 8px 24px rgba(58,106,175,0.28);
+}
+
+.login-header h1 {
+    font-family: var(--font-serif);
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.login-header p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Card Container */
+.login-card-new {
+    background-color: var(--card-bg);
+    border-radius: var(--radius-2xl); /* rounded-3xl */
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+}
+
+.login-card-new h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.login-card-new p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Error Message Box */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--danger-hover, #dc2626); /* text-red-600 */
+    background-color: var(--danger-bg, #fef2f2); /* bg-red-50 */
+    border: 1px solid var(--danger-border, #fecaca); /* border-red-200 */
+    border-radius: var(--radius-md);
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+    color: var(--text-primary);
+}
+
+.input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md); /* rounded-xl */
+    border: 1px solid var(--glass-border);
+    background-color: var(--muted-bg);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: all var(--transition-fast);
+    box-sizing: border-box;
+}
+
+.input-field::placeholder {
+    color: var(--text-secondary);
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: rgba(0, 229, 255, 0.4);
+    box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.25);
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+}
+
+.password-toggle:hover {
+    color: var(--text-primary);
+}
+
+/* Submit Button */
+.submit-btn-new {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary, #ffffff);
+    background: var(--primary-gradient, linear-gradient(135deg, #3a6aaf 0%, #5b8dd9 100%));
+    box-shadow: 0 4px 14px rgba(58,106,175,0.30);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-top: 0.25rem;
+}
+
+.submit-btn-new:hover {
+    opacity: 0.9;
+}
+
+.submit-btn-new:active {
+    transform: scale(0.99);
+}

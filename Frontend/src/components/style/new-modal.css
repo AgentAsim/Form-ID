@@ -1,0 +1,126 @@
+/* New Modal CSS: Figma Implementation */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 1rem;
+}
+
+.modal-content {
+    background-color: var(--card-bg, #111827);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-radius: var(--radius-xl); /* rounded-2xl */
+    width: 100%;
+    max-width: 28rem; /* max-w-md */
+    overflow: hidden;
+    box-shadow: var(--shadow-2xl);
+    animation: modalFadeIn 0.2s ease-out forwards;
+}
+
+.modal-header {
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary, #ffffff);
+    margin: 0;
+}
+
+.modal-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #8a9bb2);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.modal-body {
+    padding: 1rem 1.5rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.modal-btn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-btn.cancel {
+    background-color: transparent;
+    color: var(--text-primary, #ffffff);
+    border-color: var(--glass-border, rgba(255, 255, 255, 0.1));
+}
+
+.modal-btn.cancel:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.modal-btn.danger {
+    background-color: var(--danger, #ef4444); /* red-500 */
+    color: var(--text-primary, #ffffff);
+    border-color: var(--danger, #ef4444);
+}
+
+.modal-btn.danger:hover {
+    background-color: var(--danger-hover, #dc2626); /* red-600 */
+}
+
+.modal-btn.primary {
+    background-color: var(--info, #3b82f6); /* blue-500 */
+    color: var(--text-primary, #ffffff);
+    border-color: var(--info, #3b82f6);
+}
+
+.modal-btn.primary:hover {
+    background-color: var(--info-hover, #2563eb); /* blue-600 */
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsiveness */
+@media (max-width: 640px) {
+    .modal-footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+    .modal-btn {
+        justify-content: center;
+    }
+}

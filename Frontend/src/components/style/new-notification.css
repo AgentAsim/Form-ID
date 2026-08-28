@@ -1,0 +1,110 @@
+/* New Notification CSS: Figma Implementation */
+
+.notification-toast-new {
+    background: var(--glass-bg, rgba(16, 25, 35, 0.65));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+    max-width: 26rem; /* max-w-420px */
+    padding: 1rem;
+    border-radius: var(--radius-md); /* rounded-xl */
+    box-shadow: var(--shadow-xl);
+    position: fixed;
+    top: 100px;
+    right: 24px;
+    z-index: 1000;
+    animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.notification-toast-new::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--accent-cyan, #00e5ff);
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.notification-toast-new.error::before {
+    background-color: var(--danger, #ef4444); /* red-500 */
+}
+
+.notification-icon-box {
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--accent-cyan, #00e5ff);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notification-toast-new.error .notification-icon-box {
+    background: var(--danger-bg-transparent, rgba(239, 68, 68, 0.1)); /* red-500 with opacity */
+    color: var(--danger, #ef4444);
+}
+
+.notification-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-title {
+    color: var(--text-primary, #ffffff);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+}
+
+.notification-message {
+    color: var(--text-secondary, #8a9bb2);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.notification-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary, #8a9bb2);
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-fast) ease;
+}
+
+.notification-close-btn:hover {
+    color: var(--text-primary, #ffffff);
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsiveness */
+@media (max-width: 640px) {
+    .notification-toast-new {
+        max-width: calc(100% - 2rem);
+        right: 1rem;
+        left: 1rem;
+    }
+}

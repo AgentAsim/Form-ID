@@ -1,0 +1,47 @@
+:root {
+    /* Core Colors */
+    --bg-dark: #090e17;
+    --card-bg: #111827;
+    --muted-bg: rgba(255, 255, 255, 0.05);
+    
+    /* Glassmorphism */
+    --glass-bg: rgba(16, 25, 35, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-border-hover: rgba(0, 229, 255, 0.5);
+    
+    /* Branding */
+    --accent-cyan: #00e5ff;
+    --primary-gradient: linear-gradient(135deg, #3a6aaf, #5b8dd9);
+    --danger-red: #ff4343;
+    
+    /* Text */
+    --text-primary: #ffffff;
+    --text-secondary: #8a9bb2;
+    
+    /* Status & Alerts */
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+    --danger-light: #f87171;
+    --danger-bg: #fef2f2;
+    --danger-bg-subtle: rgba(254, 242, 242, 0.5);
+    --danger-bg-transparent: rgba(239, 68, 68, 0.1);
+    --danger-border: #fecaca;
+    --danger-text: #b91c1c;
+
+    --success: #059669;
+
+    --info: #3b82f6;
+    --info-hover: #2563eb;
+    --info-bg: #eff6ff;
+    --info-border: #bfdbfe;
+    --info-text: #1d4ed8;
+
+    /* Roles */
+    --admin-bg: #f5f3ff;
+    --admin-text: #6d28d9;
+    --admin-border: #ede9fe;
+
+    --user-bg: #f0f9ff;
+    --user-text: #0369a1;
+    --user-border: #e0f2fe;
+}

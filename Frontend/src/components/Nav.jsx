@@ -207,72 +207,73 @@ export const Nav = () => {
 
     return (
         <>
-            <nav>
-                <img src={logo} id='logo' onClick={() => (authorized ? navigate("/") : navigate('/login'), setsearchbar(false))} title="Home" />
-                
-                <form className={`${searchbar ? "search-bar form-group" : "hide-block"}`} onSubmit={handleSearch}>
-                        <input type="text" className="search-area" name='query' placeholder='Search' value={searchPara.query} onChange={handleChange}/>
-                </form>
-
-                <div className={`add side-bar`} onClick={() => (setside_panel(true), handle_side_panel())} title="Quick Links">
-                    <TbLayoutSidebarRightExpandFilled size='25'/>
-                </div>
-
-
-                <div className={`${side_panel ? "side-panel" : "hide-block"}`}> 
-                    
-                    <div className="btnholder side-panel-btnholder">
-
-                        <div onClick={() => (setsearchbar(true), setside_panel(false))} className='add' title='Search'>
-                            <BsSearch />
+            <header className="navbar-new">
+                <div className="nav-container">
+                    <div className="nav-top-row">
+                        
+                        <div className="nav-logo" onClick={() => (authorized ? navigate("/") : navigate('/login'), setsearchbar(false))} style={{cursor: 'pointer'}}>
+                            <div className="nav-logo-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"/>
+                                    <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+                                    <path d="M12 17.5v-11"/>
+                                </svg>
+                            </div>
+                            <span>ShopTrack</span>
                         </div>
 
-                        <div className="add" onClick={handle_user_role} title={super_user ? "Normal" : "Admin"}>
-                            <AiOutlineUserSwitch />
-                        </div>
+                        <form className="nav-search" onSubmit={handleSearch}>
+                            <svg className="nav-search-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                            </svg>
+                            <input type="text" name="query" className="nav-search-input" placeholder="Search transactions…" value={searchPara.query} onChange={handleChange} />
+                        </form>
 
-                        {super_user ? (
-                            <> 
-                                <div onClick={() => (handleRoute("new post"), setside_panel(false), setsearchbar(false))} className='add' title="New Post">
-                                    <RiAddLargeLine />
-                                </div>
-                                <div onClick={() => (handleRoute("summary"), handleSummary(), setside_panel(false), setsearchbar(false))} className='add' title="Summary">
-                                    <MdOutlineSummarize />
-                                </div>
-                            </>
-                        ) : null}
+                        <div className="nav-spacer"></div>
 
-                        <div onClick={handlelogout} className='add' title="Log Out">
-                            <BiLogOut />
-                        </div>
-
-                    </div>
-
-                </div>
-                <div className="nav-btn-container">
-                    <form className="search-bar form-group" onSubmit={handleSearch}>
-                        <input type="text" className="search-area" name='query' placeholder='Search' value={searchPara.query} onChange={handleChange} />
-                    </form>
-                    <div className="btnholder">
-                        {super_user ? (
-                            <>
-                                <div onClick={() => (handleRoute("new post"))} className={`${url.pathname === '/new/post' ? "btn-hover" : ""} add`} title="New Post">
-                                    <RiAddLargeLine />
-                                </div>
-                                <div onClick={() => (handleRoute("summary"), handleSummary())} className={`${url.pathname === '/summary' ? "btn-hover" : ""} add`} title="Summary">
-                                    <MdOutlineSummarize />
-                                </div>
-                            </>
-                        ) : null}
-                        <div className='add' onClick={handle_user_role} title={super_user ? "Normal" : "Admin"}>
-                            <AiOutlineUserSwitch />
-                        </div>
-                        <div onClick={handlelogout} className='add logout' title="Log Out">
-                            <BiLogOut />
+                        <div className="nav-actions">
+                            {super_user ? (
+                                <>
+                                    <button className={`nav-btn ${url.pathname === '/new/post' ? "active" : ""}`} onClick={() => handleRoute("new post")}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M5 12h14"/><path d="M12 5v14"/>
+                                        </svg>
+                                        <span>New Post</span>
+                                    </button>
+                                    <button className={`nav-btn ${url.pathname === '/summary' ? "active" : ""}`} onClick={() => { handleRoute("summary"); handleSummary(); }}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+                                        </svg>
+                                        <span>Summary</span>
+                                    </button>
+                                </>
+                            ) : null}
+                            <button className="nav-btn" onClick={handle_user_role}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/>
+                                </svg>
+                                <span>Switch Role</span>
+                            </button>
+                            <button className="nav-btn danger" onClick={handlelogout}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/>
+                                </svg>
+                                <span>Logout</span>
+                            </button>
                         </div>
                     </div>
+
+                    <div className="nav-bottom-row">
+                        <div className={`role-badge ${super_user ? "admin" : ""}`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                            </svg>
+                            {super_user ? "Administrator" : "Normal User"}
+                        </div>
+                        <span className="nav-status-text">{authorized ? "Signed in" : "Not signed in"}</span>
+                    </div>
                 </div>
-            </nav>
+            </header>
         </>
     )
 }
