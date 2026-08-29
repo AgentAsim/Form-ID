@@ -2,11 +2,12 @@
 
 /* Core Nav Styles */
 .navbar-new {
+    width: 100%;
     background: var(--glass-bg, rgba(16, 25, 35, 0.65));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 30;
     box-shadow: var(--shadow-nav);

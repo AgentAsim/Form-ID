@@ -1,10 +1,10 @@
-@import url('./components/style/dark.css');
-@import url('./components/style/new-nav.css');
-@import url('./components/style/new-home.css');
-@import url('./components/style/new-login.css');
-@import url('./components/style/new-form.css');
-@import url('./components/style/new-notification.css');
-@import url('./components/style/new-modal.css');
+@import url('./style/color-theme.css');
+@import url('./style/new-nav.css');
+@import url('./style/new-home.css');
+@import url('./style/new-login.css');
+@import url('./style/new-form.css');
+@import url('./style/new-notification.css');
+@import url('./style/new-modal.css');
 
 :root {
   /* Typography */

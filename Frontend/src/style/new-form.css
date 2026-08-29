@@ -143,8 +143,8 @@
     border-radius: var(--radius-md);
     /* rounded-xl */
     font-size: 0.875rem;
-    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid #008eff1a;
+    background-color: #f2f9ff;
     /* bg-muted/40 */
     color: var(--text-primary, #ffffff);
     box-sizing: border-box;
@@ -182,7 +182,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(0, 229, 255, 0.05);
+    background-color: #f2f9ff;
     /* bg-primary/5 */
     border: 1px solid rgba(0, 229, 255, 0.2);
     /* border-primary/20 */
