@@ -75,7 +75,7 @@
 
 .modal-btn.cancel {
     background-color: transparent;
-    color: var(--text-primary, #ffffff);
+    color: var(--text-ternary, #ffffff);
     border-color: var(--glass-border, rgba(255, 255, 255, 0.1));
 }
 
@@ -95,7 +95,7 @@
 
 .modal-btn.primary {
     background-color: var(--info, #3b82f6); /* blue-500 */
-    color: var(--text-primary, #ffffff);
+    color: var(--text-qoudrent, #ffffff);
     border-color: var(--info, #3b82f6);
 }
 

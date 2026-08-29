@@ -37,6 +37,6 @@
   --shadow-glow-danger: 0 0 0 2px rgba(254, 226, 226, 1);
 
   /* Box Shadows (Specific components) */
-  --shadow-nav: 0 4px 30px rgba(0, 0, 0, 0.1);
+  --shadow-nav: 4px 0 30px rgba(0, 0, 0, 0.1);
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05);
 }

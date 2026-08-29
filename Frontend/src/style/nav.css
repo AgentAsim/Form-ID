@@ -110,7 +110,7 @@ img {
 }
 
 .nav-btn:hover {
-    background-color: rgba(255, 255, 255, 0.05); /* hover:bg-muted/70 */
+    background-color: #c2c2c227; /* hover:bg-muted/70 */
     color: var(--text-primary, #ffffff);
 }
 

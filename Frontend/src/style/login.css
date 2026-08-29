@@ -151,7 +151,7 @@ body {
     border-radius: var(--radius-md);
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-primary, #ffffff);
+    color: var(--text-qoudernt, #ffffff);
     background: var(--primary-gradient, linear-gradient(135deg, #3a6aaf 0%, #5b8dd9 100%));
     box-shadow: 0 4px 14px rgba(58,106,175,0.30);
     border: none;
