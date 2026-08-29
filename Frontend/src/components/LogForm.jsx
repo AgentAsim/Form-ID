@@ -71,6 +71,14 @@ export const LogForm = () => {
             }
             let post_res = await res.json()
 
+            setNotification({
+                ...notification,
+                show: true,
+                is_error: false,
+                status_code: "Success",
+                message: "Transaction added successfully"
+            });
+
             // back to home page
             handleRoute()
 
@@ -81,10 +89,6 @@ export const LogForm = () => {
         }
 
     };
-
-    if (notification.is_error) {
-        return <Notification />
-    }
 
     return (<>
         <div className="form-page-wrapper">

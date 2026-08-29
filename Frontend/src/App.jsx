@@ -215,6 +215,7 @@ function App() {
           ) : null }
           
         </div>
+        {notification.message && <Notification />}
       </ContainerContext.Provider>
     </>
   )

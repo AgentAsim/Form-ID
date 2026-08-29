@@ -52,6 +52,14 @@ export const CardForm = () => {
 
             let newData = await res.json()
 
+            setNotification({
+                ...notification,
+                show: true,
+                is_error: false,
+                status_code: "Success",
+                message: "Transaction updated successfully"
+            });
+
             // back to home page
             handleRoute()
 
@@ -63,11 +71,6 @@ export const CardForm = () => {
             console.error(`Error in Updating error: ${err}`)
         }
     };
-
-    if (notification.is_error) {
-        return <Notification />
-    }
-
 
     return (<>
         <div className="form-page-wrapper">

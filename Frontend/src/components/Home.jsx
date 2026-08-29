@@ -9,7 +9,7 @@ import { Notification } from './Notification';
 
 export const Home = () => {
 
-    const { API_Connect, setoldData, searchData, authorized, access_token, setAuthorized, notification, setNotification, super_user, summary_data } = useContext(ContainerContext)
+    const { API_Connect, setoldData, searchData, setsearchData, authorized, access_token, setAuthorized, notification, setNotification, super_user, summary_data, setsummary_data } = useContext(ContainerContext)
 
     const url = useLocation();
     const navigate = useNavigate();
@@ -86,18 +86,26 @@ export const Home = () => {
                 setNotification({
                     ...notification,
                     "is_error": true,
-                    "status_code": res.status,
-                    "message": res.statusText
+                    "status_code": "Error",
+                    "message": "Failed to delete transaction"
                 })
                 throw new Error("log not delete")
             };
 
             let delete_res = await res.json();
+            
             setNotification({
                 ...notification,
-                "status_code": res.status,
-                "message": res.statusText
-            })
+                show: true,
+                is_error: false,
+                status_code: "Success",
+                message: "Transaction deleted successfully"
+            });
+
+            setHomeData(prev => prev.filter(item => item.id !== delete_log_ID.id));
+            if (setsearchData) setsearchData(prev => prev.filter(item => item.id !== delete_log_ID.id));
+            if (setsummary_data) setsummary_data(prev => prev.filter(item => item.id !== delete_log_ID.id));
+            
             return delete_res;
         }
         catch (err) {
@@ -106,7 +114,6 @@ export const Home = () => {
         finally {
             setdelete_doc(false)
             setdelete_log_ID({ id: "" })
-            window.location.reload()
         }
     };
 
@@ -118,10 +125,6 @@ export const Home = () => {
             navigate("/login")
         }
     } 
-
-    if (notification.is_error) {
-        return <Notification />
-    }
 
     return (
         <>
