@@ -35,11 +35,7 @@ body {
     align-items: center;
     justify-content: center;
     width: 4rem;
-    height: 4rem;
-    border-radius: var(--radius-lg);
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #3a6aaf 0%, #5b8dd9 100%);
-    box-shadow: 0 8px 24px rgba(58,106,175,0.28);
 }
 
 .login-header h1 {
@@ -69,12 +65,14 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
+    text-align: center;
 }
 
 .login-card-new p {
     color: var(--text-secondary);
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 /* Error Message Box */
@@ -108,8 +106,8 @@ body {
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: var(--radius-md); /* rounded-xl */
-    border: 1px solid var(--glass-border);
-    background-color: var(--muted-bg);
+    border: 1px solid var(--input-border-primary);
+    background-color: var(--input-bg-primary);
     color: var(--text-primary);
     font-size: 0.875rem;
     transition: all var(--transition-fast);
