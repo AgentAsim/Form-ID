@@ -143,18 +143,22 @@
     border-radius: var(--radius-md);
     /* rounded-xl */
     font-size: 0.875rem;
-    border: 1px solid #008eff1a;
-    background-color: #f2f9ff;
+    border: 1px solid var(--input-border-primary);
+    background-color: var(--input-bg-primary);
     /* bg-muted/40 */
     color: var(--text-primary, #ffffff);
     box-sizing: border-box;
     transition: all var(--transition-fast);
 }
 
+.form-input.form-due {
+    color: var(--danger);
+    font-weight: 700;
+}
+
 .form-input:focus {
     outline: none;
     border-color: rgba(0, 229, 255, 0.4);
-    box-shadow: var(--shadow-glow);
 }
 
 .form-input.error {

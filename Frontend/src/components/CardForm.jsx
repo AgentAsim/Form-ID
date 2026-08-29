@@ -184,7 +184,7 @@ export const CardForm = () => {
 
                             <div className="form-field">
                                 <label htmlFor="Due">Due Amount (₹)</label>
-                                <input type="number" id="Due" name="Due" className="form-input" value={oldData.Due} onChange={handleChange} placeholder="0" />
+                                <input type="number" id="Due" name="Due" className="form-input form-due" value={oldData.Due} onChange={handleChange} placeholder="0" />
                             </div>
                         </div>
                     </section>
