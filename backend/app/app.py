@@ -18,6 +18,7 @@ load_dotenv()
 # fetch know urls
 self_connect = os.getenv("self_connect")
 local_connect = os.getenv("local_connect")
+local_connect_2 = os.getenv("local_connect_2")
 global_connect = os.getenv("global_connect")
 
 app = FastAPI()
@@ -42,6 +43,7 @@ def get_home_entitiys_by_user_role(current_user, doc_collection):
 origins = [
     self_connect,
     local_connect,
+    local_connect_2,
     global_connect
 ]
 

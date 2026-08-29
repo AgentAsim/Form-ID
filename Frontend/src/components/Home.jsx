@@ -93,7 +93,7 @@ export const Home = () => {
             };
 
             let delete_res = await res.json();
-            
+
             setNotification({
                 ...notification,
                 show: true,
@@ -105,7 +105,7 @@ export const Home = () => {
             setHomeData(prev => prev.filter(item => item.id !== delete_log_ID.id));
             if (setsearchData) setsearchData(prev => prev.filter(item => item.id !== delete_log_ID.id));
             if (setsummary_data) setsummary_data(prev => prev.filter(item => item.id !== delete_log_ID.id));
-            
+
             return delete_res;
         }
         catch (err) {
@@ -124,7 +124,7 @@ export const Home = () => {
         else {
             navigate("/login")
         }
-    } 
+    }
 
     return (
         <>
@@ -152,11 +152,11 @@ export const Home = () => {
                         <div className="txn-card" key={row.id || row.Month}>
                             <div className="txn-card-body">
                                 <div className="txn-card-header">
-                                    <div style={{minWidth: 0}}>
+                                    <div style={{ minWidth: 0 }}>
                                         <h3 className="txn-name">{row.Month}</h3>
                                     </div>
                                 </div>
-                                <div className="txn-fin-box" style={{marginTop: '0'}}>
+                                <div className="txn-fin-box" style={{ marginTop: '0' }}>
                                     <div className="txn-fin-grid">
                                         <div className="txn-fin-item">
                                             <p>Govt Fee</p>
@@ -182,7 +182,7 @@ export const Home = () => {
                         <div className="txn-card" key={row.id}>
                             <div className="txn-card-body">
                                 <div className="txn-card-header">
-                                    <div style={{minWidth: 0}}>
+                                    <div style={{ minWidth: 0 }}>
                                         <h3 className="txn-name">{row.Name}</h3>
                                         <a href={`tel:${row.Contact}`} className="txn-contact">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -226,7 +226,7 @@ export const Home = () => {
                                             </svg>
                                             Application ID
                                         </div>
-                                        <div className="txn-info-value mono textCopy" style={{cursor: "copy"}} onClick={() => navigator.clipboard.writeText(row.Application_ID)}>{row.Application_ID}</div>
+                                        <div className="txn-info-value mono textCopy" style={{ cursor: "copy" }} onClick={() => navigator.clipboard.writeText(row.Application_ID)}>{row.Application_ID}</div>
                                     </div>
                                 </div>
 
@@ -235,27 +235,27 @@ export const Home = () => {
                                         <div className="txn-fin-grid">
                                             <div className="txn-fin-item">
                                                 <p>Govt Fee</p>
-                                                <p>₹{row.Govt_Fee}</p>
+                                                <p>₹{row.Govt_Fee}.00</p>
                                             </div>
                                             <div className="txn-fin-item">
                                                 <p>Svc. Charge</p>
-                                                <p>₹{row.Service_Charge}</p>
+                                                <p>₹{row.Service_Charge}.00</p>
                                             </div>
                                             <div className="txn-fin-item highlight">
                                                 <p>Total</p>
-                                                <p>₹{row.Total_Amount}</p>
+                                                <p>₹{row.Total_Amount}.00</p>
                                             </div>
                                         </div>
                                         <div className="txn-balance-row">
                                             <span>Balance Due</span>
-                                            <span className="due">₹{row.Due}</span>
+                                            <span className={row.Due > 0 ? 'due' : 'paid'}>{row.Due > 0.00 ? `₹${row.Due}.00` : 'Fully Paid'}</span>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="txn-fin-box">
-                                        <div className="txn-balance-row">
+                                        <div className="txn-balance-row" style={{ border: "none", padding: "0" }}>
                                             <span>Balance Due</span>
-                                            <span className="due">₹{row.Due}</span>
+                                            <span className={row.Due > 0 ? 'due' : 'paid'}>{row.Due > 0.00 ? `₹${row.Due}.00` : 'Fully Paid'}</span>
                                         </div>
                                     </div>
                                 )}
@@ -264,13 +264,13 @@ export const Home = () => {
                                     <span className="txn-date">{row.Created_At}</span>
                                     {super_user && (
                                         <div className="txn-actions">
-                                            <button className="txn-action-btn edit" onClick={() => {setoldData(row); handleRoute('edit');}}>
+                                            <button className="txn-action-btn edit" onClick={() => { setoldData(row); handleRoute('edit'); }}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                     <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                                                 </svg>
                                                 Edit
                                             </button>
-                                            <button className="txn-action-btn delete" onClick={() => {setdelete_doc(true); setdelete_log_ID({ id: row.id });}}>
+                                            <button className="txn-action-btn delete" onClick={() => { setdelete_doc(true); setdelete_log_ID({ id: row.id }); }}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                     <path d="M3 6h18" />
                                                     <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
@@ -292,20 +292,7 @@ export const Home = () => {
                     <div className="modal-overlay">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h3 className="modal-title">Delete Transaction</h3>
-                                <p className="modal-description">Are you sure you want to delete this transaction? This action cannot be undone.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button 
-                                    className="modal-btn cancel" 
-                                    onClick={() => { setdelete_doc(false); setdelete_log_ID({ id: '' }); }}
-                                >
-                                    Cancel
-                                </button>
-                                <button 
-                                    className="modal-btn danger" 
-                                    onClick={delete_log}
-                                >
+                                <div className="modal-header-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M3 6h18" />
                                         <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
@@ -313,6 +300,24 @@ export const Home = () => {
                                         <line x1="10" y1="11" x2="10" y2="17" />
                                         <line x1="14" y1="11" x2="14" y2="17" />
                                     </svg>
+                                </div>
+                                <div className="modal-title">
+                                    <h3>Delete Transaction</h3>
+                                    <p>This cannot be undone</p>
+                                </div>
+                            </div>
+                            <p className="modal-description">Are you sure you want to permanently delete this transaction record? All associated data will be removed.</p>
+                            <div className="modal-footer">
+                                <button
+                                    className="modal-btn cancel"
+                                    onClick={() => { setdelete_doc(false); setdelete_log_ID({ id: '' }); }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="modal-btn danger"
+                                    onClick={delete_log}
+                                >
                                     Delete
                                 </button>
                             </div>

@@ -4,8 +4,8 @@
 .navbar-new {
     width: 100%;
     background: var(--glass-bg, rgba(16, 25, 35, 0.65));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
     position: fixed;
     top: 0;
@@ -14,7 +14,7 @@
 }
 
 .nav-container {
-    max-width: 80rem; /* max-w-7xl */
+    max-width: 80rem;
     margin: 0 auto;
     padding: 0 1rem;
 }
@@ -163,7 +163,7 @@ img {
 /* Responsiveness */
 @media (max-width: 830px) {
     .navbar-new {
-        margin: 1rem;
+        margin: 1rem 1rem 0 1rem;
         border-radius: var(--radius-lg);
         width: calc(100% - 2rem);
     }
