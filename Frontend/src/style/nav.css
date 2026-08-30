@@ -80,8 +80,8 @@ img {
 
 .nav-search-input:focus {
     outline: none;
-    border-color: rgba(0, 229, 255, 0.4);
-    box-shadow: var(--shadow-glow);
+    border-color: #3a6baf40;
+    box-shadow: 0 0 0 2px #3a6baf3a;
 }
 
 .nav-spacer {
