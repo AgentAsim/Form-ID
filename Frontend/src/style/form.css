@@ -63,6 +63,9 @@
 }
 
 .form-close-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: none;
     border: none;
     color: var(--text-secondary, #8a9bb2);
@@ -74,7 +77,7 @@
 
 .form-close-btn:hover {
     color: var(--text-primary, #ffffff);
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: #f2f6fb;
     /* bg-muted/60 */
 }
 
