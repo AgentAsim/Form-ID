@@ -80,8 +80,8 @@ img {
 
 .nav-search-input:focus {
     outline: none;
-    border-color: #3a6baf40;
-    box-shadow: 0 0 0 2px #3a6baf3a;
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 2px var(--input-ring-focus);
 }
 
 .nav-spacer {
@@ -110,7 +110,7 @@ img {
 }
 
 .nav-btn:hover {
-    background-color: #c2c2c227; /* hover:bg-muted/70 */
+    background-color: var(--hover-bg-subtle); /* hover:bg-muted/70 */
     color: var(--text-primary);
 }
 
@@ -128,7 +128,7 @@ img {
     align-items: center;
     gap: 0.5rem;
     padding-bottom: 0.625rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05); /* border-t border-border/50 */
+    border-top: 1px solid var(--border-subtle); /* border-t border-border/50 */
     padding-top: 0.5rem;
 }
 

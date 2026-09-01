@@ -37,7 +37,7 @@
 }
 
 .notification-icon-box {
-    background: rgba(0, 229, 255, 0.1);
+    background: var(--glow-cyan-medium);
     color: var(--accent-cyan);
     width: 2.5rem;
     height: 2.5rem;

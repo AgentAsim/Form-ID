@@ -51,4 +51,31 @@
     --muted-hover: #eaf0f9;
     --input-bg-primary: #f2f9ffa6;
     --input-border-primary: 3a6aaf;
+
+    /* Additional UI Colors & Glows */
+    --glow-cyan-light: rgba(0, 229, 255, 0.05);
+    --glow-cyan-medium: rgba(0, 229, 255, 0.1);
+    
+    /* Subtle Borders & Backgrounds */
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --input-border-subtle: #3a6aaf24;
+    --input-border-focus: #3a6baf40;
+    --input-ring-focus: #3a6baf3a;
+    --bg-primary-subtle: #3a6aaf10;
+    --hover-bg-subtle: #c2c2c227;
+
+    /* Overlay */
+    --overlay-bg: #0a142859;
+
+    /* Admin Role Extended */
+    --admin-border-active: #5d0ec0;
+    --admin-bg-active: #ddd6ff;
+    --admin-text-active: #7008e7;
+    
+    /* User Role Extended */
+    --user-border-active: #0084d1;
+    --user-bg-active: #b8e6fe;
+    --user-text-active: #017dce;
+    --user-text-dark: #0069a8;
 }
+

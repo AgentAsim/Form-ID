@@ -6,7 +6,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #0a142859;
+    background-color: var(--overlay-bg);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     display: flex;
@@ -56,11 +56,11 @@
 }
 
 .modal-header-icon-normal {
-    background-color: #eaf0f9;
+    background-color: var(--muted-hover);
 }
 
 .modal-header-icon-normal svg {
-    color: #6b82a0;
+    color: var(--text-secondary);
 }
 
 .modal-for-role {
@@ -96,16 +96,16 @@
     align-items: center;
     gap: 12px;
     padding: 16px;
-    border-radius: 1rem;
+    border-radius: var(--radius-xl);
 }
 
 .role-btn-hover {
     background-color: transparent;
-    border: 1px solid #3a6aaf24;
+    border: 1px solid var(--input-border-subtle);
 }
 
 .role-buttons .role-btn-hover:hover {
-    background-color: #3a6aaf10;
+    background-color: var(--bg-primary-subtle);
 }
 
 .role-buttons .role-name {
@@ -123,46 +123,46 @@
 }
 
 .admin {
-    border: 2px solid #5d0ec0;
+    border: 2px solid var(--admin-border-active);
 }
 
 .admin-status {
-    background-color: #ddd6ff;
-    color: #7008e7;
+    background-color: var(--admin-bg-active);
+    color: var(--admin-text-active);
 }
 
 .admin-active {
-    border: 2px solid #5d0ec0;
-    background-color: #f5f3ff;
-    color: #5d0ec0;
+    border: 2px solid var(--admin-border-active);
+    background-color: var(--admin-bg);
+    color: var(--admin-border-active);
 }
 
 .admin-active svg {
-    color: #5d0ec0;
+    color: var(--admin-border-active);
 }
 
 .user {
-    border: 2px solid #0084d1;
+    border: 2px solid var(--user-border-active);
 }
 
 .user-status {
-    background-color: #b8e6fe;
-    color: #017dce;
+    background-color: var(--user-bg-active);
+    color: var(--user-text-active);
 }
 
 .user-active {
-    background-color: #f0f9ff;
-    color: #0069a8;
+    background-color: var(--user-bg);
+    color: var(--user-text-dark);
 }
 
 .user-active svg {
-    color: #0069a8;
+    color: var(--user-text-dark);
 }
 
 .role-status {
     padding-inline: calc(0.25rem * 2);
     padding-block: calc(0.25rem * 0.5);
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     font-weight: 600;
     font-size: 0.75rem;
 }

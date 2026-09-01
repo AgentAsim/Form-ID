@@ -14,8 +14,8 @@
 
 *:focus-visible {
   outline: none;
-  border-color: #3a6baf40;
-  box-shadow: 0 0 0 2px #3a6baf3a;
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 2px var(--input-ring-focus);
 }
 
 :root {
@@ -51,4 +51,9 @@
   /* Box Shadows (Specific components) */
   --shadow-nav: 4px 0 30px rgba(0, 0, 0, 0.1);
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  /* Component Shadows */
+  --shadow-btn-primary: 0 4px 12px rgba(58, 106, 175, 0.28);
+  --shadow-btn-primary-heavy: 0 4px 14px rgba(58, 106, 175, 0.30);
+  --shadow-card-heavy: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
