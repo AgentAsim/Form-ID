@@ -93,6 +93,16 @@ export const Nav = () => {
     }
 
 
+    const handleRole = async (role) =>  {
+        if (role === 'admin') {
+           await handle_user_role();
+        }
+        else if (role === 'user') {
+           await handle_user_role();
+        }        
+    }
+
+
     const handleSearch = (e) => {
         e.preventDefault()
         handleSearchPage()
