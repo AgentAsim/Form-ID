@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ContainerContext } from '../Context/context'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import logo from '/public/logo.png'
+import logo from '../assets/logo.png'
 
 export const Login = () => {
 
