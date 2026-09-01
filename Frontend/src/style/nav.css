@@ -172,10 +172,23 @@ img {
     }
 }
 @media (max-width: 640px) {
-    .nav-search {
-        display: none; /* Hide search on very small screens, or adjust layout */
-    }
     .nav-top-row {
         justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .nav-logo {
+        order: 1;
+    }
+    .nav-actions {
+        order: 2;
+    }
+    .nav-search {
+        order: 3;
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin-top: 0.5rem;
+    }
+    .nav-spacer {
+        display: none;
     }
 }
