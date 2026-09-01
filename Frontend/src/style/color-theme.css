@@ -1,6 +1,6 @@
 :root {
     /* Core Colors */
-    --bg-dark: #ffffff;
+    --bg-primary: #ffffff;
     --card-bg: #ffffff;
     --muted-bg: rgba(255, 255, 255, 0.05);
     
@@ -17,8 +17,8 @@
     /* Text */
     --text-primary: #18293f;
     --text-secondary: #6b82a0;
-    --text-ternary: #3a6aaf;
-    --text-qoudrent: #ffffff;
+    --text-tertiary: #3a6aaf;
+    --text-inverse: #ffffff;
     
     /* Status & Alerts */
     --danger: #e7000b;

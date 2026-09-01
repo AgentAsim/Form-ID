@@ -17,8 +17,8 @@
 }
 
 .modal-content {
-    background-color: var(--card-bg, #111827);
-    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    background-color: var(--card-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     /* rounded-2xl */
     width: 24rem;
@@ -52,7 +52,7 @@
 
 .modal-header-icon-danger svg {
     scale: 1.35;
-    color: var(--danger, #ef4444);
+    color: var(--danger);
 }
 
 .modal-header-icon-normal {
@@ -73,7 +73,7 @@
 
 .modal-role-description {
     font-size: 0.875rem;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     margin: 0;
     line-height: 1.5;
 }
@@ -170,7 +170,7 @@
 .modal-title>h3 {
     font-size: 1.125rem;
     font-weight: bold;
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
     margin: 0;
 }
 
@@ -182,7 +182,7 @@
 
 .modal-description {
     font-size: 0.875rem;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     margin: 0;
     line-height: 1.5;
     margin-bottom: 1.5rem;
@@ -216,8 +216,8 @@
 .modal-btn.cancel {
     display: block;
     background-color: var(--muted);
-    color: var(--text-secondary, #ffffff);
-    border-color: var(--glass-border, rgba(255, 255, 255, 0.1));
+    color: var(--text-secondary);
+    border-color: var(--glass-border);
 }
 
 .modal-btn.cancel:hover {
@@ -226,26 +226,26 @@
 
 .modal-btn.danger {
     display: block;
-    background-color: var(--danger, #ef4444);
+    background-color: var(--danger);
     /* red-500 */
-    color: var(--text-qoudrent, #ffffff);
-    border-color: var(--danger, #ef4444);
+    color: var(--text-inverse);
+    border-color: var(--danger);
 }
 
 .modal-btn.danger:hover {
-    background-color: var(--danger-hover, #dc2626);
+    background-color: var(--danger-hover);
     /* red-600 */
 }
 
 .modal-btn.primary {
-    background-color: var(--info, #3b82f6);
+    background-color: var(--info);
     /* blue-500 */
-    color: var(--text-qoudrent, #ffffff);
-    border-color: var(--info, #3b82f6);
+    color: var(--text-inverse);
+    border-color: var(--info);
 }
 
 .modal-btn.primary:hover {
-    background-color: var(--info-hover, #2563eb);
+    background-color: var(--info-hover);
     /* blue-600 */
 }
 

@@ -27,13 +27,13 @@
     font-family: var(--font-serif);
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
     margin: 0;
 }
 
 .home-subtitle {
     font-size: 0.875rem;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     margin-top: 0.125rem;
 }
 
@@ -68,8 +68,8 @@
 
 /* Transaction Card */
 .txn-card {
-    background-color: var(--card-bg, #111827);
-    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    background-color: var(--card-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     /* rounded-2xl */
     overflow: hidden;
@@ -103,7 +103,7 @@
 .txn-name {
     font-weight: 600;
     font-size: 1rem;
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -115,13 +115,13 @@
     align-items: center;
     gap: 0.25rem;
     font-size: 0.75rem;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     margin-top: 0.125rem;
     text-decoration: none;
 }
 
 .txn-contact:hover {
-    color: var(--accent-cyan, #00e5ff);
+    color: var(--accent-cyan);
 }
 
 .txn-info-grid {
@@ -143,7 +143,7 @@
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     font-size: 0.625rem;
     /* 10px */
     text-transform: uppercase;
@@ -153,7 +153,7 @@
 }
 
 .txn-info-value {
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
     font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
@@ -182,7 +182,7 @@
 }
 
 .txn-fin-item p:first-child {
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     font-size: 0.625rem;
     text-transform: uppercase;
     letter-spacing: 0.025em;
@@ -192,7 +192,7 @@
 .txn-fin-item p:last-child {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
 }
 
 .txn-fin-item.highlight p:last-child {
@@ -209,7 +209,7 @@
 
 .txn-balance-row span:first-child {
     font-size: 0.75rem;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
 }
 
 .txn-balance-row span:last-child {
@@ -218,12 +218,12 @@
 }
 
 .txn-balance-row span.due {
-    color: var(--danger, #ef4444);
+    color: var(--danger);
     /* red-600 */
 }
 
 .txn-balance-row span.paid {
-    color: var(--success, #059669);
+    color: var(--success);
     /* emerald-600 */
 }
 
@@ -238,7 +238,7 @@
 
 .txn-date {
     font-size: 0.75rem;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
 }
 
 .txn-actions {
@@ -260,30 +260,30 @@
 }
 
 .txn-action-btn.edit {
-    background-color: var(--info-bg, #eff6ff);
+    background-color: var(--info-bg);
     /* blue-50 */
-    color: var(--info-text, #1d4ed8);
+    color: var(--info-text);
     /* blue-700 */
-    border-color: var(--info-border, #bfdbfe);
+    border-color: var(--info-border);
     /* blue-200 */
 }
 
 .txn-action-btn.edit:hover {
-    background-color: var(--info-bg-hover, #dbeafe);
+    background-color: var(--info-bg-hover);
     /* blue-100 */
 }
 
 .txn-action-btn.delete {
-    background-color: var(--danger-bg, #fef2f2);
+    background-color: var(--danger-bg);
     /* red-50 */
-    color: var(--danger-text, #b91c1c);
+    color: var(--danger-text);
     /* red-700 */
-    border-color: var(--danger-border, #fecaca);
+    border-color: var(--danger-border);
     /* red-200 */
 }
 
 .txn-action-btn.delete:hover {
-    background-color: var(--danger-bg-hover, #fee2e2);
+    background-color: var(--danger-bg-hover);
     /* red-100 */
 }
 

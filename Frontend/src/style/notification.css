@@ -1,10 +1,10 @@
 /* New Notification CSS: Figma Implementation */
 
 .notification-toast-new {
-    background: var(--glass-bg, rgba(16, 25, 35, 0.65));
+    background: var(--glass-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border: 1px solid var(--glass-border);
     display: flex;
     align-items: flex-start;
     gap: 1rem;
@@ -28,17 +28,17 @@
     top: 0;
     bottom: 0;
     width: 4px;
-    background-color: var(--accent-cyan, #00e5ff);
+    background-color: var(--accent-cyan);
     border-radius: var(--radius-md) 0 0 var(--radius-md);
 }
 
 .notification-toast-new.error::before {
-    background-color: var(--danger, #ef4444); /* red-500 */
+    background-color: var(--danger); /* red-500 */
 }
 
 .notification-icon-box {
     background: rgba(0, 229, 255, 0.1);
-    color: var(--accent-cyan, #00e5ff);
+    color: var(--accent-cyan);
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
@@ -49,8 +49,8 @@
 }
 
 .notification-toast-new.error .notification-icon-box {
-    background: var(--danger-bg-transparent, rgba(239, 68, 68, 0.1)); /* red-500 with opacity */
-    color: var(--danger, #ef4444);
+    background: var(--danger-bg-transparent); /* red-500 with opacity */
+    color: var(--danger);
 }
 
 .notification-content {
@@ -60,14 +60,14 @@
 }
 
 .notification-title {
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
     font-size: 0.95rem;
     font-weight: 600;
     margin: 0 0 0.25rem 0;
 }
 
 .notification-message {
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     font-size: 0.85rem;
     line-height: 1.4;
     margin: 0;
@@ -76,7 +76,7 @@
 .notification-close-btn {
     background: none;
     border: none;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     cursor: pointer;
     padding: 0.25rem;
     display: flex;
@@ -86,7 +86,7 @@
 }
 
 .notification-close-btn:hover {
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
 }
 
 @keyframes slideInRight {

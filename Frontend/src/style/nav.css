@@ -3,10 +3,10 @@
 /* Core Nav Styles */
 .navbar-new {
     width: 100%;
-    background: var(--glass-bg, rgba(16, 25, 35, 0.65));
+    background: var(--glass-bg);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    border-bottom: 1px solid var(--glass-border);
     position: fixed;
     top: 0;
     z-index: 30;
@@ -59,7 +59,7 @@ img {
     left: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
 }
 
 .nav-search-input {
@@ -67,15 +67,15 @@ img {
     padding: 0.5rem 0.75rem 0.5rem 2rem; /* pl-8 pr-3 py-2 */
     font-size: 0.875rem;
     border-radius: var(--radius-md);
-    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-    background-color: var(--muted-bg, rgba(255, 255, 255, 0.05));
-    color: var(--text-primary, #ffffff);
+    border: 1px solid var(--glass-border);
+    background-color: var(--muted-bg);
+    color: var(--text-primary);
     box-sizing: border-box;
     transition: all var(--transition-fast);
 }
 
 .nav-search-input::placeholder {
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
 }
 
 .nav-search-input:focus {
@@ -102,7 +102,7 @@ img {
     border-radius: var(--radius-md);
     font-size: 0.75rem;
     font-weight: 500;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
     background: none;
     border: none;
     cursor: pointer;
@@ -111,16 +111,16 @@ img {
 
 .nav-btn:hover {
     background-color: #c2c2c227; /* hover:bg-muted/70 */
-    color: var(--text-primary, #ffffff);
+    color: var(--text-primary);
 }
 
 .nav-btn.danger {
-    color: var(--danger, #ef4444); /* text-red-500 */
+    color: var(--danger); /* text-red-500 */
 }
 
 .nav-btn.danger:hover {
-    background-color: var(--danger-bg, #fef2f2); /* hover:bg-red-50 */
-    color: var(--danger-text, #b91c1c); /* hover:text-red-700 */
+    background-color: var(--danger-bg); /* hover:bg-red-50 */
+    color: var(--danger-text); /* hover:text-red-700 */
 }
 
 .nav-bottom-row {
@@ -144,20 +144,20 @@ img {
 }
 
 .role-badge.admin {
-    background-color: var(--admin-bg, #f5f3ff); /* bg-violet-50 */
-    color: var(--admin-text, #6d28d9); /* text-violet-700 */
-    border-color: var(--admin-border, #ede9fe); /* border-violet-200 */
+    background-color: var(--admin-bg); /* bg-violet-50 */
+    color: var(--admin-text); /* text-violet-700 */
+    border-color: var(--admin-border); /* border-violet-200 */
 }
 
 .role-badge.user {
-    background-color: var(--user-bg, #f0f9ff); /* bg-sky-50 */
-    color: var(--user-text, #0369a1); /* text-sky-700 */
-    border-color: var(--user-border, #e0f2fe); /* border-sky-200 */
+    background-color: var(--user-bg); /* bg-sky-50 */
+    color: var(--user-text); /* text-sky-700 */
+    border-color: var(--user-border); /* border-sky-200 */
 }
 
 .nav-status-text {
     font-size: 0.75rem;
-    color: var(--text-secondary, #8a9bb2);
+    color: var(--text-secondary);
 }
 
 /* Responsiveness */

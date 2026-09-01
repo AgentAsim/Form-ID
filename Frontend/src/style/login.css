@@ -5,7 +5,7 @@
 
 /* Background gradient for depth */
 body {
-    background-color: var(--bg-dark);
+    background-color: var(--bg-primary);
     background-image: radial-gradient(circle at top right, rgba(0, 229, 255, 0.05), transparent 40%),
         radial-gradient(circle at bottom left, rgba(0, 229, 255, 0.05), transparent 40%);
     color: var(--text-primary);
@@ -82,11 +82,11 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--danger-hover, #dc2626);
+    color: var(--danger-hover);
     /* text-red-600 */
-    background-color: var(--danger-bg, #fef2f2);
+    background-color: var(--danger-bg);
     /* bg-red-50 */
-    border: 1px solid var(--danger-border, #fecaca);
+    border: 1px solid var(--danger-border);
     /* border-red-200 */
     border-radius: var(--radius-md);
     padding: 0.625rem 0.75rem;
@@ -157,8 +157,8 @@ body {
     border-radius: var(--radius-md);
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-qoudernt, #ffffff);
-    background: var(--primary-gradient, linear-gradient(135deg, #3a6aaf 0%, #5b8dd9 100%));
+    color: var(--text-inverse);
+    background: var(--primary-gradient);
     box-shadow: 0 4px 14px rgba(58, 106, 175, 0.30);
     border: none;
     cursor: pointer;
