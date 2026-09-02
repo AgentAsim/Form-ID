@@ -301,6 +301,10 @@
 }
 
 @media (max-width: 640px) {
+    .home-container {
+        padding-top: 5.5rem;
+    }
+
     .txn-grid {
         grid-template-columns: repeat(1, minmax(0, 1fr));
     }
