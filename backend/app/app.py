@@ -6,9 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from bson import ObjectId
 from dotenv import load_dotenv
-from app.databases.mongo import conn
-from app.model.model import super_home_entitys, home_entitys
-import re
+from app.databases.crud import Crud 
 from app.schema.schema import CreateLog, UpdateLog, UpdateDue, DocumentID
 from app.auth import auth_router, get_current_active_user, User
 from app.func.func import Func
@@ -26,17 +24,8 @@ app.include_router(auth_router)
 # Current Active User Dependency for methods
 current_active_user = Annotated[User, Depends(get_current_active_user)]
 
-
-# check weather the user is super or not
-def get_home_entitiys_by_user_role(current_user, doc_collection):
-    if current_user.admin:
-        return super_home_entitys(doc_collection)
-    
-    if not current_user.admin:
-        return home_entitys(doc_collection)
-
-    return None
-
+# Data Cluster
+data_cluster = 'Shop'
 
 # origins
 origins = [
@@ -54,12 +43,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# DataBase Table Selection
-def get_collection_name(user_data_collection):
-    db = conn['Shop']
-    collection = db[user_data_collection]
-    return collection
-
 
 # User Session
 @app.get("/user/session")
@@ -71,11 +54,10 @@ def user_session(current_user: current_active_user):
 
 @app.get("/home")
 def get_logs(current_user: current_active_user):
-    # fetch all rows
-    docs = get_collection_name(current_user.data_collection).find()
-    result = get_home_entitiys_by_user_role(current_user, docs)
+    # CRUD operations instance
+    CRUD = Crud(user=current_user, data_cluster=data_cluster)
+    result = CRUD.all_posts()
 
-    # if data not found
     if not result:
         raise HTTPException(status_code=404, detail="Data Not Found!")
 
@@ -108,16 +90,15 @@ async def post_log(row: CreateLog, current_user: current_active_user):
     new_doc_dict["Total_Amount"] = total_amount
 
     try:
-        # Count total no of documents
-        doc_count = get_collection_name(current_user.data_collection).count_documents({})
-
         # Insert New Doc
-        get_collection_name(current_user.data_collection).insert_one(new_doc_dict)
+        CRUD = Crud(user=current_user, data_cluster=data_cluster)
+        post = CRUD.new_post(new_doc_dict)
+
         return JSONResponse(content=f"Insertion Done Successfully!", status_code=201)
     
     # Error in method execution
     except Exception as e:
-        raise HTTPException(detail=f"Insertion Failed! With Status Code {e}", status_code=500)
+        raise HTTPException(detail=f"Insertion Failed! error {e}", status_code=500)
 
 
 
@@ -142,46 +123,15 @@ async def update_log(row: UpdateLog, current_user: current_active_user):
     updated_doc_dict["Total_Amount"] = total_amount
 
     try:
-        # Get Document from Database
-        get_targeted_doc = get_collection_name(current_user.data_collection).find_one({"_id": document_id})
-
-        # Update if Document is available
-        if get_targeted_doc:
-            doc_update = get_collection_name(current_user.data_collection).update_one({"_id": document_id}, {"$set": updated_doc_dict})
-            if doc_update.acknowledged:
-                return JSONResponse(content="Document Update Successfully", status_code=200)
-        # if document not found
-        else:
-            raise HTTPException(status_code=404, detail="Document not found!")
-
-    # Error in method execution
-    except Exception as e:
-        raise HTTPException(detail=f"Couldn't able to update document due to: {e}", status_code=400)
-
-
-
-@app.put("/post/UpdateDue")
-async def update_due(due_row: UpdateDue, current_user: current_active_user):
-    # Only super user can do this
-    if not current_user.admin:
-        raise HTTPException(status_code=405, detail="You are not allow for this operation!")
-
-    # Convert String to ObjectID for MongoDB compatibility
-    document_id = ObjectId(due_row.id)
-    try:
-        # find document
-        get_targeted_doc = get_collection_name(current_user.data_collection).find_one({"_id": document_id})
-
-        # update data if document is available
-        if get_targeted_doc:
-            doc_due_update = get_collection_name(current_user.data_collection).update_one({"_id": document_id}, {"$set": {"Due": due_row.Due}})
-            # if update data successfully
-            if doc_due_update.acknowledged:
-                return JSONResponse(content="Document Due Field Updated Successfully!", status_code=200)
+        # Update Document
+        CRUD = Crud(user=current_user, data_cluster=data_cluster)
+        update_result = CRUD.update_post(updated_doc_dict)
+        if update_result:
+            return JSONResponse(content="Document Update Successfully", status_code=200)
 
         # if document not found
         else:
-            raise HTTPException(status_code=404, detail="Document not found!")
+            raise HTTPException(status_code=404, detail="Post not found!!!")
 
     # Error in method execution
     except Exception as e:
@@ -191,35 +141,14 @@ async def update_due(due_row: UpdateDue, current_user: current_active_user):
 
 @app.get("/search/post/{query}")
 async def search_row(query, current_user: current_active_user):
-    try:
-        clean_query = query.replace('+', ' ').strip()
-        escaped_query = re.escape(clean_query)
-        
-        or_conditions = []
-        
-        # Check if the query is a valid 24-character hexadecimal ObjectId
-        if len(clean_query) == 24 and all(c in "0123456789abcdefABCDEF" for c in clean_query):
-            or_conditions.append({"_id": ObjectId(clean_query)})
-
-        if clean_query.lower() == 'due':
-            or_conditions.append({"Due": {"$gt": 0} })
-            
-        # Substring case-insensitive matches on text fields
-        search_fields = ["Name", "Contact", "Application_ID", "Service", "Service_Type", "Month"]
-        for field in search_fields:
-            or_conditions.append({field: {"$regex": escaped_query, "$options": "i"}})
-            
-        # Query MongoDB
-        data = get_collection_name(current_user.data_collection).find({"$or": or_conditions})
-        
-        # Map results
-        rows = get_home_entitiys_by_user_role(current_user, data)
-        
+    try:        
+        CRUD = Crud(user=current_user, data_cluster=data_cluster)
+        search_result = CRUD.search_posts(query)
         # If no results found, return a formatted 404 message
-        if not rows:
-            return JSONResponse(content=f"No Data Found for {clean_query}", status_code=404)
+        if not search_result:
+            return JSONResponse(content=f"Not Found {query}", status_code=404)
             
-        return JSONResponse(content=rows[::-1], status_code=200)
+        return JSONResponse(content=search_result[::-1], status_code=200)
         
     except Exception as e:
         raise HTTPException(detail=f"Search failed: {str(e)}", status_code=500)
@@ -229,24 +158,18 @@ async def search_row(query, current_user: current_active_user):
 def delete_log(row: DocumentID, current_user: current_active_user):
     # Only super user can do this
     if not current_user.admin:
-        raise HTTPException(status_code=405, detail="You are not allow for this operation!")
+        raise HTTPException(status_code=405, detail="You are not allow for this operation!") 
 
-    # make dict of row data
-    delete_doc_id = row.model_dump()
-
-    # convert str to ObjectID
-    document_id = ObjectId(delete_doc_id["id"])
+    # Post ID
+    post_data = row.model_dump()
+    post_id = post_data["id"]
 
     try:
-        # find document
-        find_document = get_collection_name(current_user.data_collection).find_one({"_id": document_id})
+        CRUD = Crud(user=current_user, data_cluster=data_cluster)
+        delete_result = CRUD.delete_post(post_id)
+        if delete_result:
+            return JSONResponse(content=f"Document delete successfully!", status_code=200)
 
-        # if document found delete it
-        if find_document:
-            delete_document = get_collection_name(current_user.data_collection).delete_one({"_id": document_id})
-            # if deletion is successful
-            if delete_document.acknowledged:
-                return JSONResponse(content=f"Document deleted successfully!", status_code=200)
         # if document not found
         else:
             raise HTTPException(status_code=404, detail="Document Not Found!")
@@ -264,9 +187,8 @@ async def delete_all_log(current_user: current_active_user):
 
 
     try:
-        delete_all = get_collection_name(current_user.data_collection).delete_many({})
-        if delete_all.acknowledged:
-            return JSONResponse(content="All documents deleted successfully")
+        CRUD = Crud(user=current_user, data_cluster=data_cluster)
+        return JSONResponse(content="All documents deleted successfully")
     except Exception as e:
         raise HTTPException(detail=f"Error: {e}", status_code=400)
 
@@ -280,8 +202,10 @@ def get_previous(current_user: current_active_user):
     if not current_user.admin:
         raise HTTPException(status_code=405, detail="You are not allow for this operation!")
 
+    CRUD = Crud(user=current_user, data_cluster=data_cluster)
+    collection = CRUD.get_collection_name()
     
-    month_filter = Func(current_user.admin, get_collection_name(current_user.data_collection))
+    month_filter = Func(current_user.admin, collection)
     current_month_value = month_filter.finance_summary(summary_duration="current")
     previous_month_value = month_filter.finance_summary(summary_duration="previous")
     all_value = month_filter.finance_summary()
