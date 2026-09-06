@@ -59,6 +59,7 @@ def finance_filter_entity(item) -> dict:
     return {
         "Govt_Fee": item["Govt_Fee"],
         "Service_Charge": item["Service_Charge"],
+        "Total_Amount": item["Total_Amount"],
         "Due": item["Due"]
     }
 

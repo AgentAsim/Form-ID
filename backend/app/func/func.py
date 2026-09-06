@@ -58,6 +58,7 @@ class Func():
                         "_id": None,
                         "Govt_Fee": {"$sum": "$Govt_Fee"},
                         "Service_Charge": {"$sum": "$Service_Charge"},
+                        "Total_Amount": {"$sum": "$Total_Amount"},
                         "Due": {"$sum": "$Due"}
                     }
                 }
@@ -70,6 +71,7 @@ class Func():
                         "_id": None,
                         "Govt_Fee": {"$sum": "$Govt_Fee"},
                         "Service_Charge": {"$sum": "$Service_Charge"},
+                        "Total_Amount": {"$sum": "$Total_Amount"},
                         "Due": {"$sum": "$Due"}
                     }
                 }
@@ -97,7 +99,7 @@ class Func():
                 #for doc in docs:
                 finance_summary_block["Govt_Fee"] += docs[0]["Govt_Fee"]
                 finance_summary_block["Service_Charge"] += docs[0]["Service_Charge"]
-                finance_summary_block["Total_Amount"] += docs[0]["Govt_Fee"] + docs[0]["Service_Charge"]
+                finance_summary_block["Total_Amount"] += docs[0]["Total_Amount"]
                 finance_summary_block["Due"] += docs[0]["Due"]
 
                 #return JSONResponse(status_code=200, content=finance_summery_block)

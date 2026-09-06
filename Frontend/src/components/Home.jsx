@@ -160,20 +160,20 @@ export const Home = () => {
                                     <div className="txn-fin-grid">
                                         <div className="txn-fin-item">
                                             <p>Govt Fee</p>
-                                            <p>₹{row.Govt_Fee}</p>
+                                            <p>₹{row.Govt_Fee}.00</p>
                                         </div>
                                         <div className="txn-fin-item">
                                             <p>Svc. Charge</p>
-                                            <p>₹{row.Service_Charge}</p>
+                                            <p>₹{row.Service_Charge}.00</p>
                                         </div>
                                         <div className="txn-fin-item highlight">
                                             <p>Total</p>
-                                            <p>₹{row.Total_Amount}</p>
+                                            <p>₹{row.Total_Amount}.00</p>
                                         </div>
                                     </div>
                                     <div className="txn-balance-row">
                                         <span>Due Amount</span>
-                                        <span className="due">₹{row.Due}</span>
+                                        <span className={row.Due > 0 ? 'due' : 'paid'}>{row.Due > 0 ? `₹${row.Due}.00` : 'Fully Paid'}</span>
                                     </div>
                                 </div>
                             </div>
