@@ -6,29 +6,53 @@ Password: dummy
 
 ## Project Structure
 ```bash
-
 E-Shopmine
 ├── backend
 │   ├── app
 │   │   ├── app.py
 │   │   ├── auth.py
 │   │   ├── databases
+│   │   │   ├── crud.py
 │   │   │   ├── __init__.py
-│   │   │   └── mongo.py
+│   │   │   ├── mongo.py
+│   │   │   └── __pycache__
+│   │   │       ├── crud.cpython-314.pyc
+│   │   │       ├── __init__.cpython-314.pyc
+│   │   │       └── mongo.cpython-314.pyc
 │   │   ├── func
 │   │   │   ├── func.py
-│   │   │   └── __init__.py
+│   │   │   ├── __init__.py
+│   │   │   └── __pycache__
+│   │   │       ├── func.cpython-314.pyc
+│   │   │       └── __init__.cpython-314.pyc
 │   │   ├── __init__.py
 │   │   ├── model
 │   │   │   ├── __init__.py
-│   │   │   └── model.py
-│   │   └── schema
-│   │       ├── __init__.py
-│   │       └── schema.py
+│   │   │   ├── model.py
+│   │   │   └── __pycache__
+│   │   │       ├── __init__.cpython-314.pyc
+│   │   │       └── model.cpython-314.pyc
+│   │   ├── __pycache__
+│   │   │   ├── app.cpython-314.pyc
+│   │   │   ├── auth.cpython-314.pyc
+│   │   │   └── __init__.cpython-314.pyc
+│   │   ├── schema
+│   │   │   ├── __init__.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── __init__.cpython-314.pyc
+│   │   │   │   └── schema.cpython-314.pyc
+│   │   │   └── schema.py
+│   │   └── Search
+│   │       └── __pycache__
+│   │           ├── __init__.cpython-314.pyc
+│   │           └── search.cpython-314.pyc
 │   ├── docker-compose.yml
 │   ├── Dockerfile
 │   ├── __init__.py
 │   ├── main.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-314.pyc
+│   │   └── main.cpython-314.pyc
 │   └── requirements.txt
 ├── Frontend
 │   ├── eslint.config.js
@@ -37,11 +61,11 @@ E-Shopmine
 │   ├── package.json
 │   ├── package-lock.json
 │   ├── public
-│   │   ├── favicon.ico
-│   │   └── logo.png
+│   │   └── favicon.ico
 │   ├── src
 │   │   ├── App.jsx
 │   │   ├── assets
+│   │   │   ├── logo.png
 │   │   │   └── react.svg
 │   │   ├── components
 │   │   │   ├── Home.jsx
@@ -52,7 +76,15 @@ E-Shopmine
 │   │   ├── Context
 │   │   │   └── context.js
 │   │   ├── Main.css
-│   │   └── main.jsx
+│   │   ├── main.jsx
+│   │   └── style
+│   │       ├── color-theme.css
+│   │       ├── form.css
+│   │       ├── home.css
+│   │       ├── login.css
+│   │       ├── modal.css
+│   │       ├── nav.css
+│   │       └── notification.css
 │   └── vite.config.js
 └── Readme.md
 
