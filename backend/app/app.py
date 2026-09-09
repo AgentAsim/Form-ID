@@ -76,14 +76,13 @@ async def post_log(row: CreateLog, current_user: current_active_user):
 
     # Get date
     doc_date = str(datetime.date.today()) if row.Created_At.title() == 'Default' else row.Created_At
+    # update date value
+    new_doc_dict["Created_At"] = doc_date
 
     #set month by default
     current_date = datetime.date.today()
     current_month = current_date.strftime("%b%y")
-    new_doc_dict["Month"] = current_month
-
-    # update date value
-    new_doc_dict["Created_At"] = doc_date
+    new_doc_dict["Month"] = current_month 
 
     # calculate total amount
     total_amount = new_doc_dict["Govt_Fee"] + new_doc_dict["Service_Charge"]
@@ -114,9 +113,6 @@ async def update_log(row: UpdateLog, current_user: current_active_user):
     doc_date = str(datetime.date.today()) if row.Created_At.title() == 'Default' else row.Created_At
     # update date value
     updated_doc_dict["Created_At"] = doc_date
-
-    # convert string to ObjectID for mongodb compatibility
-    document_id = ObjectId(updated_doc_dict["id"])
 
     # calculate total amount
     total_amount = updated_doc_dict["Govt_Fee"] + updated_doc_dict["Service_Charge"]

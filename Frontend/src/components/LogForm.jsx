@@ -1,5 +1,5 @@
 import React, { use } from 'react'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { ContainerContext } from '../Context/context';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { Notification } from './Notification';
 
 export const LogForm = () => {
 
-    const { API_Connect, access_token, notification, setNotification } = useContext(ContainerContext);
+    const { API_Connect, access_token, oldData, setoldData, notification, setNotification } = useContext(ContainerContext);
 
     const { handleSubmit, formState: { isSubmitting } } = useForm();
 
@@ -32,20 +32,33 @@ export const LogForm = () => {
         Due: 0
     });
 
+    useEffect(() => {
+        if (window.location.pathname === '/update/log') {
+            setFormData(oldData);
+        }
+    }, [])
+    
+    
     // track form field changes
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+
+        //if (window.location.pathname === '/new/post') {
+            setFormData({
+                ...formData,
+                [name]: value
+            });
+
+        //} else if (window.location.pathname === '/update/log') {
+        //    setoldData(oldData);
+        //} 
     };
 
 
-    // handle form submition
-    const handle_Submit = async (data) => {
+    async function new_post() {
         //data.preventDefault();
 
+        delete formData.Total_Amount
         // API call here
         try {
             // POST data
@@ -88,6 +101,64 @@ export const LogForm = () => {
             console.error(`Error Occure in Posting Form with error code ${err}`)
         }
 
+    }
+
+    async function update_post() {
+         //e.preventDefault();
+        delete formData.Total_Amount
+
+        try {
+            // post data 
+            let res = await fetch(`${API_Connect}/post/update`, {
+                method: "PUT",
+                headers: {
+                    'Authorization': `Bearer ${access_token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+
+            if (!res.ok) {
+                setNotification({
+                    ...notification,
+                    "is_error": true,
+                    "status_code": res.status,
+                    "message": res.statusText
+                })
+                throw new Error(`Log at ID ${oldData.id} not updated!`)
+            }
+
+            let newData = await res.json()
+
+            setNotification({
+                ...notification,
+                show: true,
+                is_error: false,
+                status_code: "Success",
+                message: "Transaction updated successfully"
+            });
+
+            // back to home page
+            handleRoute()
+
+            return newData
+
+
+        }
+        catch (err) {
+            console.error(`Error in Updating error: ${err}`)
+        }
+ 
+    }
+
+
+    // handle form submition
+    const handle_Submit = async (data) => {
+        if (window.location.pathname === '/new/post') {
+            return await new_post();
+        } else if (window.location.pathname === '/update/log') {
+            return await update_post();
+        }
     };
 
     return (<>
@@ -101,10 +172,19 @@ export const LogForm = () => {
                                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
                         </div>
-                        <div>
-                            <h2>New Transaction</h2>
-                            <p>Fill in the details below</p>
-                        </div>
+                        {window.location.pathname === '/new/post' ? (
+                            <div>
+                                <h2>New Transaction</h2>
+                                <p>Fill in the details below</p>
+                            </div>
+                        ) : (
+                        window.location.pathname === '/update/log' ? (
+                            <div>
+                                <h2>Edit Transaction</h2>
+                                <p>Update transaction details</p>
+                            </div>
+                        ) : null
+                        )}
                     </div>
                     <button type="button" className="form-close-btn" onClick={handleRoute}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -124,13 +204,19 @@ export const LogForm = () => {
                             <div className="section-label-divider"></div>
                         </div>
                         <div className="form-grid">
+                            {window.location.pathname === '/update/log' ? (
+                            <div className="form-field full">
+                                <label htmlFor="id">Log ID</label>
+                                <input type="text" id="id" name="id" className="form-input" value={oldData.id} onChange={handleChange} placeholder="Enter ID" disabled required />
+                            </div>
+                            ) : null}
                             <div className="form-field full">
                                 <label htmlFor="Name">Full Name</label>
-                                <input type="text" id="Name" name="Name" className="form-input" value={formData.Name} onChange={handleChange} placeholder="Name" required />
+                                <input type="text" id="Name" name="Name" className="form-input" value={formData.Name} onChange={handleChange} placeholder="e.g. Mehmed Khan" required />
                             </div>
                             <div className="form-field full">
                                 <label htmlFor="Contact">Contact No.</label>
-                                <input type="text" id="Contact" name="Contact" className="form-input" value={formData.Contact} onChange={handleChange} placeholder="1234567890" required />
+                                <input type="text" id="Contact" name="Contact" className="form-input" value={formData.Contact} onChange={handleChange} placeholder="e.g. 7598421562" required />
                             </div>
                         </div>
                     </section>
@@ -147,19 +233,19 @@ export const LogForm = () => {
                         <div className="form-grid">
                             <div className="form-field">
                                 <label htmlFor="Service">Service</label>
-                                <input type="text" id="Service" name="Service" className="form-input" value={formData.Service} onChange={handleChange} placeholder="Service" required />
+                                <input type="text" id="Service" name="Service" className="form-input" value={formData.Service} onChange={handleChange} placeholder="e.g. Passport" required />
                             </div>
                             <div className="form-field">
                                 <label htmlFor="Service_Type">Service Type</label>
-                                <input type="text" id="Service_Type" name="Service_Type" className="form-input" value={formData.Service_Type} onChange={handleChange} placeholder="Service Type" required />
+                                <input type="text" id="Service_Type" name="Service_Type" className="form-input" value={formData.Service_Type} onChange={handleChange} placeholder="e.g. New" required />
                             </div>
                             <div className="form-field full">
                                 <label htmlFor="Application_ID">Application ID</label>
-                                <input type="text" id="Application_ID" name="Application_ID" className="form-input" value={formData.Application_ID} onChange={handleChange} placeholder="Application no." style={{fontFamily: "monospace"}} />
+                                <input type="text" id="Application_ID" name="Application_ID" className="form-input" value={formData.Application_ID} onChange={handleChange} placeholder="e.g. ABC-458-DEF-96321" style={{fontFamily: "monospace"}} />
                             </div>
                             <div className="form-field full">
                                 <label htmlFor="Created_At">Created At</label>
-                                <input type="text" id="Created_At" name="Created_At" className="form-input" value={formData.Created_At} onChange={handleChange} placeholder="e.g. YYYY-MM-DD" required />
+                                <input type="text" id="Created_At" name="Created_At" className="form-input" value={formData.Created_At} onChange={handleChange} placeholder="YYYY-MM-DD" required />
                             </div>
                         </div>
                     </section>
@@ -201,7 +287,7 @@ export const LogForm = () => {
 
                     <div className="form-actions-new">
                         <button type="button" className="btn-cancel" onClick={handleRoute}>Cancel</button>
-                        <button type="submit" disabled={isSubmitting} className="btn-save">Create Transaction</button>
+                        <button type="submit" disabled={isSubmitting} className="btn-save">{window.location.pathname === '/new/post' ? "Create Transaction" : "Save Changes" }</button>
                     </div>
                 </form>
 

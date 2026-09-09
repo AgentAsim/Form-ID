@@ -210,7 +210,7 @@ function App() {
             <Routes>
               <Route path="/summary" element={<Home />} /> 
               <Route path="/new/post" element={<LogForm />} />
-              <Route path={`/update/log`} element={<CardForm />} />
+              <Route path={`/update/log`} element={<LogForm />} />
             </Routes>
           ) : null }
           
