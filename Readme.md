@@ -14,45 +14,21 @@ E-Shopmine
 │   │   ├── databases
 │   │   │   ├── crud.py
 │   │   │   ├── __init__.py
-│   │   │   ├── mongo.py
-│   │   │   └── __pycache__
-│   │   │       ├── crud.cpython-314.pyc
-│   │   │       ├── __init__.cpython-314.pyc
-│   │   │       └── mongo.cpython-314.pyc
+│   │   │   └── mongo.py
 │   │   ├── func
 │   │   │   ├── func.py
-│   │   │   ├── __init__.py
-│   │   │   └── __pycache__
-│   │   │       ├── func.cpython-314.pyc
-│   │   │       └── __init__.cpython-314.pyc
+│   │   │   └── __init__.py
 │   │   ├── __init__.py
 │   │   ├── model
 │   │   │   ├── __init__.py
-│   │   │   ├── model.py
-│   │   │   └── __pycache__
-│   │   │       ├── __init__.cpython-314.pyc
-│   │   │       └── model.cpython-314.pyc
-│   │   ├── __pycache__
-│   │   │   ├── app.cpython-314.pyc
-│   │   │   ├── auth.cpython-314.pyc
-│   │   │   └── __init__.cpython-314.pyc
-│   │   ├── schema
-│   │   │   ├── __init__.py
-│   │   │   ├── __pycache__
-│   │   │   │   ├── __init__.cpython-314.pyc
-│   │   │   │   └── schema.cpython-314.pyc
-│   │   │   └── schema.py
-│   │   └── Search
-│   │       └── __pycache__
-│   │           ├── __init__.cpython-314.pyc
-│   │           └── search.cpython-314.pyc
+│   │   │   └── model.py
+│   │   └── schema
+│   │       ├── __init__.py
+│   │       └── schema.py
 │   ├── docker-compose.yml
 │   ├── Dockerfile
 │   ├── __init__.py
 │   ├── main.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-314.pyc
-│   │   └── main.cpython-314.pyc
 │   └── requirements.txt
 ├── Frontend
 │   ├── eslint.config.js
@@ -87,7 +63,6 @@ E-Shopmine
 │   │       └── notification.css
 │   └── vite.config.js
 └── Readme.md
-
 ```
 ## Requirements
 - MongoDB - for the data storage.
