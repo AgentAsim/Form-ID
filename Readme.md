@@ -44,7 +44,6 @@ E-Shopmine
 │   │   ├── assets
 │   │   │   └── react.svg
 │   │   ├── components
-│   │   │   ├── CardForm.jsx
 │   │   │   ├── Home.jsx
 │   │   │   ├── LogForm.jsx
 │   │   │   ├── Login.jsx
